@@ -3,9 +3,7 @@
 import { useState, useEffect, useCallback, useMemo } from "react";
 import { tools, categories } from "@/data/tools";
 import type { Tool } from "@/types/tools";
-import { ColorPickerTool } from "@/tools/color-picker";
-import { ColorConverterTool } from "@/tools/color-converter";
-import { ColorPaletteTool } from "@/tools/color-palette";
+import { ColorTools } from "@/tools/color-tools";
 import { ImageCutoutTool } from "@/tools/image-cutout";
 import { TextToSpeechTool } from "@/tools/text-to-speech";
 
@@ -18,9 +16,7 @@ const iconBg: Record<string, string> = {
 };
 
 const toolComponents: Record<string, React.ReactNode> = {
-  "color-picker": <ColorPickerTool />,
-  "color-converter": <ColorConverterTool />,
-  "color-palette": <ColorPaletteTool />,
+  "color-tools": <ColorTools />,
   "image-cutout": <ImageCutoutTool />,
   "text-to-speech": <TextToSpeechTool />,
 };
