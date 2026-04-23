@@ -96,3 +96,19 @@ export function generateComplementaryColor(hex: string): string[] {
     (() => { const c = hslToRgb((hsl.h + 120) % 360, hsl.s, hsl.l); return rgbToHex(c.r, c.g, c.b); })(),
   ];
 }
+
+export function generateHarmony(hex: string, type: "complementary" | "analogous" | "triadic" | "split"): string[] {
+  const rgb = parseColor(hex);
+  if (!rgb) return [];
+  const hsl = rgbToHsl(rgb.r, rgb.g, rgb.b);
+  const angles: number[] = {
+    complementary: [0, 180],
+    analogous: [-30, 0, 30],
+    triadic: [0, 120, 240],
+    split: [0, 150, 210],
+  }[type];
+  return angles.map((a) => {
+    const c = hslToRgb((hsl.h + a + 360) % 360, hsl.s, hsl.l);
+    return rgbToHex(c.r, c.g, c.b);
+  });
+}
