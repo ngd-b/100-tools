@@ -27,18 +27,24 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-      - name: Upload image to server via SCP
+      - name: Package image + compose
+        run: |
+          cp docker-compose.yml ${{ runner.temp }}
+          tar czf ${{ runner.temp }}/deploy.tar.gz \
+            -C ${{ runner.temp }} 100-tools.tar docker-compose.yml
+
+      - name: Upload to server via SCP
         uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.REMOTE_HOST }}
           username: ${{ secrets.REMOTE_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.SSH_PORT || 22 }}
-          source: "${{ runner.temp }}/100-tools.tar"
+          source: "${{ runner.temp }}/deploy.tar.gz"
           target: "/tmp"
           strip_components: 0
 
-      - name: Load image and restart on server
+      - name: Extract, load & restart
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.REMOTE_HOST }}
@@ -46,9 +52,12 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.SSH_PORT || 22 }}
           script: |
-            docker load -i /tmp/100-tools.tar
+            mkdir -p ${{ secrets.DEPLOY_PATH }}
             cd ${{ secrets.DEPLOY_PATH }}
+            tar xzf /tmp/deploy.tar.gz -C .
+            docker load -i 100-tools.tar
             docker compose down
             docker compose up -d
+            rm -f 100-tools.tar
             docker image prune -f
-            rm -f /tmp/100-tools.tar
+            rm -f /tmp/deploy.tar.gz
