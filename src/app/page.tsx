@@ -70,6 +70,30 @@ const toolComponents: Record<string, React.ReactNode> = {
 };
 
 const ANIM_DURATION = 500;
+const FAVORITES_KEY = "100-tools-favorites";
+
+function useFavorites() {
+  const [favorites, setFavorites] = useState<Set<string>>(() => {
+    try {
+      const stored = localStorage.getItem(FAVORITES_KEY);
+      return stored ? new Set(JSON.parse(stored) as string[]) : new Set();
+    } catch {
+      return new Set();
+    }
+  });
+
+  const toggle = useCallback((id: string) => {
+    setFavorites((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      localStorage.setItem(FAVORITES_KEY, JSON.stringify([...next]));
+      return next;
+    });
+  }, []);
+
+  return { favorites, toggle };
+}
 
 export default function Home() {
   const [selectedId, setSelectedId] = useState<string | null>(null);
@@ -79,6 +103,10 @@ export default function Home() {
   // View state
   const [isOpen, setIsOpen] = useState(false);
   const [animating, setAnimating] = useState(false);
+
+  // Favorites
+  const { favorites, toggle } = useFavorites();
+  const showFavorites = activeCategory === "favorites";
 
   // Read hash on mount
   useEffect(() => {
@@ -105,7 +133,11 @@ export default function Home() {
 
   const filtered = useMemo(() => {
     return tools.filter((t) => {
-      const matchCat = activeCategory === "all" || t.category === activeCategory;
+      const matchCat = activeCategory === "all"
+        ? true
+        : activeCategory === "favorites"
+          ? favorites.has(t.id)
+          : t.category === activeCategory;
       const matchSearch =
         !search ||
         t.name.includes(search) ||
@@ -114,7 +146,7 @@ export default function Home() {
         t.tags.some((tag) => tag.toLowerCase().includes(search.toLowerCase()));
       return matchCat && matchSearch;
     });
-  }, [search, activeCategory]);
+  }, [search, activeCategory, favorites]);
 
   // ---- OPEN ----
   const selectTool = useCallback((id: string) => {
@@ -207,6 +239,12 @@ export default function Home() {
               >
                 全部
               </button>
+              <button
+                onClick={() => setActiveCategory("favorites")}
+                className={`filter-pill ${activeCategory === "favorites" ? "active" : ""}`}
+              >
+                ⭐ 收藏{favorites.size > 0 ? ` (${favorites.size})` : ""}
+              </button>
               {categories.map((cat) => (
                 <button
                   key={cat.id}
@@ -227,14 +265,21 @@ export default function Home() {
                     className="grid-item"
                     style={{ "--item-index": index } as React.CSSProperties}
                   >
-                    <ToolCard tool={tool} onSelect={selectTool} />
+                    <ToolCard
+                      tool={tool}
+                      onSelect={selectTool}
+                      isFavorite={favorites.has(tool.id)}
+                      onToggleFavorite={() => toggle(tool.id)}
+                    />
                   </div>
                 ))}
               </div>
             ) : (
               <div className="flex flex-col items-center py-20 text-center">
-                <div className="mb-3 text-3xl text-gray-300">🔍</div>
-                <p className="text-sm text-gray-400">没有找到匹配的工具</p>
+                <div className="mb-3 text-3xl text-gray-300">{showFavorites ? "⭐" : "🔍"}</div>
+                <p className="text-sm text-gray-400">
+                  {showFavorites ? "还没有收藏任何工具" : "没有找到匹配的工具"}
+                </p>
                 <button
                   onClick={() => { setSearch(""); setActiveCategory("all"); }}
                   className="mt-3 text-sm font-medium text-blue-500 hover:text-blue-600"
@@ -284,6 +329,12 @@ export default function Home() {
             >
               全部
             </button>
+            <button
+              onClick={() => setActiveCategory("favorites")}
+              className={`sidebar-pill ${activeCategory === "favorites" ? "active" : ""}`}
+            >
+              ⭐
+            </button>
             {categories.map((cat) => (
               <button
                 key={cat.id}
@@ -299,22 +350,34 @@ export default function Home() {
             {filtered.map((tool, index) => {
               const bg = iconBg[tool.category] ?? iconBg.text;
               const isActive = tool.id === selectedId;
+              const isFav = favorites.has(tool.id);
 
               return (
-                <button
+                <div
                   key={tool.id}
-                  className={`sidebar-item ${isActive ? "active" : ""}`}
+                  className={`sidebar-item-wrapper ${isActive ? "active" : ""}`}
                   style={{ "--slide-index": index } as React.CSSProperties}
-                  onClick={() => selectTool(tool.id)}
                 >
-                  <div className="sidebar-icon" style={{ background: bg }}>
-                    {tool.icon}
-                  </div>
-                  <div className="sidebar-item-text">
-                    <span className="sidebar-item-name">{tool.name}</span>
-                    <span className="sidebar-item-desc">{tool.description}</span>
-                  </div>
-                </button>
+                  <button
+                    className="sidebar-item flex-1"
+                    onClick={() => selectTool(tool.id)}
+                  >
+                    <div className="sidebar-icon" style={{ background: bg }}>
+                      {tool.icon}
+                    </div>
+                    <div className="sidebar-item-text">
+                      <span className="sidebar-item-name">{tool.name}</span>
+                      <span className="sidebar-item-desc">{tool.description}</span>
+                    </div>
+                  </button>
+                  <button
+                    className="sidebar-fav-btn"
+                    onClick={(e) => { e.stopPropagation(); toggle(tool.id); }}
+                    title={isFav ? "取消收藏" : "收藏"}
+                  >
+                    {isFav ? "★" : "☆"}
+                  </button>
+                </div>
               );
             })}
 
@@ -363,32 +426,45 @@ export default function Home() {
 function ToolCard({
   tool,
   onSelect,
+  isFavorite,
+  onToggleFavorite,
 }: {
   tool: Tool;
   onSelect: (id: string) => void;
+  isFavorite: boolean;
+  onToggleFavorite: () => void;
 }) {
   const bg = iconBg[tool.category] ?? iconBg.text;
 
   return (
-    <button
-      onClick={() => onSelect(tool.id)}
-      className="tool-card w-full text-left"
-    >
-      <div
-        className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl text-xl text-white"
-        style={{ background: bg }}
+    <div className="relative group">
+      <button
+        onClick={() => onSelect(tool.id)}
+        className="tool-card w-full text-left"
       >
-        {tool.icon}
-      </div>
-      <h3 className="text-base font-semibold tracking-tight text-gray-900">
-        {tool.name}
-      </h3>
-      <p className="mt-0.5 text-xs font-medium tracking-wider text-gray-400 uppercase">
-        {tool.nameEn}
-      </p>
-      <p className="mt-3 text-sm leading-relaxed text-gray-500">
-        {tool.description}
-      </p>
-    </button>
+        <div
+          className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl text-xl text-white"
+          style={{ background: bg }}
+        >
+          {tool.icon}
+        </div>
+        <h3 className="text-base font-semibold tracking-tight text-gray-900">
+          {tool.name}
+        </h3>
+        <p className="mt-0.5 text-xs font-medium tracking-wider text-gray-400 uppercase">
+          {tool.nameEn}
+        </p>
+        <p className="mt-3 text-sm leading-relaxed text-gray-500">
+          {tool.description}
+        </p>
+      </button>
+      <button
+        className="fav-star absolute top-3 right-3"
+        onClick={(e) => { e.stopPropagation(); onToggleFavorite(); }}
+        title={isFavorite ? "取消收藏" : "收藏"}
+      >
+        {isFavorite ? "★" : "☆"}
+      </button>
+    </div>
   );
 }

@@ -526,6 +526,16 @@ input[type="range"]::-webkit-slider-thumb {
 }
 
 /* Sidebar item stagger animation */
+.sidebar-item-wrapper {
+  opacity: 0;
+  transform: translateX(24px);
+  animation: sidebar-in 350ms var(--ease-out) calc(var(--slide-index, 0) * 40ms + 100ms) forwards;
+}
+
+.sidebar-open .sidebar-item-wrapper {
+  animation: sidebar-in 350ms var(--ease-out) calc(var(--slide-index, 0) * 40ms + 100ms) forwards;
+}
+
 .sidebar-item {
   display: flex;
   align-items: center;
@@ -537,30 +547,10 @@ input[type="range"]::-webkit-slider-thumb {
   background: transparent;
   cursor: pointer;
   text-align: left;
-  /* Stagger slide-in */
-  opacity: 0;
-  transform: translateX(24px);
-  animation: sidebar-in 350ms var(--ease-out) calc(var(--slide-index, 0) * 40ms + 100ms) forwards;
-}
-
-@keyframes sidebar-in {
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-/* When sidebar is opening, reset animation for new items */
-.sidebar-open .sidebar-item {
-  animation: sidebar-in 350ms var(--ease-out) calc(var(--slide-index, 0) * 40ms + 100ms) forwards;
 }
 
 .sidebar-item:hover {
   background: rgba(0, 0, 0, 0.03);
-}
-
-.sidebar-item.active {
-  background: rgba(59, 130, 246, 0.06);
 }
 
 .sidebar-icon {
@@ -695,4 +685,79 @@ input[type="range"]::-webkit-slider-thumb {
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+/* ===== Favorites ===== */
+.fav-star {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border: none;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 6px;
+  font-size: 16px;
+  color: #d1d5db;
+  cursor: pointer;
+  opacity: 0;
+  transition: all 0.15s;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+}
+
+.group:hover .fav-star,
+.fav-star[data-active="true"] {
+  opacity: 1;
+}
+
+.fav-star:hover {
+  transform: scale(1.15);
+}
+
+.fav-star[title="取消收藏"] {
+  opacity: 1;
+  color: #f59e0b;
+}
+
+.sidebar-item-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  width: 100%;
+  padding: 2px 6px;
+  border-radius: 10px;
+  transition: background 0.15s;
+}
+
+.sidebar-item-wrapper.active {
+  background: rgba(59, 130, 246, 0.06);
+}
+
+.sidebar-fav-btn {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border: none;
+  background: none;
+  font-size: 14px;
+  color: #d1d5db;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.15s;
+}
+
+.sidebar-fav-btn:hover {
+  color: #f59e0b;
+  background: rgba(245, 158, 11, 0.1);
+}
+
+.sidebar-item-wrapper .sidebar-fav-btn {
+  color: #d1d5db;
+}
+
+.sidebar-item-wrapper:has(.sidebar-fav-btn[title="取消收藏"]) .sidebar-fav-btn {
+  color: #f59e0b;
 }
