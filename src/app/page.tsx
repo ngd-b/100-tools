@@ -6,6 +6,11 @@ import type { Tool } from "@/types/tools";
 import { ColorTools } from "@/tools/color-tools";
 import { ImageCutoutTool } from "@/tools/image-cutout";
 import { TextToSpeechTool } from "@/tools/text-to-speech";
+import { Base64Tool } from "@/tools/base64-tool";
+import { TextStats } from "@/tools/text-stats";
+import { JsonFormatter } from "@/tools/json-formatter";
+import { TimestampConverter } from "@/tools/timestamp-converter";
+import { CssShadowGenerator } from "@/tools/css-shadow";
 
 const iconBg: Record<string, string> = {
   color: "linear-gradient(135deg, #f59e0b, #f97316)",
@@ -19,6 +24,11 @@ const toolComponents: Record<string, React.ReactNode> = {
   "color-tools": <ColorTools />,
   "image-cutout": <ImageCutoutTool />,
   "text-to-speech": <TextToSpeechTool />,
+  "base64-tool": <Base64Tool />,
+  "text-stats": <TextStats />,
+  "json-formatter": <JsonFormatter />,
+  "timestamp-converter": <TimestampConverter />,
+  "css-shadow": <CssShadowGenerator />,
 };
 
 const ANIM_DURATION = 500;
