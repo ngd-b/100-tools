@@ -11,6 +11,12 @@ import { TextStats } from "@/tools/text-stats";
 import { JsonFormatter } from "@/tools/json-formatter";
 import { TimestampConverter } from "@/tools/timestamp-converter";
 import { CssShadowGenerator } from "@/tools/css-shadow";
+import { GradientGenerator } from "@/tools/gradient-generator";
+import { ContrastChecker } from "@/tools/contrast-checker";
+import { ImageCompressor } from "@/tools/image-compressor";
+import { ImageWatermark } from "@/tools/image-watermark";
+import { AudioRecorder } from "@/tools/audio-recorder";
+import { UrlEncoder } from "@/tools/url-encoder";
 
 const iconBg: Record<string, string> = {
   color: "linear-gradient(135deg, #f59e0b, #f97316)",
@@ -29,6 +35,12 @@ const toolComponents: Record<string, React.ReactNode> = {
   "json-formatter": <JsonFormatter />,
   "timestamp-converter": <TimestampConverter />,
   "css-shadow": <CssShadowGenerator />,
+  "gradient-generator": <GradientGenerator />,
+  "contrast-checker": <ContrastChecker />,
+  "image-compressor": <ImageCompressor />,
+  "image-watermark": <ImageWatermark />,
+  "audio-recorder": <AudioRecorder />,
+  "url-encoder": <UrlEncoder />,
 };
 
 const ANIM_DURATION = 500;
