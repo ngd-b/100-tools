@@ -1,0 +1,9 @@
+services:
+  100-tools:
+    image: ngd-b/100-tools:latest
+    container_name: 100-tools
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
