@@ -1,6 +1,6 @@
 services:
   100-tools:
-    image: ngd-b/100-tools:latest
+    build: .
     container_name: 100-tools
     restart: unless-stopped
     ports:
