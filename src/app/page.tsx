@@ -17,6 +17,12 @@ import { ImageCompressor } from "@/tools/image-compressor";
 import { ImageWatermark } from "@/tools/image-watermark";
 import { AudioRecorder } from "@/tools/audio-recorder";
 import { UrlEncoder } from "@/tools/url-encoder";
+import { HtmlEntities } from "@/tools/html-entities";
+import { RegexTester } from "@/tools/regex-tester";
+import { PasswordGenerator } from "@/tools/password-generator";
+import { ImageConverter } from "@/tools/image-converter";
+import { ImageResizer } from "@/tools/image-resizer";
+import { LoremIpsumGenerator } from "@/tools/lorem-ipsum";
 
 const iconBg: Record<string, string> = {
   color: "linear-gradient(135deg, #f59e0b, #f97316)",
@@ -41,6 +47,12 @@ const toolComponents: Record<string, React.ReactNode> = {
   "image-watermark": <ImageWatermark />,
   "audio-recorder": <AudioRecorder />,
   "url-encoder": <UrlEncoder />,
+  "html-entities": <HtmlEntities />,
+  "regex-tester": <RegexTester />,
+  "password-generator": <PasswordGenerator />,
+  "image-converter": <ImageConverter />,
+  "image-resizer": <ImageResizer />,
+  "lorem-ipsum": <LoremIpsumGenerator />,
 };
 
 const ANIM_DURATION = 500;
