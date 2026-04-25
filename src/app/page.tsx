@@ -106,6 +106,8 @@ export default function Home() {
 
   // Favorites
   const { favorites, toggle } = useFavorites();
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
   const showFavorites = activeCategory === "favorites";
 
   // Read hash on mount
@@ -243,7 +245,7 @@ export default function Home() {
                 onClick={() => setActiveCategory("favorites")}
                 className={`filter-pill ${activeCategory === "favorites" ? "active" : ""}`}
               >
-                ⭐ 收藏{favorites.size > 0 ? ` (${favorites.size})` : ""}
+                ⭐ 收藏{mounted && favorites.size > 0 ? ` (${favorites.size})` : ""}
               </button>
               {categories.map((cat) => (
                 <button
