@@ -2,6 +2,59 @@
 
 import { useState, useCallback, useRef, useEffect } from "react";
 
+interface Settings {
+  text: string;
+  fontSize: number;
+  opacity: number;
+  position: string;
+}
+
+function renderWatermark(
+  canvas: HTMLCanvasElement,
+  img: HTMLImageElement,
+  settings: Settings
+): Promise<string> {
+  canvas.width = img.width;
+  canvas.height = img.height;
+  const ctx = canvas.getContext("2d")!;
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.drawImage(img, 0, 0);
+
+  const { text, fontSize, opacity, position } = settings;
+  const scale = Math.max(img.width, img.height) / 500;
+  const size = Math.round(fontSize * scale);
+
+  ctx.font = `bold ${size}px sans-serif`;
+  ctx.globalAlpha = opacity;
+  ctx.fillStyle = "#ffffff";
+  ctx.strokeStyle = "rgba(0, 0, 0, 0.4)";
+  ctx.lineWidth = Math.max(2, Math.round(size * 0.08));
+  ctx.lineJoin = "round";
+  ctx.textBaseline = "middle";
+
+  const metrics = ctx.measureText(text);
+  const w = metrics.width;
+  const pad = 20 * scale;
+  let x = 0, y = 0;
+
+  switch (position) {
+    case "bottom-left": x = pad; y = img.height - pad; break;
+    case "bottom-right": x = img.width - w - pad; y = img.height - pad; break;
+    case "top-left": x = pad; y = pad; break;
+    case "top-right": x = img.width - w - pad; y = pad; break;
+    case "center": x = (img.width - w) / 2; y = img.height / 2; break;
+  }
+
+  ctx.strokeText(text, x, y);
+  ctx.fillText(text, x, y);
+
+  return new Promise((resolve) => {
+    canvas.toBlob((blob) => {
+      if (blob) resolve(URL.createObjectURL(blob));
+    });
+  });
+}
+
 export function ImageWatermark() {
   const [imageUrl, setImageUrl] = useState("");
   const [text, setText] = useState("© 100-tools");
@@ -11,66 +64,45 @@ export function ImageWatermark() {
   const [resultUrl, setResultUrl] = useState("");
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const imgRef = useRef<HTMLImageElement | null>(null);
+  const settingsRef = useRef<Settings>({ text: "© 100-tools", fontSize: 24, opacity: 0.5, position: "bottom-right" });
+  const prevResultRef = useRef<string | null>(null);
+
+  settingsRef.current = { text, fontSize, opacity, position };
+
+  const draw = useCallback(async () => {
+    const canvas = canvasRef.current;
+    const img = imgRef.current;
+    if (!canvas || !img) return;
+    if (prevResultRef.current) { URL.revokeObjectURL(prevResultRef.current); prevResultRef.current = null; }
+    const url = await renderWatermark(canvas, img, settingsRef.current);
+    prevResultRef.current = url;
+    setResultUrl(url);
+  }, []);
 
   const handleFile = useCallback((file: File) => {
+    setResultUrl("");
     const url = URL.createObjectURL(file);
     setImageUrl(url);
     const img = new Image();
-    img.onload = () => { imgRef.current = img; applyWatermark(img); };
+    img.onload = () => {
+      imgRef.current = img;
+      setTimeout(() => draw(), 50);
+    };
     img.src = url;
-  }, []);
+  }, [draw]);
 
-  const applyWatermark = useCallback((img?: HTMLImageElement) => {
-    const image = img || imgRef.current;
-    if (!image) return;
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    canvas.width = image.width;
-    canvas.height = image.height;
-    const ctx = canvas.getContext("2d")!;
-    ctx.drawImage(image, 0, 0);
-
-    const scale = Math.max(image.width, image.height) / 500;
-    const size = Math.round(fontSize * scale);
-    ctx.font = `bold ${size}px sans-serif`;
-    ctx.globalAlpha = opacity;
-    ctx.fillStyle = "rgba(255, 255, 255, 0.9)";
-    ctx.strokeStyle = "rgba(0, 0, 0, 0.3)";
-    ctx.lineWidth = Math.max(2, Math.round(2 * scale));
-
-    const metrics = ctx.measureText(text);
-    const w = metrics.width;
-    const h = size;
-    const pad = 20 * scale;
-    let x = 0, y = 0;
-
-    switch (position) {
-      case "bottom-left": x = pad; y = image.height - pad - h / 2; break;
-      case "bottom-right": x = image.width - w - pad; y = image.height - pad - h / 2; break;
-      case "top-left": x = pad; y = pad + h; break;
-      case "top-right": x = image.width - w - pad; y = pad + h; break;
-      case "center": x = (image.width - w) / 2; y = image.height / 2; break;
-    }
-
-    ctx.strokeText(text, x, y);
-    ctx.fillText(text, x, y);
-
-    canvas.toBlob((blob) => {
-      if (blob) setResultUrl(URL.createObjectURL(blob));
-    });
-  }, [text, fontSize, opacity, position]);
-
+  // Redraw when settings change and image is loaded
   useEffect(() => {
-    if (imgRef.current) applyWatermark();
-  }, [text, fontSize, opacity, position, applyWatermark]);
+    if (imgRef.current) draw();
+  }, [draw]);
 
   const handleDownload = useCallback(() => {
-    if (!resultURL) return;
+    if (!resultUrl) return;
     const a = document.createElement("a");
-    a.href = resultURL;
+    a.href = resultUrl;
     a.download = "watermarked.png";
     a.click();
-  }, [resultURL]);
+  }, [resultUrl]);
 
   const positions: { label: string; value: typeof position }[] = [
     { label: "左上", value: "top-left" }, { label: "中", value: "center" }, { label: "右上", value: "top-right" },
@@ -110,7 +142,7 @@ export function ImageWatermark() {
                   <span className="text-xs text-gray-500">字号</span>
                   <span className="font-mono text-xs">{fontSize}px</span>
                 </div>
-                <input type="range" min={12} max={120} value={fontSize} onChange={(e) => setFontSize(Number(e.target.value))} className="w-full" />
+                <input type="range" min={12} max={200} value={fontSize} onChange={(e) => setFontSize(Number(e.target.value))} className="w-full" />
               </div>
               <div>
                 <div className="flex justify-between mb-1">
@@ -131,14 +163,31 @@ export function ImageWatermark() {
             </div>
           </div>
 
-          <div className="glass-card mb-6 text-center">
-            <span className="field-label mb-4 block">预览</span>
-            {imageUrl && <img src={imageUrl} alt="preview" className="max-h-[300px] rounded-xl mx-auto object-contain" />}
+          <div className="glass-card mb-6">
+            <span className="field-label mb-4 block">对比预览</span>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="text-center">
+                <p className="mb-2 text-xs text-gray-400">原始图片</p>
+                <img src={imageUrl} alt="original" className="max-h-[250px] w-full rounded-xl object-contain bg-gray-50" />
+              </div>
+              <div className="text-center">
+                <p className="mb-2 text-xs text-gray-400">水印效果</p>
+                {resultUrl ? (
+                  <img src={resultUrl} alt="watermarked" className="max-h-[250px] w-full rounded-xl object-contain bg-gray-50" />
+                ) : (
+                  <div className="flex h-[100px] items-center justify-center rounded-xl bg-gray-50 text-xs text-gray-400">
+                    渲染中...
+                  </div>
+                )}
+              </div>
+            </div>
           </div>
 
           <div className="flex gap-3">
-            <button className="btn btn-primary flex-1" onClick={handleDownload}>下载</button>
-            <button className="btn btn-secondary" onClick={() => { setImageUrl(""); setResultUrl(""); imgRef.current = null; }}>
+            <button className="btn btn-primary flex-1" onClick={handleDownload} disabled={!resultUrl}>下载</button>
+            <button className="btn btn-secondary" onClick={() => {
+              setImageUrl(""); setResultUrl(""); imgRef.current = null;
+            }}>
               更换图片
             </button>
           </div>
@@ -146,7 +195,7 @@ export function ImageWatermark() {
       )}
 
       <div className="mt-8 rounded-2xl border border-amber-200 bg-amber-50/50 px-5 py-4 text-xs leading-relaxed text-gray-500">
-        💡 水印会根据图片尺寸自动缩放。字号基于 500px 基准面自动等比适配。
+        💡 水印为白色文字 + 黑色描边，会根据图片尺寸自动缩放字号，确保在明暗背景上都清晰可见。
       </div>
     </div>
   );
