@@ -23,6 +23,13 @@ import { PasswordGenerator } from "@/tools/password-generator";
 import { ImageConverter } from "@/tools/image-converter";
 import { ImageResizer } from "@/tools/image-resizer";
 import { LoremIpsumGenerator } from "@/tools/lorem-ipsum";
+import { CssFilterGenerator } from "@/tools/css-filter";
+import { RandomPalette } from "@/tools/random-palette";
+import { WhiteNoiseGenerator } from "@/tools/white-noise";
+import { AudioConverter } from "@/tools/audio-converter";
+import { AudioVisualizer } from "@/tools/audio-wave";
+import { MarkdownPreview } from "@/tools/markdown-preview";
+import { JwtDecoder } from "@/tools/jwt-decoder";
 
 const iconBg: Record<string, string> = {
   color: "linear-gradient(135deg, #f59e0b, #f97316)",
@@ -53,6 +60,13 @@ const toolComponents: Record<string, React.ReactNode> = {
   "image-converter": <ImageConverter />,
   "image-resizer": <ImageResizer />,
   "lorem-ipsum": <LoremIpsumGenerator />,
+  "css-filter": <CssFilterGenerator />,
+  "random-palette": <RandomPalette />,
+  "white-noise": <WhiteNoiseGenerator />,
+  "audio-converter": <AudioConverter />,
+  "audio-wave": <AudioVisualizer />,
+  "markdown-preview": <MarkdownPreview />,
+  "jwt-decoder": <JwtDecoder />,
 };
 
 const ANIM_DURATION = 500;
