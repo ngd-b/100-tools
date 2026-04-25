@@ -30,9 +30,9 @@ jobs:
       - name: Upload image to server via SCP
         uses: appleboy/scp-action@v0.1.7
         with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USER }}
-          key: ${{ secrets.SSH_KEY }}
+          host: ${{ secrets.REMOTE_HOST }}
+          username: ${{ secrets.REMOTE_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.SSH_PORT || 22 }}
           source: "${{ runner.temp }}/100-tools.tar"
           target: "/tmp"
@@ -41,13 +41,13 @@ jobs:
       - name: Load image and restart on server
         uses: appleboy/ssh-action@v1.0.3
         with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USER }}
-          key: ${{ secrets.SSH_KEY }}
+          host: ${{ secrets.REMOTE_HOST }}
+          username: ${{ secrets.REMOTE_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.SSH_PORT || 22 }}
           script: |
             docker load -i /tmp/100-tools.tar
-            cd ${{ secrets.REMOTE_APP_DIR }}
+            cd ${{ secrets.DEPLOY_PATH }}
             docker compose down
             docker compose up -d
             docker image prune -f
