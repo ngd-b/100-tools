@@ -2,7 +2,9 @@ name: Build & Deploy
 
 on:
   push:
-    branches: [main]
+    tags:
+      - "v*"
+  workflow_dispatch:
 
 jobs:
   deploy:
@@ -21,7 +23,7 @@ jobs:
           context: .
           push: false
           outputs: type=docker,dest=${{ runner.temp }}/100-tools.tar
-          tags: 100-tools:latest
+          tags: 100-tools:${{ github.ref_name }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
@@ -45,7 +47,8 @@ jobs:
           port: ${{ secrets.SSH_PORT || 22 }}
           script: |
             docker load -i /tmp/100-tools.tar
-            docker compose -f ${{ secrets.REMOTE_APP_DIR }}/docker-compose.yml down
-            docker compose -f ${{ secrets.REMOTE_APP_DIR }}/docker-compose.yml up -d
+            cd ${{ secrets.REMOTE_APP_DIR }}
+            docker compose down
+            docker compose up -d
             docker image prune -f
             rm -f /tmp/100-tools.tar
