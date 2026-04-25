@@ -375,9 +375,9 @@ export default function Home() {
                   <button
                     className="sidebar-fav-btn"
                     onClick={(e) => { e.stopPropagation(); toggle(tool.id); }}
-                    title={isFav ? "取消收藏" : "收藏"}
+                    title={mounted && isFav ? "取消收藏" : "收藏"}
                   >
-                    {isFav ? "★" : "☆"}
+                    {mounted && isFav ? "★" : "☆"}
                   </button>
                 </div>
               );
@@ -437,6 +437,8 @@ function ToolCard({
   onToggleFavorite: () => void;
 }) {
   const bg = iconBg[tool.category] ?? iconBg.text;
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
 
   return (
     <div className="relative group">
@@ -463,9 +465,9 @@ function ToolCard({
       <button
         className="fav-star absolute top-3 right-3"
         onClick={(e) => { e.stopPropagation(); onToggleFavorite(); }}
-        title={isFavorite ? "取消收藏" : "收藏"}
+        title={mounted && isFavorite ? "取消收藏" : "收藏"}
       >
-        {isFavorite ? "★" : "☆"}
+        {mounted && isFavorite ? "★" : "☆"}
       </button>
     </div>
   );
