@@ -12,29 +12,31 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Create tarball
-        run: |
-          tar czf deploy.tar.gz \
-            --exclude='.git' \
-            --exclude='.github' \
-            --exclude='node_modules' \
-            --exclude='.next' \
-            --exclude='.vscode' \
-            --exclude='*.md' \
-            .
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
 
-      - name: Upload to server via SCP
+      - name: Build and export image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: false
+          outputs: type=docker,dest=${{ runner.temp }}/100-tools.tar
+          tags: 100-tools:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Upload image to server via SCP
         uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_KEY }}
           port: ${{ secrets.SSH_PORT || 22 }}
-          source: "deploy.tar.gz"
+          source: "${{ runner.temp }}/100-tools.tar"
           target: "/tmp"
           strip_components: 0
 
-      - name: Extract, build & restart
+      - name: Load image and restart on server
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.SSH_HOST }}
@@ -42,10 +44,8 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           port: ${{ secrets.SSH_PORT || 22 }}
           script: |
-            mkdir -p ${{ secrets.REMOTE_APP_DIR }}
-            cd ${{ secrets.REMOTE_APP_DIR }}
-            tar xzf /tmp/deploy.tar.gz -C .
-            docker compose build --no-cache
-            docker compose up -d
+            docker load -i /tmp/100-tools.tar
+            docker compose -f ${{ secrets.REMOTE_APP_DIR }}/docker-compose.yml down
+            docker compose -f ${{ secrets.REMOTE_APP_DIR }}/docker-compose.yml up -d
             docker image prune -f
-            rm -f /tmp/deploy.tar.gz
+            rm -f /tmp/100-tools.tar

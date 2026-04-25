@@ -1,6 +1,6 @@
 services:
   100-tools:
-    build: .
+    image: 100-tools:latest
     container_name: 100-tools
     restart: unless-stopped
     ports:
