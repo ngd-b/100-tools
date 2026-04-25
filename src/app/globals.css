@@ -527,13 +527,25 @@ input[type="range"]::-webkit-slider-thumb {
 
 /* Sidebar item stagger animation */
 .sidebar-item-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  width: 100%;
+  padding: 2px 6px;
+  border-radius: 10px;
+  transition: background 0.15s;
   opacity: 0;
   transform: translateX(24px);
-  animation: sidebar-in 350ms var(--ease-out) calc(var(--slide-index, 0) * 40ms + 100ms) forwards;
+  transition:
+    opacity 300ms var(--ease-out),
+    transform 300ms var(--ease-out),
+    background 0.15s;
+  transition-delay: calc(var(--slide-index, 0) * 40ms + 50ms);
 }
 
 .sidebar-open .sidebar-item-wrapper {
-  animation: sidebar-in 350ms var(--ease-out) calc(var(--slide-index, 0) * 40ms + 100ms) forwards;
+  opacity: 1;
+  transform: translateX(0);
 }
 
 .sidebar-item {
@@ -717,16 +729,6 @@ input[type="range"]::-webkit-slider-thumb {
 .fav-star[title="取消收藏"] {
   opacity: 1;
   color: #f59e0b;
-}
-
-.sidebar-item-wrapper {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  width: 100%;
-  padding: 2px 6px;
-  border-radius: 10px;
-  transition: background 0.15s;
 }
 
 .sidebar-item-wrapper.active {
