@@ -7,6 +7,7 @@ export function AudioVisualizer() {
   const [mode, setMode] = useState<"waveform" | "bars" | "circle">("bars");
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const analyserRef = useRef<AnalyserNode | null>(null);
+  const audioCtxRef = useRef<AudioContext | null>(null);
   const rafRef = useRef<number>(0);
 
   const draw = useCallback(() => {
@@ -98,6 +99,7 @@ export function AudioVisualizer() {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       const audioCtx = new AudioContext();
+      audioCtxRef.current = audioCtx;
       const source = audioCtx.createMediaStreamSource(stream);
       const analyser = audioCtx.createAnalyser();
       analyser.fftSize = 2048;
@@ -111,10 +113,11 @@ export function AudioVisualizer() {
 
   const stopListening = useCallback(() => {
     if (rafRef.current) cancelAnimationFrame(rafRef.current);
-    if (analyserRef.current) {
-      analyserRef.current.context.close();
-      analyserRef.current = null;
+    if (audioCtxRef.current) {
+      audioCtxRef.current.close();
+      audioCtxRef.current = null;
     }
+    analyserRef.current = null;
     setIsListening(false);
     const canvas = canvasRef.current;
     if (canvas) {
