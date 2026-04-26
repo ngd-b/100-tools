@@ -34,15 +34,19 @@ jobs:
             -C ${{ runner.temp }} 100-tools.tar docker-compose.yml
 
       - name: Upload to server via SCP
-        uses: appleboy/scp-action@v0.1.7
-        with:
-          host: ${{ secrets.REMOTE_HOST }}
-          username: ${{ secrets.REMOTE_USER }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          port: ${{ secrets.SSH_PORT || 22 }}
-          source: "${{ runner.temp }}/deploy.tar.gz"
-          target: "/tmp"
-          strip_components: 0
+        run: |
+          mkdir -p ~/.ssh && chmod 700 ~/.ssh
+          echo "${SSH_KEY}" > ~/.ssh/deploy_key && chmod 600 ~/.ssh/deploy_key
+          scp -i ~/.ssh/deploy_key \
+              -o StrictHostKeyChecking=no \
+              -P "${SSH_PORT}" \
+              "${{ runner.temp }}/deploy.tar.gz" \
+              "${SSH_USER}@${SSH_HOST}:/tmp/deploy.tar.gz"
+        env:
+          SSH_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          SSH_HOST: ${{ secrets.REMOTE_HOST }}
+          SSH_USER: ${{ secrets.REMOTE_USER }}
+          SSH_PORT: ${{ secrets.SSH_PORT || 22 }}
 
       - name: Extract, load & restart
         uses: appleboy/ssh-action@v1.0.3
