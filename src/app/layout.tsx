@@ -38,7 +38,7 @@ export default function RootLayout({
             </a>
             <nav className="flex items-center gap-6">
               <a
-                href="https://github.com"
+                href="https://github.com/ngd-b/100-tools"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-sm text-gray-400 transition-colors hover:text-gray-900"

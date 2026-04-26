@@ -30,6 +30,9 @@ import { AudioConverter } from "@/tools/audio-converter";
 import { AudioVisualizer } from "@/tools/audio-wave";
 import { MarkdownPreview } from "@/tools/markdown-preview";
 import { JwtDecoder } from "@/tools/jwt-decoder";
+import { ImageCrop } from "@/tools/image-crop";
+import { GifMaker } from "@/tools/gif-maker";
+import { QrCodeGenerator } from "@/tools/qr-code";
 
 const iconBg: Record<string, string> = {
   color: "linear-gradient(135deg, #f59e0b, #f97316)",
@@ -67,6 +70,9 @@ const toolComponents: Record<string, React.ReactNode> = {
   "audio-wave": <AudioVisualizer />,
   "markdown-preview": <MarkdownPreview />,
   "jwt-decoder": <JwtDecoder />,
+  "image-crop": <ImageCrop />,
+  "gif-maker": <GifMaker />,
+  "qr-code": <QrCodeGenerator />,
 };
 
 const ANIM_DURATION = 500;

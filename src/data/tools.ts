@@ -271,6 +271,36 @@ export const tools: Tool[] = [
     path: "/dev/jwt",
     tags: ["jwt", "token", "解码", "decode", "auth"],
   },
+  {
+    id: "image-crop",
+    name: "图片裁剪",
+    nameEn: "Image Crop",
+    category: "image",
+    icon: "🖼️",
+    description: "自由裁剪图片，拖拽选择区域，实时预览",
+    path: "/image/crop",
+    tags: ["图片", "裁剪", "crop", "剪切"],
+  },
+  {
+    id: "gif-maker",
+    name: "GIF 制作器",
+    nameEn: "GIF Maker",
+    category: "image",
+    icon: "🎞️",
+    description: "上传图片制作 GIF 动图，可调帧速和循环次数",
+    path: "/image/gif",
+    tags: ["gif", "动图", "制作", "动画", "maker"],
+  },
+  {
+    id: "qr-code",
+    name: "二维码生成器",
+    nameEn: "QR Code Generator",
+    category: "image",
+    icon: "📱",
+    description: "输入文本或链接，一键生成高清二维码",
+    path: "/image/qr",
+    tags: ["二维码", "qr", "二维码生成", "扫码"],
+  },
 ];
 
 export const categories = [
