@@ -1,36 +1,82 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 100-tools — 免费在线工具合集
 
-## Getting Started
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
-First, run the development server:
+无需注册，打开即用。提供颜色、图片、音频、文本、开发等各类实用在线工具。
+
+## 工具列表（30 个）
+
+### 颜色工具
+
+- 颜色工具箱 — 拾取、格式转换、调色板
+- 渐变色生成器 — 可视化调节双色/多色渐变
+- 对比度检测 — WCAG 对比度等级
+- CSS 阴影生成器 — box-shadow / text-shadow 可视化
+- CSS 滤镜生成器 — blur / brightness / contrast 等
+- 随机调色板 — 和谐配色方案
+
+### 图片工具
+
+- 图片裁剪 — 拖拽选区，透明遮罩，Canvas 裁剪
+- 图片抠图 — 一键去除图片背景
+- 图片压缩 — Canvas 压缩，质量可调
+- 图片水印 — 文字水印，位置/透明度可调
+- 图片格式转换 — PNG / JPEG / WebP 互转
+- 图片尺寸调整 — 调整宽高，保持/裁剪比例
+- GIF 制作器 — 多帧合成，内置 LZW 编码器，可调帧速/循环
+- 二维码生成器 — 自动版本，EC Level M 纠错
+
+### 音频工具
+
+- 文本转语音 — 文字转语音，多语言支持
+- 音频录制器 — 录制麦克风音频，导出 WAV
+- 白噪音生成器 — 环境音，可后台播放
+- 音频格式转换 — 录制导出不同格式
+- 音频波形可视化 — 实时波形/频谱
+
+### 文本工具
+
+- Base64 编解码 — 文本与 Base64 互转
+- 字数统计 — 字符数、词数、阅读时间
+- HTML 实体编码 — 特殊字符转义
+- Lorem Ipsum 生成器 — 占位文本生成
+- Markdown 预览器 — 实时编辑与预览
+
+### 开发工具
+
+- JSON 格式化 — 校验、格式化、压缩
+- 时间戳转换 — Unix 时间戳与日期互转
+- URL 编解码 — 特殊字符安全处理
+- 正则表达式测试 — 实时匹配测试
+- 密码生成器 — 安全随机密码
+- JWT 解码器 — 解析 Token 内容
+
+## 本地运行
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+打开 [http://localhost:3000](http://localhost:3000) 访问。
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Docker 部署
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+docker-compose up -d
+```
 
-## Learn More
+应用监听 `127.0.0.1:3000`，建议通过反向代理暴露到公网。
 
-To learn more about Next.js, take a look at the following resources:
+## CI/CD
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+推送 `v*` tag 自动触发构建部署：
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```bash
+git tag -a v1.2.0 -m "Release v1.2.0"
+git push origin v1.2.0
+```
 
-## Deploy on Vercel
+## License
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+[MIT](LICENSE)
