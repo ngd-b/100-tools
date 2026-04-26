@@ -23,7 +23,7 @@ jobs:
           context: .
           push: false
           outputs: type=docker,dest=${{ runner.temp }}/100-tools.tar
-          tags: 100-tools:${{ github.ref_name }}
+          tags: 100-tools:latest
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
@@ -52,12 +52,30 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.SSH_PORT || 22 }}
           script: |
+            echo "=== 1. 准备部署目录 ==="
             mkdir -p ${{ secrets.DEPLOY_PATH }}
             cd ${{ secrets.DEPLOY_PATH }}
+
+            echo "=== 2. 检查并清理临时文件 ==="
+            # 如果 /tmp/deploy.tar.gz 不存在，可能是上一次运行残留被清理了，或者上传失败
+            if [ ! -f /tmp/deploy.tar.gz ]; then
+              echo "❌ 错误: /tmp/deploy.tar.gz 不存在！检查上一步 SCP 是否成功。"
+              ls -lh /tmp/
+              exit 1
+            fi
+
+            echo "=== 3. 解压文件 ==="
+            # -C . 表示解压到当前目录 (即 DEPLOY_PATH)
             tar xzf /tmp/deploy.tar.gz -C .
+
+            echo "=== 4. 加载 Docker 镜像 ==="
             docker load -i 100-tools.tar
+
+            echo "=== 5. 重启服务 ==="
             docker compose down
             docker compose up -d
+
+            echo "=== 6. 清理垃圾 ==="
             rm -f 100-tools.tar
-            docker image prune -f
             rm -f /tmp/deploy.tar.gz
+            docker image prune -f
