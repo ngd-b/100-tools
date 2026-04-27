@@ -21,23 +21,35 @@ function strengthScore(password: string): number {
   return score;
 }
 
+const ALL_SYMBOLS = [..."!@#$%^&*()_+-=[]{}|;:,.<>?"];
+
 export function PasswordGenerator() {
   const [length, setLength] = useState(16);
   const [uppercase, setUppercase] = useState(true);
   const [lowercase, setLowercase] = useState(true);
   const [numbers, setNumbers] = useState(true);
-  const [symbols, setSymbols] = useState(true);
+  const [selectedSymbols, setSelectedSymbols] = useState<Set<string>>(new Set(ALL_SYMBOLS));
   const [passwords, setPasswords] = useState<string[]>([]);
   const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
+
+  const toggleSymbol = (s: string) => {
+    setSelectedSymbols((prev) => {
+      const next = new Set(prev);
+      next.has(s) ? next.delete(s) : next.add(s);
+      return next;
+    });
+  };
+
+  const activeSymbols = useMemo(() => [...selectedSymbols].join(""), [selectedSymbols]);
 
   const charset = useMemo(() => {
     let c = "";
     if (lowercase) c += "abcdefghijklmnopqrstuvwxyz";
     if (uppercase) c += "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     if (numbers) c += "0123456789";
-    if (symbols) c += "!@#$%^&*()_+-=[]{}|;:,.<>?";
+    if (activeSymbols) c += activeSymbols;
     return c;
-  }, [uppercase, lowercase, numbers, symbols]);
+  }, [uppercase, lowercase, numbers, activeSymbols]);
 
   const handleGenerate = useCallback(() => {
     if (!charset) return;
@@ -61,7 +73,6 @@ export function PasswordGenerator() {
             { label: "大写字母 (A-Z)", checked: uppercase, setter: setUppercase },
             { label: "小写字母 (a-z)", checked: lowercase, setter: setLowercase },
             { label: "数字 (0-9)", checked: numbers, setter: setNumbers },
-            { label: "特殊符号 (!@#$)", checked: symbols, setter: setSymbols },
           ].map(({ label, checked, setter }) => (
             <label key={label} className="flex items-center gap-3 cursor-pointer">
               <input type="checkbox" checked={checked} onChange={(e) => setter(e.target.checked)}
@@ -69,6 +80,29 @@ export function PasswordGenerator() {
               <span className="text-sm">{label}</span>
             </label>
           ))}
+          <div className="flex flex-col gap-2 pt-1">
+            <div className="flex items-center gap-3">
+              <input type="checkbox" checked={selectedSymbols.size === ALL_SYMBOLS.length}
+                onChange={(e) => {
+                  if (e.target.checked) setSelectedSymbols(new Set(ALL_SYMBOLS));
+                  else setSelectedSymbols(new Set());
+                }}
+                className="h-5 w-5 rounded accent-blue-500" />
+              <span className="text-sm">特殊符号</span>
+              <button className="text-xs text-blue-500 hover:text-blue-600 ml-auto"
+                onClick={() => setSelectedSymbols(new Set(ALL_SYMBOLS))}>全选</button>
+            </div>
+            <div className="flex flex-wrap gap-2 pl-8">
+              {ALL_SYMBOLS.map((s) => (
+                <label key={s} className="flex items-center gap-1 cursor-pointer rounded-lg border px-2 py-1 text-sm font-mono"
+                  style={{ borderColor: selectedSymbols.has(s) ? "#3b82f6" : "#e5e7eb", backgroundColor: selectedSymbols.has(s) ? "#eff6ff" : "#fff" }}>
+                  <input type="checkbox" checked={selectedSymbols.has(s)} onChange={() => toggleSymbol(s)}
+                    className="h-4 w-4 rounded accent-blue-500" />
+                  <span>{s}</span>
+                </label>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
 
