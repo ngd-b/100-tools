@@ -281,7 +281,7 @@ export default function Home() {
                   placeholder="搜索工具名称或关键词..."
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
-                  className="input pl-11"
+                  className="input"
                 />
               </div>
             </div>
@@ -464,7 +464,7 @@ export default function Home() {
                 <path strokeLinecap="round" d="M4 6h16M4 12h16M4 18h16" />
               </svg>
             </button>
-            <div className="flex items-center gap-3">
+            <div className="flex min-w-0 items-center gap-3">
               <div
                 className="flex h-9 w-9 items-center justify-center rounded-lg text-lg text-white"
                 style={{ background: iconBg[selectedTool.category] ?? iconBg.text }}
@@ -472,8 +472,8 @@ export default function Home() {
                 {selectedTool.icon}
               </div>
               <div>
-                <h2 className="tool-title">{selectedTool.name}</h2>
-                <p className="tool-subtitle">{selectedTool.nameEn}</p>
+                <h2 className="tool-title truncate">{selectedTool.name}</h2>
+                <p className="tool-subtitle truncate">{selectedTool.nameEn}</p>
               </div>
             </div>
             <button className="close-btn" onClick={closeTool} title="关闭">

@@ -116,7 +116,7 @@ export function TimestampConverter() {
           <Button variant="gradient" onClick={handleDateToTs}>转换</Button>
         </div>
         {convertedTs && (
-          <div className="mt-3 grid grid-cols-2 gap-3">
+          <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2">
             <div className="value-row">
               <span className="text-xs text-gray-500">秒级</span>
               <span className="font-mono text-sm">{Math.floor(Number(convertedTs) / 1000)}</span>

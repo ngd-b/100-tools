@@ -51,7 +51,7 @@ export function CurrencyConverter() {
 
       {/* Main Conversion */}
       <div className="glass-card mb-6">
-        <div className="grid grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
           <div>
             <Label>从</Label>
             <Select value={fromCode} onValueChange={(v) => { if (v) setFromCode(v); }}>
@@ -81,7 +81,7 @@ export function CurrencyConverter() {
       {amount && !isNaN(parseFloat(amount)) && (
         <div className="glass-card">
           <Label>换算到所有货币</Label>
-          <div className="mt-3 grid grid-cols-2 gap-2">
+          <div className="mt-3 grid grid-cols-1 gap-2 sm:grid-cols-2">
             {quickResults.map((c) => (
               <div key={c.code} className="flex items-center justify-between rounded-lg bg-gray-50 px-3 py-2 text-sm">
                 <span className="text-gray-500">{c.symbol} {c.code}</span>

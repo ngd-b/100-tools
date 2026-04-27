@@ -85,7 +85,7 @@ export function LoanCalculator() {
 
       <div className="glass-card">
         <Label className="mb-4 block">计算结果</Label>
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
           {type === "equal" ? (
             <>
               <div className="flex flex-col items-center rounded-xl bg-blue-50 p-4">

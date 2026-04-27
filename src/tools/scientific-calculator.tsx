@@ -199,7 +199,7 @@ export function ScientificCalculator() {
           </Button>
         ))}
       </div>
-      <div className="grid grid-cols-2 gap-2 mt-2">
+      <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 mt-2">
         <Button variant="outline" onClick={() => inputConstant("e")}>e</Button>
         <Button variant="outline" onClick={() => { setExpression(`(${parseFloat(display)})`); setIsNewNumber(true); }}>( )</Button>
       </div>

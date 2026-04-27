@@ -36,7 +36,7 @@ export function BmiCalculator() {
   return (
     <div>
       <div className="glass-card mb-6">
-        <div className="grid grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
           <div>
             <Label>身高 (cm)</Label>
             <Input type="number" min={1} value={height} onChange={(e) => setHeight(e.target.value)} className="mt-3" />

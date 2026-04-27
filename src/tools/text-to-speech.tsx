@@ -101,7 +101,7 @@ export function TextToSpeechTool() {
 
       {/* Controls */}
       <div className="glass-card mb-6">
-        <div className="grid grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
           <div>
             <Label>语速</Label>
             <Slider

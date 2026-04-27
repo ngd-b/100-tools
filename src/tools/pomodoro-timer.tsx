@@ -91,7 +91,7 @@ export function PomodoroTimer() {
       {/* Settings */}
       <div className="glass-card mb-6">
         <Label>设置（分钟）</Label>
-        <div className="grid grid-cols-2 gap-6 mt-3">
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 mt-3">
           <div>
             <Label className="text-xs text-gray-400">工作时长</Label>
             <Input type="number" min={1} max={90} value={workMin} onChange={(e) => { setWorkMin(parseInt(e.target.value) || 25); handleReset(); }} className="mt-1 text-center font-mono text-lg" />

@@ -93,7 +93,7 @@ export function ContrastChecker() {
             <div className={`text-5xl font-bold ${levelColor}`}>{level}</div>
             <p className="mt-2 text-sm text-gray-500">对比度: {result.ratio.toFixed(2)}:1</p>
           </div>
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
             <div className={`value-row ${result.aa ? "border-green-200 bg-green-50/30" : "border-red-200 bg-red-50/30"}`}>
               <span className="text-sm">WCAG AA</span>
               <span className={`text-lg font-bold ${result.aa ? "text-green-600" : "text-red-500"}`}>

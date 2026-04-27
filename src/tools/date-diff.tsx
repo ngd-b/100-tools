@@ -87,7 +87,7 @@ export function DateDiff() {
 
           <div className="glass-card">
             <Label className="mb-4 block">其他单位</Label>
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
               {[
                 { label: "总周数", value: result.diffWeeks.toLocaleString() + " 周" },
                 { label: "总小时", value: result.diffHours.toLocaleString() + " 小时" },

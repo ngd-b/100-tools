@@ -139,7 +139,7 @@ export function UnitConverter() {
 
       {/* Conversion */}
       <div className="glass-card mb-6">
-        <div className="grid grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
           <div>
             <Label>从</Label>
             <Select value={cat.units[fromIdx].key} onValueChange={(v) => { const idx = cat.units.findIndex((u) => u.key === v); setFromIdx(idx); }}>
@@ -169,7 +169,7 @@ export function UnitConverter() {
       {value && !isNaN(parseFloat(value)) && (
         <div className="glass-card">
           <Label>全部换算</Label>
-          <div className="mt-3 grid grid-cols-2 gap-2">
+          <div className="mt-3 grid grid-cols-1 gap-2 sm:grid-cols-2">
             {cat.units.map((u, i) => {
               const fromUnit = cat.units[fromIdx];
               const base = fromUnit.toBase(parseFloat(value));

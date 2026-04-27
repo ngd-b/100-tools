@@ -72,7 +72,7 @@ export function SvgPlaceholder() {
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-4 mb-6">
+      <div className="grid grid-cols-1 gap-4 mb-6 sm:grid-cols-2">
         <div className="glass-card">
           <Label className="mb-3 block">宽度 (px)</Label>
           <div className="flex items-center gap-3">
@@ -89,7 +89,7 @@ export function SvgPlaceholder() {
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-4 mb-6">
+      <div className="grid grid-cols-1 gap-4 mb-6 sm:grid-cols-2">
         <div className="glass-card">
           <Label className="mb-3 block">背景色</Label>
           <Input type="color" value={bgColor} onChange={(e) => setBgColor(e.target.value)} className="h-10 w-full cursor-pointer" />

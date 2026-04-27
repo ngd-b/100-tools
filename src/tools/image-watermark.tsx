@@ -169,7 +169,7 @@ export function ImageWatermark() {
 
           <div className="glass-card mb-6">
             <Label className="mb-4 block">对比预览</Label>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               <div className="text-center">
                 <p className="mb-2 text-xs text-gray-400">原始图片</p>
                 <img src={imageUrl} alt="original" className="max-h-[250px] w-full rounded-xl object-contain bg-gray-50" />

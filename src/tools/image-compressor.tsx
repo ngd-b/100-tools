@@ -119,7 +119,7 @@ export function ImageCompressor() {
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-4 mb-6">
+          <div className="grid grid-cols-1 gap-4 mb-6 sm:grid-cols-2">
             <div className="glass-card text-center">
               <span className="text-xs text-gray-500">原始大小</span>
               <p className="text-lg font-bold font-mono mt-1">{formatSize(originalSize)}</p>

@@ -75,7 +75,7 @@ export function TextStats() {
 
           <div className="glass-card mb-6">
             <Label className="mb-4 block">预估时间</Label>
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
               <StatItem label="阅读" value={stats.readTime} unit="分钟" />
               <StatItem label="朗读" value={stats.speakTime} unit="分钟" />
             </div>
