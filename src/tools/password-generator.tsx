@@ -27,6 +27,8 @@ function strengthScore(password: string): number {
 
 const ALL_SYMBOLS = [..."!@#$%^&*()_+-=[]{}|;:,.<>?"];
 
+const PAIRS: Record<string, string> = { "(": ")", "[": "]", "{": "}", ")": "(", "]": "[", "}": "{", "<": ">", ">": "<" };
+
 export function PasswordGenerator() {
   const [length, setLength] = useState(16);
   const [uppercase, setUppercase] = useState(true);
@@ -39,7 +41,14 @@ export function PasswordGenerator() {
   const toggleSymbol = (s: string) => {
     setSelectedSymbols((prev) => {
       const next = new Set(prev);
-      next.has(s) ? next.delete(s) : next.add(s);
+      const pair = PAIRS[s];
+      if (pair) {
+        // Toggle the pair together
+        if (next.has(s)) { next.delete(s); next.delete(pair); }
+        else { next.add(s); next.add(pair); }
+      } else {
+        next.has(s) ? next.delete(s) : next.add(s);
+      }
       return next;
     });
   };
@@ -95,13 +104,31 @@ export function PasswordGenerator() {
                 onClick={() => setSelectedSymbols(new Set(ALL_SYMBOLS))}>全选</button>
             </div>
             <div className="flex flex-wrap gap-2 pl-8">
-              {ALL_SYMBOLS.map((s) => (
-                <label key={s} className="flex items-center gap-1 cursor-pointer rounded-lg border px-2 py-1 text-sm font-mono"
-                  style={{ borderColor: selectedSymbols.has(s) ? "#3b82f6" : "#e5e7eb", backgroundColor: selectedSymbols.has(s) ? "#eff6ff" : "#fff" }}>
-                  <Checkbox checked={selectedSymbols.has(s)} onCheckedChange={() => toggleSymbol(s)} />
-                  <span>{s}</span>
-                </label>
-              ))}
+              {(() => {
+                const seen = new Set<string>();
+                const items: { key: string; display: string }[] = [];
+                for (const s of ALL_SYMBOLS) {
+                  if (seen.has(s)) continue;
+                  const pair = PAIRS[s];
+                  if (pair && pair > s) {
+                    seen.add(s); seen.add(pair);
+                    items.push({ key: s + pair, display: `${s} ${pair}` });
+                  } else {
+                    seen.add(s);
+                    items.push({ key: s, display: s });
+                  }
+                }
+                return items.map(({ key, display }) => {
+                  const isSelected = key.length > 1 ? selectedSymbols.has(key[0]) && selectedSymbols.has(key[1]) : selectedSymbols.has(key);
+                  return (
+                    <label key={key} className="flex items-center gap-1 cursor-pointer rounded-lg px-2 py-1 text-sm font-mono"
+                      style={{ backgroundColor: isSelected ? "#eff6ff" : "#fff" }}>
+                      <Checkbox checked={isSelected} onCheckedChange={() => toggleSymbol(key[0])} />
+                      <span>{display}</span>
+                    </label>
+                  );
+                });
+              })()}
             </div>
           </div>
         </div>
