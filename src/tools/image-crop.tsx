@@ -1,6 +1,8 @@
 "use client";
 
 import { useState, useCallback, useRef, useLayoutEffect } from "react";
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
 
 interface CropRect {
   x: number;
@@ -159,17 +161,17 @@ export function ImageCrop() {
               <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
             </svg>
             <p className="text-sm text-gray-400 mb-1">拖拽图片到此处</p>
-            <label className="btn btn-secondary text-sm cursor-pointer">
+            <Button variant="secondary" className="text-sm cursor-pointer">
               选择图片
               <input type="file" accept="image/*" className="hidden"
                 onChange={(e) => { const f = e.target.files?.[0]; if (f) handleFile(f); }} />
-            </label>
+            </Button>
           </div>
         </div>
       ) : (
         <>
           <div className="glass-card mb-6">
-            <span className="field-label mb-3 block">裁剪区域</span>
+            <Label className="mb-3 block">裁剪区域</Label>
             <p className="text-xs text-gray-400 mb-3">在图片上拖拽鼠标选择裁剪区域</p>
             <div className="flex justify-center">
               <div
@@ -205,7 +207,7 @@ export function ImageCrop() {
 
           {previewUrl && (
             <div className="glass-card mb-6">
-              <span className="field-label mb-4 block">裁剪预览</span>
+              <Label className="mb-4 block">裁剪预览</Label>
               <div className="flex flex-col items-center gap-4">
                 <img src={previewUrl} alt="cropped" className="max-h-62.5 rounded-xl object-contain bg-gray-50" />
               </div>
@@ -213,12 +215,12 @@ export function ImageCrop() {
           )}
 
           <div className="flex gap-3">
-            <button className="btn btn-primary flex-1" onClick={handleDownload} disabled={!previewUrl}>下载</button>
-            <button className="btn btn-secondary" onClick={() => {
+            <Button variant="gradient" className="flex-1" onClick={handleDownload} disabled={!previewUrl}>下载</Button>
+            <Button variant="secondary" onClick={() => {
               setImageUrl(""); setCrop(null); setPreviewUrl("");
             }}>
               更换图片
-            </button>
+            </Button>
           </div>
         </>
       )}

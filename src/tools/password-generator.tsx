@@ -1,6 +1,10 @@
 "use client";
 
 import { useState, useCallback, useMemo } from "react";
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+import { Slider } from "@/components/ui/slider";
+import { Checkbox } from "@/components/ui/checkbox";
 
 function generateSecurePassword(length: number, charset: string): string {
   const chars = [...charset];
@@ -59,15 +63,15 @@ export function PasswordGenerator() {
   return (
     <div>
       <div className="glass-card mb-6">
-        <span className="field-label mb-3 block">密码长度</span>
+        <Label className="mb-3 block">密码长度</Label>
         <div className="flex items-center gap-3">
-          <input type="range" min={4} max={64} value={length} onChange={(e) => setLength(Number(e.target.value))} className="flex-1" />
+          <Slider min={4} max={64} value={[length]} onValueChange={(v) => { const val = Array.isArray(v) ? v[0] : v; setLength(val as number) }} className="flex-1" />
           <span className="w-12 text-right font-mono text-lg font-bold">{length}</span>
         </div>
       </div>
 
       <div className="glass-card mb-6">
-        <span className="field-label mb-3 block">字符集</span>
+        <Label className="mb-3 block">字符集</Label>
         <div className="flex flex-col gap-3">
           {[
             { label: "大写字母 (A-Z)", checked: uppercase, setter: setUppercase },
@@ -75,19 +79,17 @@ export function PasswordGenerator() {
             { label: "数字 (0-9)", checked: numbers, setter: setNumbers },
           ].map(({ label, checked, setter }) => (
             <label key={label} className="flex items-center gap-3 cursor-pointer">
-              <input type="checkbox" checked={checked} onChange={(e) => setter(e.target.checked)}
-                className="h-5 w-5 rounded accent-blue-500" />
+              <Checkbox checked={checked} onCheckedChange={(v) => setter(v as boolean)} />
               <span className="text-sm">{label}</span>
             </label>
           ))}
           <div className="flex flex-col gap-2 pt-1">
             <div className="flex items-center gap-3">
-              <input type="checkbox" checked={selectedSymbols.size === ALL_SYMBOLS.length}
-                onChange={(e) => {
-                  if (e.target.checked) setSelectedSymbols(new Set(ALL_SYMBOLS));
+              <Checkbox checked={selectedSymbols.size === ALL_SYMBOLS.length}
+                onCheckedChange={(v) => {
+                  if (v) setSelectedSymbols(new Set(ALL_SYMBOLS));
                   else setSelectedSymbols(new Set());
-                }}
-                className="h-5 w-5 rounded accent-blue-500" />
+                }} />
               <span className="text-sm">特殊符号</span>
               <button className="text-xs text-blue-500 hover:text-blue-600 ml-auto"
                 onClick={() => setSelectedSymbols(new Set(ALL_SYMBOLS))}>全选</button>
@@ -96,8 +98,7 @@ export function PasswordGenerator() {
               {ALL_SYMBOLS.map((s) => (
                 <label key={s} className="flex items-center gap-1 cursor-pointer rounded-lg border px-2 py-1 text-sm font-mono"
                   style={{ borderColor: selectedSymbols.has(s) ? "#3b82f6" : "#e5e7eb", backgroundColor: selectedSymbols.has(s) ? "#eff6ff" : "#fff" }}>
-                  <input type="checkbox" checked={selectedSymbols.has(s)} onChange={() => toggleSymbol(s)}
-                    className="h-4 w-4 rounded accent-blue-500" />
+                  <Checkbox checked={selectedSymbols.has(s)} onCheckedChange={() => toggleSymbol(s)} />
                   <span>{s}</span>
                 </label>
               ))}
@@ -106,13 +107,13 @@ export function PasswordGenerator() {
         </div>
       </div>
 
-      <button className="btn btn-primary w-full mb-6" onClick={handleGenerate} disabled={!charset}>
+      <Button variant="gradient" className="w-full mb-6" onClick={handleGenerate} disabled={!charset}>
         生成 5 个密码
-      </button>
+      </Button>
 
       {passwords.length > 0 && (
         <div className="glass-card">
-          <span className="field-label mb-3 block">生成结果</span>
+          <Label className="mb-3 block">生成结果</Label>
           <div className="flex flex-col gap-3">
             {passwords.map((p, i) => {
               const score = strengthScore(p);

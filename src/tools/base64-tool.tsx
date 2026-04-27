@@ -1,6 +1,9 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useState, useCallback } from "react";
+import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
 
 export function Base64Tool() {
   const [input, setInput] = useState("");
@@ -40,27 +43,29 @@ export function Base64Tool() {
   return (
     <div>
       <div className="glass-card mb-6">
-        <span className="field-label mb-3 block">模式</span>
+        <Label className="mb-3 block">模式</Label>
         <div className="flex gap-3">
-          <button
-            className={`btn flex-1 ${mode === "encode" ? "btn-primary" : "btn-secondary"}`}
+          <Button
+            variant={mode === "encode" ? "gradient" : "secondary"}
+            className="flex-1"
             onClick={() => { setMode("encode"); setOutput(""); setError(""); }}
           >
             编码
-          </button>
-          <button
-            className={`btn flex-1 ${mode === "decode" ? "btn-primary" : "btn-secondary"}`}
+          </Button>
+          <Button
+            variant={mode === "decode" ? "gradient" : "secondary"}
+            className="flex-1"
             onClick={() => { setMode("decode"); setOutput(""); setError(""); }}
           >
             解码
-          </button>
+          </Button>
         </div>
       </div>
 
       <div className="glass-card mb-6">
-        <span className="field-label mb-3 block">{mode === "encode" ? "原始文本" : "Base64 编码"}</span>
-        <textarea
-          className="input min-h-[120px] w-full resize-y"
+        <Label className="mb-3 block">{mode === "encode" ? "原始文本" : "Base64 编码"}</Label>
+        <Textarea
+          className="min-h-[120px] w-full resize-y"
           placeholder={mode === "encode" ? "输入要编码的文本..." : "粘贴 Base64 编码..."}
           value={input}
           onChange={(e) => setInput(e.target.value)}
@@ -68,12 +73,12 @@ export function Base64Tool() {
       </div>
 
       <div className="flex gap-3 mb-6">
-        <button className="btn btn-primary flex-1" onClick={handleConvert}>
+        <Button variant="gradient" className="flex-1" onClick={handleConvert}>
           {mode === "encode" ? "编码" : "解码"}
-        </button>
-        <button className="btn btn-secondary" onClick={handleClear}>
+        </Button>
+        <Button variant="secondary" onClick={handleClear}>
           清空
-        </button>
+        </Button>
       </div>
 
       {error && <p className="mb-6 text-sm text-red-500">{error}</p>}
@@ -81,7 +86,7 @@ export function Base64Tool() {
       {output && (
         <div className="glass-card">
           <div className="mb-3 flex items-center justify-between">
-            <span className="field-label">{mode === "encode" ? "Base64 结果" : "解码结果"}</span>
+            <Label>{mode === "encode" ? "Base64 结果" : "解码结果"}</Label>
             <button className="copy-btn text-xs text-blue-500 hover:text-blue-600" onClick={handleCopy}>
               {copied ? "✓" : "复制"}
             </button>

@@ -1,28 +1,10 @@
 "use client";
 
 import { useState, useCallback, useMemo } from "react";
-
-function RangeSlider({ label, value, min, max, step = 1, unit, onChange }: {
-  label: string; value: number; min: number; max: number; step?: number; unit?: string; onChange: (v: number) => void;
-}) {
-  return (
-    <div className="flex items-center gap-3">
-      <span className="w-12 shrink-0 text-xs text-gray-600">{label}</span>
-      <input
-        type="range"
-        min={min}
-        max={max}
-        step={step}
-        value={value}
-        onChange={(e) => onChange(Number(e.target.value))}
-        className="flex-1"
-      />
-      <span className="w-12 shrink-0 text-right font-mono text-xs tabular-nums">
-        {value}{unit || ""}
-      </span>
-    </div>
-  );
-}
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+import { Slider } from "@/components/ui/slider";
+import { Checkbox } from "@/components/ui/checkbox";
 
 export function CssShadowGenerator() {
   const [shadowType, setShadowType] = useState<"box" | "text">("box");
@@ -75,34 +57,56 @@ export function CssShadowGenerator() {
   return (
     <div>
       <div className="glass-card mb-6">
-        <span className="field-label mb-3 block">类型</span>
+        <Label className="mb-3 block">类型</Label>
         <div className="flex gap-3">
-          <button
-            className={`btn flex-1 ${shadowType === "box" ? "btn-primary" : "btn-secondary"}`}
+          <Button
+            variant={shadowType === "box" ? "gradient" : "secondary"}
+            className="flex-1"
             onClick={() => setShadowType("box")}
           >
             box-shadow
-          </button>
-          <button
-            className={`btn flex-1 ${shadowType === "text" ? "btn-primary" : "btn-secondary"}`}
+          </Button>
+          <Button
+            variant={shadowType === "text" ? "gradient" : "secondary"}
+            className="flex-1"
             onClick={() => setShadowType("text")}
           >
             text-shadow
-          </button>
+          </Button>
         </div>
       </div>
 
       <div className="glass-card mb-6">
-        <span className="field-label mb-4 block">参数调节</span>
+        <Label className="mb-4 block">参数调节</Label>
         <div className="flex flex-col gap-4">
-          <RangeSlider label="X" value={x} min={-50} max={50} unit="px" onChange={setX} />
-          <RangeSlider label="Y" value={y} min={-50} max={50} unit="px" onChange={setY} />
-          <RangeSlider label="模糊" value={blur} min={0} max={100} unit="px" onChange={setBlur} />
-          <RangeSlider label="扩展" value={spread} min={-50} max={50} unit="px" onChange={setSpread} />
-          <RangeSlider label="透明" value={opacity} min={0} max={100} unit="%" onChange={setOpacity} />
+          <div className="flex items-center gap-3">
+            <span className="w-12 shrink-0 text-xs text-gray-600">X</span>
+            <Slider value={[x]} onValueChange={(v) => { const val = Array.isArray(v) ? v[0] : v; setX(val as number) }} min={-50} max={50} className="flex-1" />
+            <span className="w-12 shrink-0 text-right font-mono text-xs tabular-nums">{x}px</span>
+          </div>
+          <div className="flex items-center gap-3">
+            <span className="w-12 shrink-0 text-xs text-gray-600">Y</span>
+            <Slider value={[y]} onValueChange={(v) => { const val = Array.isArray(v) ? v[0] : v; setY(val as number) }} min={-50} max={50} className="flex-1" />
+            <span className="w-12 shrink-0 text-right font-mono text-xs tabular-nums">{y}px</span>
+          </div>
+          <div className="flex items-center gap-3">
+            <span className="w-12 shrink-0 text-xs text-gray-600">模糊</span>
+            <Slider value={[blur]} onValueChange={(v) => { const val = Array.isArray(v) ? v[0] : v; setBlur(val as number) }} min={0} max={100} className="flex-1" />
+            <span className="w-12 shrink-0 text-right font-mono text-xs tabular-nums">{blur}px</span>
+          </div>
+          <div className="flex items-center gap-3">
+            <span className="w-12 shrink-0 text-xs text-gray-600">扩展</span>
+            <Slider value={[spread]} onValueChange={(v) => { const val = Array.isArray(v) ? v[0] : v; setSpread(val as number) }} min={-50} max={50} className="flex-1" />
+            <span className="w-12 shrink-0 text-right font-mono text-xs tabular-nums">{spread}px</span>
+          </div>
+          <div className="flex items-center gap-3">
+            <span className="w-12 shrink-0 text-xs text-gray-600">透明</span>
+            <Slider value={[opacity]} onValueChange={(v) => { const val = Array.isArray(v) ? v[0] : v; setOpacity(val as number) }} min={0} max={100} className="flex-1" />
+            <span className="w-12 shrink-0 text-right font-mono text-xs tabular-nums">{opacity}%</span>
+          </div>
           {shadowType === "box" && (
             <label className="flex items-center gap-2 text-sm text-gray-600">
-              <input type="checkbox" checked={inset} onChange={(e) => setInset(e.target.checked)} />
+              <Checkbox checked={inset} onCheckedChange={(v) => setInset(v as boolean)} />
               inset（内阴影）
             </label>
           )}
@@ -110,22 +114,23 @@ export function CssShadowGenerator() {
       </div>
 
       <div className="glass-card mb-6">
-        <span className="field-label mb-4 block">预设</span>
+        <Label className="mb-4 block">预设</Label>
         <div className="grid grid-cols-3 gap-2 sm:grid-cols-6">
           {presets.map((p) => (
-            <button
+            <Button
               key={p.label}
-              className="btn btn-secondary text-xs"
+              variant="secondary"
+              className="text-xs"
               onClick={() => applyPreset(p)}
             >
               {p.label}
-            </button>
+            </Button>
           ))}
         </div>
       </div>
 
       <div className="glass-card mb-6 text-center" style={{ minHeight: "160px" }}>
-        <span className="field-label mb-4 block">实时预览</span>
+        <Label className="mb-4 block">实时预览</Label>
         {shadowType === "text" ? (
           <span className="text-4xl font-bold text-gray-800" style={previewStyle}>
             Shadow Text
@@ -140,7 +145,7 @@ export function CssShadowGenerator() {
 
       <div className="glass-card">
         <div className="mb-3 flex items-center justify-between">
-          <span className="field-label">CSS 代码</span>
+          <Label>CSS 代码</Label>
           <button className="copy-btn text-xs text-blue-500 hover:text-blue-600" onClick={handleCopy}>
             {copied ? "✓" : "复制"}
           </button>

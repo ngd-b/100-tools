@@ -1,6 +1,10 @@
 "use client";
 
 import { useState, useCallback, useRef, useEffect } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Slider } from "@/components/ui/slider";
 
 interface Settings {
   text: string;
@@ -120,43 +124,43 @@ export function ImageWatermark() {
               <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
             </svg>
             <p className="text-sm text-gray-400 mb-1">拖拽图片到此处</p>
-            <label className="btn btn-secondary text-sm cursor-pointer">
+            <Button variant="secondary" className="text-sm cursor-pointer">
               选择图片
               <input type="file" accept="image/*" className="hidden"
                 onChange={(e) => { const f = e.target.files?.[0]; if (f) handleFile(f); }} />
-            </label>
+            </Button>
           </div>
         </div>
       ) : (
         <>
           <div className="glass-card mb-6">
-            <span className="field-label mb-3 block">水印文字</span>
-            <input className="input" value={text} onChange={(e) => setText(e.target.value)} placeholder="输入水印文字..." />
+            <Label className="mb-3 block">水印文字</Label>
+            <Input value={text} onChange={(e) => setText(e.target.value)} placeholder="输入水印文字..." />
           </div>
 
           <div className="glass-card mb-6">
-            <span className="field-label mb-4 block">参数调节</span>
+            <Label className="mb-4 block">参数调节</Label>
             <div className="flex flex-col gap-4">
               <div>
                 <div className="flex justify-between mb-1">
                   <span className="text-xs text-gray-500">字号</span>
                   <span className="font-mono text-xs">{fontSize}px</span>
                 </div>
-                <input type="range" min={12} max={200} value={fontSize} onChange={(e) => setFontSize(Number(e.target.value))} className="w-full" />
+                <Slider value={[fontSize]} onValueChange={(v) => { const val = Array.isArray(v) ? v[0] : v; setFontSize(val as number) }} min={12} max={200} step={1} className="w-full" />
               </div>
               <div>
                 <div className="flex justify-between mb-1">
                   <span className="text-xs text-gray-500">透明度</span>
                   <span className="font-mono text-xs">{Math.round(opacity * 100)}%</span>
                 </div>
-                <input type="range" min={0.1} max={1} step={0.05} value={opacity} onChange={(e) => setOpacity(Number(e.target.value))} className="w-full" />
+                <Slider value={[opacity]} onValueChange={(v) => { const val = Array.isArray(v) ? v[0] : v; setOpacity(val as number) }} min={0.1} max={1} step={0.05} className="w-full" />
               </div>
               <div>
                 <span className="text-xs text-gray-500 mb-2 block">位置</span>
                 <div className="flex flex-wrap gap-2">
                   {positions.map((p) => (
-                    <button key={p.value} className={`btn text-xs ${position === p.value ? "btn-primary" : "btn-secondary"}`}
-                      onClick={() => setPosition(p.value)}>{p.label}</button>
+                    <Button key={p.value} variant={position === p.value ? "gradient" : "secondary"} className="text-xs"
+                      onClick={() => setPosition(p.value)}>{p.label}</Button>
                   ))}
                 </div>
               </div>
@@ -164,7 +168,7 @@ export function ImageWatermark() {
           </div>
 
           <div className="glass-card mb-6">
-            <span className="field-label mb-4 block">对比预览</span>
+            <Label className="mb-4 block">对比预览</Label>
             <div className="grid grid-cols-2 gap-4">
               <div className="text-center">
                 <p className="mb-2 text-xs text-gray-400">原始图片</p>
@@ -184,12 +188,12 @@ export function ImageWatermark() {
           </div>
 
           <div className="flex gap-3">
-            <button className="btn btn-primary flex-1" onClick={handleDownload} disabled={!resultUrl}>下载</button>
-            <button className="btn btn-secondary" onClick={() => {
+            <Button variant="gradient" className="flex-1" onClick={handleDownload} disabled={!resultUrl}>下载</Button>
+            <Button variant="secondary" onClick={() => {
               setImageUrl(""); setResultUrl(""); imgRef.current = null;
             }}>
               更换图片
-            </button>
+            </Button>
           </div>
         </>
       )}

@@ -1,6 +1,10 @@
 "use client";
 
 import { useState, useMemo, useEffect } from "react";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
 
 export function RegexTester() {
   const [pattern, setPattern] = useState("[a-z]+");
@@ -72,29 +76,31 @@ export function RegexTester() {
   return (
     <div>
       <div className="glass-card mb-6">
-        <span className="field-label mb-3 block">正则表达式</span>
+        <Label className="mb-3 block">正则表达式</Label>
         <div className="flex items-center gap-2">
           <span className="font-mono text-lg text-gray-400">/</span>
-          <input
-            className="input flex-1 font-mono text-sm"
+          <Input
+            className="flex-1 font-mono text-sm"
             value={pattern}
             onChange={(e) => setPattern(e.target.value)}
             placeholder="输入正则表达式..."
           />
           <span className="font-mono text-lg text-gray-400">/</span>
-          <input
-            className="input w-16 font-mono text-sm text-center"
+          <Input
+            className="w-16 font-mono text-sm text-center"
             value={flags}
             onChange={(e) => setFlags(e.target.value)}
           />
         </div>
         <div className="flex flex-wrap gap-2 mt-3">
           {flagOptions.map((f) => (
-            <button key={f.key}
-              className={`btn text-xs ${flags.includes(f.key) ? "btn-primary" : "btn-secondary"}`}
+            <Button key={f.key}
+              variant={flags.includes(f.key) ? "gradient" : "secondary"}
+              size="sm"
+              className="text-xs"
               onClick={() => toggleFlag(f.key)}>
               {f.key} — {f.label}
-            </button>
+            </Button>
           ))}
         </div>
       </div>
@@ -103,9 +109,9 @@ export function RegexTester() {
 
       {result && (
         <div className="glass-card mb-6">
-          <span className="field-label mb-3 block">
+          <Label className="mb-3 block">
             匹配结果: <span className="text-blue-500">{result.count} 个匹配</span>
-          </span>
+          </Label>
           {result.matches.length > 0 && (
             <div className="flex flex-wrap gap-1">
               {result.matches.slice(0, 50).map((m, i) => (
@@ -120,23 +126,23 @@ export function RegexTester() {
       )}
 
       <div className="glass-card mb-6">
-        <span className="field-label mb-3 block">测试文本</span>
-        <textarea
-          className="input min-h-[100px] w-full resize-y font-mono text-sm"
+        <Label className="mb-3 block">测试文本</Label>
+        <Textarea
+          className="min-h-[100px] w-full resize-y font-mono text-sm"
           value={testText}
           onChange={(e) => setTestText(e.target.value)}
         />
       </div>
 
       <div className="glass-card mb-6">
-        <span className="field-label mb-3 block">高亮显示</span>
+        <Label className="mb-3 block">高亮显示</Label>
         <div className="rounded-xl bg-gray-50 p-4 font-mono text-sm min-h-[60px] whitespace-pre-wrap break-all">
           {highlighted || <span className="text-gray-400">{testText || "输入测试文本后显示高亮"}</span>}
         </div>
       </div>
 
       <div className="glass-card">
-        <span className="field-label mb-3 block">快速测试用例</span>
+        <Label className="mb-3 block">快速测试用例</Label>
         <div className="grid grid-cols-1 gap-2 text-sm sm:grid-cols-2">
           {[
             ["邮箱", "[\\w.-]+@[\\w.-]+\\.\\w+", "test@example.com foo@bar.org"],

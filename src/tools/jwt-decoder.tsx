@@ -1,6 +1,9 @@
 "use client";
 
 import { useState, useCallback, useMemo } from "react";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
 
 function base64UrlDecode(str: string): string {
   str = str.replace(/-/g, "+").replace(/_/g, "/");
@@ -48,14 +51,14 @@ export function JwtDecoder() {
   return (
     <div>
       <div className="glass-card mb-6">
-        <span className="field-label mb-3 block">JWT Token</span>
-        <textarea
-          className="input min-h-[80px] w-full resize-y font-mono text-xs"
+        <Label className="mb-3 block">JWT Token</Label>
+        <Textarea
+          className="min-h-[80px] w-full resize-y font-mono text-xs"
           placeholder="粘贴 JWT token，如 eyJhbGciOi..."
           value={token}
           onChange={(e) => setToken(e.target.value)}
         />
-        <button className="btn btn-secondary mt-3 text-sm" onClick={handlePaste}>从剪贴板粘贴</button>
+        <Button variant="secondary" className="mt-3 text-sm" onClick={handlePaste}>从剪贴板粘贴</Button>
       </div>
 
       {error && <p className="mb-6 text-sm text-red-500">{error}</p>}
@@ -64,7 +67,7 @@ export function JwtDecoder() {
         <>
           {decoded.expInfo && (
             <div className={`glass-card mb-6 ${decoded.expInfo.startsWith("已过期") ? "border-red-200 bg-red-50/50" : "border-green-200 bg-green-50/50"}`}>
-              <span className="field-label mb-2 block">过期状态</span>
+              <Label className="mb-2 block">过期状态</Label>
               <p className={`text-sm font-medium ${decoded.expInfo.startsWith("已过期") ? "text-red-600" : "text-green-600"}`}>
                 {decoded.expInfo}
               </p>
@@ -73,14 +76,14 @@ export function JwtDecoder() {
 
           <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
             <div className="glass-card">
-              <span className="field-label mb-3 block">Header</span>
+              <Label className="mb-3 block">Header</Label>
               <pre className="rounded-xl bg-gray-50 p-4 font-mono text-xs overflow-x-auto whitespace-pre-wrap break-all">
                 {formatJson(decoded.header)}
               </pre>
             </div>
 
             <div className="glass-card">
-              <span className="field-label mb-3 block">Payload</span>
+              <Label className="mb-3 block">Payload</Label>
               <pre className="rounded-xl bg-gray-50 p-4 font-mono text-xs overflow-x-auto whitespace-pre-wrap break-all">
                 {formatJson(decoded.payload)}
               </pre>

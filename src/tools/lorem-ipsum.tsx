@@ -1,6 +1,9 @@
 "use client";
 
 import { useState, useCallback } from "react";
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+import { Slider } from "@/components/ui/slider";
 
 const words = [
   "lorem", "ipsum", "dolor", "sit", "amet", "consectetur", "adipiscing", "elit",
@@ -55,29 +58,43 @@ export function LoremIpsumGenerator() {
   return (
     <div>
       <div className="glass-card mb-6">
-        <span className="field-label mb-3 block">段落数</span>
+        <Label className="mb-3 block">段落数</Label>
         <div className="flex items-center gap-3">
-          <input type="range" min={1} max={20} value={paragraphs} onChange={(e) => setParagraphs(Number(e.target.value))} className="flex-1" />
+          <Slider
+            value={[paragraphs]}
+            onValueChange={(v) => { const val = Array.isArray(v) ? v[0] : v; setParagraphs(val as number) }}
+            min={1}
+            max={20}
+            step={1}
+            className="flex-1"
+          />
           <span className="w-12 text-right font-mono text-lg font-bold">{paragraphs}</span>
         </div>
       </div>
 
       <div className="glass-card mb-6">
-        <span className="field-label mb-3 block">每段大约字数</span>
+        <Label className="mb-3 block">每段大约字数</Label>
         <div className="flex items-center gap-3">
-          <input type="range" min={20} max={200} value={wordCount} onChange={(e) => setWordCount(Number(e.target.value))} className="flex-1" />
+          <Slider
+            value={[wordCount]}
+            onValueChange={(v) => { const val = Array.isArray(v) ? v[0] : v; setWordCount(val as number) }}
+            min={20}
+            max={200}
+            step={1}
+            className="flex-1"
+          />
           <span className="w-12 text-right font-mono text-lg font-bold">{wordCount}</span>
         </div>
       </div>
 
-      <button className="btn btn-primary w-full mb-6" onClick={handleGenerate}>
+      <Button variant="gradient" className="w-full mb-6" onClick={handleGenerate}>
         生成文本
-      </button>
+      </Button>
 
       {result && (
         <div className="glass-card">
           <div className="mb-3 flex items-center justify-between">
-            <span className="field-label">生成结果</span>
+            <Label>生成结果</Label>
             <button className="copy-btn text-xs text-blue-500 hover:text-blue-600" onClick={handleCopy}>{copied ? "✓" : "复制"}</button>
           </div>
           <div className="rounded-xl bg-gray-50 p-4 text-sm leading-relaxed whitespace-pre-wrap max-h-[400px] overflow-y-auto">

@@ -1,6 +1,8 @@
 "use client";
 
 import { useState, useCallback } from "react";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
 
 const defaultMd = `# 标题
 
@@ -112,9 +114,9 @@ export function MarkdownPreview() {
     <div>
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
         <div className="glass-card">
-          <span className="field-label mb-3 block">Markdown 编辑</span>
-          <textarea
-            className="input font-mono text-sm min-h-[300px] w-full resize-y"
+          <Label className="mb-3 block">Markdown 编辑</Label>
+          <Textarea
+            className="font-mono text-sm min-h-[300px] w-full resize-y"
             value={md}
             onChange={(e) => setMd(e.target.value)}
             spellCheck={false}
@@ -123,7 +125,7 @@ export function MarkdownPreview() {
 
         <div className="glass-card">
           <div className="mb-3 flex items-center justify-between">
-            <span className="field-label mb-0">预览</span>
+            <Label className="mb-0">预览</Label>
             <button className="copy-btn text-xs text-blue-500 hover:text-blue-600" onClick={handleCopyHtml}>{copied ? "✓" : "复制 HTML"}</button>
           </div>
           <div

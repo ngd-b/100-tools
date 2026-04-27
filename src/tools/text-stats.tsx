@@ -1,6 +1,8 @@
 "use client";
 
 import { useState, useMemo } from "react";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
 
 export function TextStats() {
   const [text, setText] = useState("");
@@ -35,9 +37,9 @@ export function TextStats() {
   return (
     <div>
       <div className="glass-card mb-6">
-        <span className="field-label mb-3 block">输入文本</span>
-        <textarea
-          className="input min-h-[160px] w-full resize-y font-mono text-sm"
+        <Label className="mb-3 block">输入文本</Label>
+        <Textarea
+          className="min-h-[160px] w-full resize-y font-mono text-sm"
           placeholder="粘贴或输入任意文本..."
           value={text}
           onChange={(e) => setText(e.target.value)}
@@ -52,7 +54,7 @@ export function TextStats() {
       {stats && (
         <>
           <div className="glass-card mb-6">
-            <span className="field-label mb-4 block">基础统计</span>
+            <Label className="mb-4 block">基础统计</Label>
             <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
               <StatItem label="字符" value={stats.chars} />
               <StatItem label="字符(无空格)" value={stats.charsNoSpace} />
@@ -62,7 +64,7 @@ export function TextStats() {
           </div>
 
           <div className="glass-card mb-6">
-            <span className="field-label mb-4 block">字符构成</span>
+            <Label className="mb-4 block">字符构成</Label>
             <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
               <StatItem label="中文" value={stats.chinese} />
               <StatItem label="英文" value={stats.english} />
@@ -72,7 +74,7 @@ export function TextStats() {
           </div>
 
           <div className="glass-card mb-6">
-            <span className="field-label mb-4 block">预估时间</span>
+            <Label className="mb-4 block">预估时间</Label>
             <div className="grid grid-cols-2 gap-3">
               <StatItem label="阅读" value={stats.readTime} unit="分钟" />
               <StatItem label="朗读" value={stats.speakTime} unit="分钟" />

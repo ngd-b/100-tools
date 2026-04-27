@@ -1,6 +1,9 @@
 "use client";
 
 import { useState, useCallback } from "react";
+import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
 
 export function UrlEncoder() {
   const [input, setInput] = useState("");
@@ -37,9 +40,9 @@ export function UrlEncoder() {
   return (
     <div>
       <div className="glass-card mb-6">
-        <span className="field-label mb-3 block">输入内容</span>
-        <textarea
-          className="input min-h-[100px] w-full resize-y font-mono text-sm"
+        <Label className="mb-3 block">输入内容</Label>
+        <Textarea
+          className="min-h-[100px] w-full resize-y font-mono text-sm"
           placeholder="输入 URL、文字或编码内容..."
           value={input}
           onChange={(e) => setInput(e.target.value)}
@@ -47,11 +50,11 @@ export function UrlEncoder() {
       </div>
 
       <div className="flex gap-3 mb-6">
-        <button className="btn btn-primary flex-1" onClick={handleEncode}>编码</button>
-        <button className="btn btn-secondary flex-1" onClick={handleDecode}>解码</button>
-        <button className="btn btn-secondary" onClick={() => { setInput(""); setEncoded(""); setDecoded(""); setError(""); }}>
+        <Button variant="gradient" className="flex-1" onClick={handleEncode}>编码</Button>
+        <Button variant="secondary" className="flex-1" onClick={handleDecode}>解码</Button>
+        <Button variant="secondary" onClick={() => { setInput(""); setEncoded(""); setDecoded(""); setError(""); }}>
           清空
-        </button>
+        </Button>
       </div>
 
       {error && <p className="mb-6 text-sm text-red-500">{error}</p>}
@@ -59,7 +62,7 @@ export function UrlEncoder() {
       {encoded && (
         <div className="glass-card mb-6">
           <div className="mb-3 flex items-center justify-between">
-            <span className="field-label">编码结果</span>
+            <Label>编码结果</Label>
             <button className="copy-btn text-xs text-blue-500 hover:text-blue-600" onClick={() => handleCopy(encoded, "encoded")}>
               {copiedField === "encoded" ? "✓" : "复制"}
             </button>
@@ -71,7 +74,7 @@ export function UrlEncoder() {
       {decoded && (
         <div className="glass-card mb-6">
           <div className="mb-3 flex items-center justify-between">
-            <span className="field-label">解码结果</span>
+            <Label>解码结果</Label>
             <button className="copy-btn text-xs text-blue-500 hover:text-blue-600" onClick={() => handleCopy(decoded, "decoded")}>
               {copiedField === "decoded" ? "✓" : "复制"}
             </button>
@@ -81,7 +84,7 @@ export function UrlEncoder() {
       )}
 
       <div className="glass-card mb-6">
-        <span className="field-label mb-3 block">常见编码对照</span>
+        <Label className="mb-3 block">常见编码对照</Label>
         <div className="grid grid-cols-1 gap-2 text-sm">
           {[
             ["空格", "%20"], ["#", "%23"], ["&", "%26"],

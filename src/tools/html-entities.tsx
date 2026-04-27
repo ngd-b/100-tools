@@ -1,6 +1,9 @@
 "use client";
 
 import { useState, useCallback } from "react";
+import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
 
 const entityMap: Record<string, string> = {
   "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;",
@@ -44,9 +47,9 @@ export function HtmlEntities() {
   return (
     <div>
       <div className="glass-card mb-6">
-        <span className="field-label mb-3 block">输入内容</span>
-        <textarea
-          className="input min-h-[120px] w-full resize-y font-mono text-sm"
+        <Label className="mb-3 block">输入内容</Label>
+        <Textarea
+          className="min-h-[120px] w-full resize-y font-mono text-sm"
           placeholder='输入含 <> & " 等特殊字符的文本...'
           value={input}
           onChange={(e) => setInput(e.target.value)}
@@ -54,9 +57,9 @@ export function HtmlEntities() {
       </div>
 
       <div className="flex gap-3 mb-6">
-        <button className="btn btn-primary flex-1" onClick={handleEncode}>编码</button>
-        <button className="btn btn-secondary flex-1" onClick={handleDecode}>解码</button>
-        <button className="btn btn-secondary" onClick={() => { setInput(""); setOutput(""); setError(""); }}>清空</button>
+        <Button variant="gradient" className="flex-1" onClick={handleEncode}>编码</Button>
+        <Button variant="secondary" className="flex-1" onClick={handleDecode}>解码</Button>
+        <Button variant="secondary" onClick={() => { setInput(""); setOutput(""); setError(""); }}>清空</Button>
       </div>
 
       {error && <p className="mb-6 text-sm text-red-500">{error}</p>}
@@ -64,7 +67,7 @@ export function HtmlEntities() {
       {output && (
         <div className="glass-card">
           <div className="mb-3 flex items-center justify-between">
-            <span className="field-label">结果</span>
+            <Label>结果</Label>
             <button className="copy-btn text-xs text-blue-500 hover:text-blue-600" onClick={handleCopy}>{copied ? "✓" : "复制"}</button>
           </div>
           <div className="rounded-xl bg-gray-50 p-4 font-mono text-sm break-all whitespace-pre-wrap">{output}</div>
@@ -72,7 +75,7 @@ export function HtmlEntities() {
       )}
 
       <div className="glass-card mt-6">
-        <span className="field-label mb-3 block">常用实体对照</span>
+        <Label className="mb-3 block">常用实体对照</Label>
         <div className="grid grid-cols-2 gap-2 text-sm sm:grid-cols-4">
           {[["<", "&lt;"], [">", "&gt;"], ["&", "&amp;"], ['"', "&quot;"],
             ["'", "&#39;"], ["©", "&copy;"], ["®", "&reg;"], ["…", "&hellip;"],

@@ -1,6 +1,9 @@
 "use client";
 
 import { useState, useCallback, useRef } from "react";
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+import { Slider } from "@/components/ui/slider";
 
 const noiseTypes = [
   { label: "白噪音", type: "white" },
@@ -98,33 +101,35 @@ export function WhiteNoiseGenerator() {
   return (
     <div>
       <div className="glass-card mb-6 text-center">
-        <span className="field-label mb-4 block">播放控制</span>
-        <button
-          className={`btn text-lg px-12 py-4 ${isPlaying ? "bg-red-500 text-white hover:shadow-red-300/50" : "btn-primary"}`}
+        <Label className="mb-4 block">播放控制</Label>
+        <Button
+          variant={isPlaying ? "destructive" : "gradient"}
+          className="text-lg px-12 py-4"
           onClick={isPlaying ? stop : play}>
-          {isPlaying ? "⏹ 停止" : "▶ 播放"}
-        </button>
+          {isPlaying ? "停止" : "播放"}
+        </Button>
       </div>
 
       <div className="glass-card mb-6">
-        <span className="field-label mb-3 block">音量</span>
+        <Label className="mb-3 block">音量</Label>
         <div className="flex items-center gap-3">
           <span className="text-sm">🔈</span>
-          <input type="range" min={0} max={1} step={0.01} value={volume} onChange={(e) => handleVolumeChange(Number(e.target.value))} className="flex-1" />
+          <Slider min={0} max={1} step={0.01} value={[volume]} onValueChange={(v) => { const val = Array.isArray(v) ? v[0] : v; handleVolumeChange(val as number) }} className="flex-1" />
           <span className="text-sm">🔊</span>
         </div>
       </div>
 
       <div className="glass-card mb-6">
-        <span className="field-label mb-3 block">声音类型</span>
+        <Label className="mb-3 block">声音类型</Label>
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
           {noiseTypes.map((n) => (
-            <button
+            <Button
               key={n.type}
-              className={`btn flex-1 ${currentType === n.type ? "btn-primary" : "btn-secondary"}`}
+              variant={currentType === n.type ? "gradient" : "secondary"}
+              className="flex-1"
               onClick={() => handleTypeChange(n.type)}>
               {n.label}
-            </button>
+            </Button>
           ))}
         </div>
       </div>

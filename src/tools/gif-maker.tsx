@@ -1,6 +1,10 @@
 "use client";
 
 import { useState, useCallback, useRef, useEffect } from "react";
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Slider } from "@/components/ui/slider";
 
 // --- Minimal GIF Encoder (GIF89a) ---
 function encodeGIF(frames: ImageData[], delayMs: number, loop: boolean): Uint8Array {
@@ -321,11 +325,11 @@ export function GifMaker() {
             <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
           </svg>
           <p className="text-sm text-gray-400 mb-2">上传多张图片作为 GIF 帧</p>
-          <label className="btn btn-secondary text-sm cursor-pointer">
+          <Button variant="secondary" className="text-sm cursor-pointer">
             选择图片
             <input type="file" accept="image/*" multiple className="hidden"
               onChange={(e) => { if (e.target.files) handleFiles(e.target.files); }} />
-          </label>
+          </Button>
         </div>
       </div>
 
@@ -333,7 +337,7 @@ export function GifMaker() {
         <>
           {/* Frame list */}
           <div className="glass-card mb-6">
-            <span className="field-label mb-3 block">帧列表 ({frames.length} 帧)</span>
+            <Label className="mb-3 block">帧列表 ({frames.length} 帧)</Label>
             <div className="flex gap-2 overflow-x-auto pb-2">
               {frames.map((frame, i) => (
                 <div
@@ -360,7 +364,7 @@ export function GifMaker() {
 
           {/* Preview */}
           <div className="glass-card mb-6">
-            <span className="field-label mb-3 block">动画预览</span>
+            <Label className="mb-3 block">动画预览</Label>
             <div className="flex items-center justify-center bg-gray-50 rounded-xl p-4 min-h-[150px]">
               {frames.length > 0 && (
                 <img
@@ -371,65 +375,66 @@ export function GifMaker() {
               )}
             </div>
             <div className="flex items-center gap-3 mt-4">
-              <button
-                className={`btn flex-1 ${playing ? "btn-primary" : "btn-secondary"}`}
+              <Button
+                variant={playing ? "gradient" : "secondary"}
+                className="flex-1"
                 onClick={() => setPlaying(!playing)}
               >
                 {playing ? "⏸ 暂停" : "▶ 播放"}
-              </button>
-              <button
-                className="btn btn-secondary"
+              </Button>
+              <Button
+                variant="secondary"
                 onClick={() => { setActiveFrame(0); setPlaying(false); }}
               >
                 ⏮ 重置
-              </button>
+              </Button>
             </div>
           </div>
 
           {/* Settings */}
           <div className="glass-card mb-6">
-            <span className="field-label mb-4 block">GIF 设置</span>
+            <Label className="mb-4 block">GIF 设置</Label>
             <div className="flex flex-col gap-4">
               <div>
                 <div className="flex justify-between mb-1">
                   <span className="text-xs text-gray-500">帧延迟</span>
                   <span className="font-mono text-xs">{frameDelay} ms</span>
                 </div>
-                <input type="range" min={50} max={2000} step={50} value={frameDelay}
-                  onChange={(e) => setFrameDelay(Number(e.target.value))} className="w-full" />
+                <Slider value={[frameDelay]} onValueChange={(v) => { const val = Array.isArray(v) ? v[0] : v; setFrameDelay(val as number) }} min={50} max={2000} step={50} className="w-full" />
               </div>
               <div>
                 <span className="text-xs text-gray-500 mb-2 block">循环次数</span>
-                <select
-                  className="input w-full"
-                  value={loopCount}
-                  onChange={(e) => setLoopCount(Number(e.target.value))}
-                >
-                  <option value={0}>无限循环</option>
-                  <option value={1}>1 次</option>
-                  <option value={2}>2 次</option>
-                  <option value={3}>3 次</option>
-                  <option value={5}>5 次</option>
-                  <option value={10}>10 次</option>
-                </select>
+                <Select value={String(loopCount)} onValueChange={(v) => setLoopCount(Number(v))}>
+                  <SelectTrigger className="w-full">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="0">无限循环</SelectItem>
+                    <SelectItem value="1">1 次</SelectItem>
+                    <SelectItem value="2">2 次</SelectItem>
+                    <SelectItem value="3">3 次</SelectItem>
+                    <SelectItem value="5">5 次</SelectItem>
+                    <SelectItem value="10">10 次</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
-              <button className="btn btn-primary" onClick={generateGif} disabled={generating}>
+              <Button variant="gradient" onClick={generateGif} disabled={generating}>
                 {generating ? "生成中..." : "生成 GIF"}
-              </button>
+              </Button>
             </div>
           </div>
 
           {/* Result */}
           {gifUrl && (
             <div className="glass-card mb-6">
-              <span className="field-label mb-4 block">生成结果</span>
+              <Label className="mb-4 block">生成结果</Label>
               <div className="flex flex-col items-center gap-3">
                 <img src={gifUrl} alt="gif" className="max-h-[300px] rounded-xl object-contain bg-gray-50" />
                 <span className="font-mono text-xs text-gray-400">
                   文件大小: {formatSize(gifSize)}
                 </span>
               </div>
-              <button className="btn btn-primary w-full mt-4"
+              <Button variant="gradient" className="w-full mt-4"
                 onClick={() => {
                   const a = document.createElement("a");
                   a.href = gifUrl;
@@ -437,7 +442,7 @@ export function GifMaker() {
                   a.click();
                 }}>
                 下载 GIF
-              </button>
+              </Button>
             </div>
           )}
         </>

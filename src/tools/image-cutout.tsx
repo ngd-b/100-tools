@@ -1,6 +1,8 @@
 "use client";
 
 import { useState, useCallback } from "react";
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
 
 export function ImageCutoutTool() {
   const [image, setImage] = useState<string | null>(null);
@@ -105,10 +107,11 @@ export function ImageCutoutTool() {
 
           {/* Action Buttons */}
           <div className="mb-6 flex gap-3">
-            <button
+            <Button
+              variant="gradient"
+              className="flex-1"
               onClick={handleRemoveBackground}
               disabled={processing}
-              className="btn btn-primary flex-1"
             >
               {processing ? (
                 <span className="flex items-center gap-2">
@@ -120,19 +123,19 @@ export function ImageCutoutTool() {
               ) : (
                 "去除背景"
               )}
-            </button>
-            <button
+            </Button>
+            <Button
+              variant="secondary"
               onClick={() => { setImage(null); setResult(null); }}
-              className="btn btn-secondary"
             >
               重新选择
-            </button>
+            </Button>
           </div>
 
           {/* Result */}
           {result && (
             <div className="glass-card">
-              <span className="field-label mb-3 block">处理结果</span>
+              <Label className="mb-3 block">处理结果</Label>
               <div
                 className="mb-4 rounded-xl p-3"
                 style={{
@@ -144,9 +147,9 @@ export function ImageCutoutTool() {
               >
                 <img src={result} alt="result" className="mx-auto max-h-64 rounded-lg" />
               </div>
-              <button onClick={handleDownload} className="btn btn-primary w-full">
+              <Button variant="gradient" className="w-full" onClick={handleDownload}>
                 下载 PNG
-              </button>
+              </Button>
             </div>
           )}
 

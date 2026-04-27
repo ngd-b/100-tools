@@ -1,6 +1,8 @@
 "use client";
 
 import { useState, useCallback, useRef } from "react";
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
 
 export function AudioConverter() {
   const [isRecording, setIsRecording] = useState(false);
@@ -67,20 +69,19 @@ export function AudioConverter() {
   return (
     <div>
       <div className="glass-card mb-6">
-        <span className="field-label mb-3 block">输出格式</span>
+        <Label className="mb-3 block">输出格式</Label>
         <div className="flex gap-2">
           {(["webm", "wav", "mp4"] as const).map((f) => (
-            <button key={f}
-              className={`btn flex-1 ${format === f ? "btn-primary" : "btn-secondary"}`}
+            <Button key={f} variant={format === f ? "gradient" : "secondary"} className="flex-1"
               onClick={() => setFormat(f)}>
               {f.toUpperCase()}
-            </button>
+            </Button>
           ))}
         </div>
       </div>
 
       <div className="glass-card mb-6 text-center">
-        <span className="field-label mb-6 block">录音</span>
+        <Label className="mb-6 block">录音</Label>
         <div className="flex items-center justify-center mb-6">
           <div className={`h-20 w-20 rounded-full flex items-center justify-center ${isRecording ? "bg-red-500 animate-pulse" : "bg-gray-100"}`}>
             {isRecording ? (
@@ -96,9 +97,9 @@ export function AudioConverter() {
           {formatTime(duration)}
         </p>
         {!isRecording ? (
-          <button className="btn btn-primary w-40" onClick={startRecording}>开始录音</button>
+          <Button variant="gradient" className="w-40" onClick={startRecording}>开始录音</Button>
         ) : (
-          <button className="btn btn-primary w-40 bg-red-500" onClick={stopRecording}>停止</button>
+          <Button variant="gradient" className="w-40" onClick={stopRecording}>停止</Button>
         )}
       </div>
 
@@ -106,11 +107,11 @@ export function AudioConverter() {
 
       {audioUrl && (
         <div className="glass-card">
-          <span className="field-label mb-3 block">录音回放</span>
+          <Label className="mb-3 block">录音回放</Label>
           <audio controls src={audioUrl} className="w-full" />
           <div className="flex gap-3 mt-3">
-            <button className="btn btn-primary flex-1" onClick={handleDownload}>下载 ({format})</button>
-            <button className="btn btn-secondary" onClick={() => { setAudioUrl(""); setDuration(0); }}>重新录制</button>
+            <Button variant="gradient" className="flex-1" onClick={handleDownload}>下载 ({format})</Button>
+            <Button variant="secondary" onClick={() => { setAudioUrl(""); setDuration(0); }}>重新录制</Button>
           </div>
         </div>
       )}

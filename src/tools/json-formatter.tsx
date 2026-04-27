@@ -1,6 +1,9 @@
 "use client";
 
 import { useState, useCallback } from "react";
+import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
 
 export function JsonFormatter() {
   const [input, setInput] = useState("");
@@ -35,9 +38,9 @@ export function JsonFormatter() {
   return (
     <div>
       <div className="glass-card mb-6">
-        <span className="field-label mb-3 block">JSON 输入</span>
-        <textarea
-          className="input min-h-[140px] w-full resize-y font-mono text-sm"
+        <Label className="mb-3 block">JSON 输入</Label>
+        <Textarea
+          className="min-h-[140px] w-full resize-y font-mono text-sm"
           placeholder='粘贴 JSON，如 {"name": "工具"}...'
           value={input}
           onChange={(e) => setInput(e.target.value)}
@@ -45,18 +48,18 @@ export function JsonFormatter() {
       </div>
 
       <div className="flex gap-3 mb-6">
-        <button className="btn btn-primary flex-1" onClick={handlePrettify}>
+        <Button variant="gradient" className="flex-1" onClick={handlePrettify}>
           格式化
-        </button>
-        <button className="btn btn-secondary flex-1" onClick={handleMinify}>
+        </Button>
+        <Button variant="secondary" className="flex-1" onClick={handleMinify}>
           压缩
-        </button>
-        <button
-          className="btn btn-secondary"
+        </Button>
+        <Button
+          variant="secondary"
           onClick={() => { setInput(""); setOutput(""); setError(""); }}
         >
           清空
-        </button>
+        </Button>
       </div>
 
       {error && <p className="mb-6 text-sm text-red-500">{error}</p>}
@@ -64,12 +67,12 @@ export function JsonFormatter() {
       {output && (
         <div className="glass-card">
           <div className="mb-3 flex items-center justify-between">
-            <span className="field-label">
+            <Label>
               {indent === "pretty" ? "格式化结果" : "压缩结果"}
               <span className="ml-2 text-xs text-gray-400 normal-case font-normal">
                 ({(new Blob([output]).size / 1024).toFixed(1)} KB)
               </span>
-            </span>
+            </Label>
             <button className="copy-btn text-xs text-blue-500 hover:text-blue-600" onClick={handleCopy}>
               {copied ? "✓" : "复制"}
             </button>

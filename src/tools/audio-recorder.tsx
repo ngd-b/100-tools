@@ -1,6 +1,8 @@
 "use client";
 
 import { useState, useRef, useCallback } from "react";
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
 
 export function AudioRecorder() {
   const [isRecording, setIsRecording] = useState(false);
@@ -61,7 +63,7 @@ export function AudioRecorder() {
   return (
     <div>
       <div className="glass-card mb-6 text-center">
-        <span className="field-label mb-6 block">录音</span>
+        <Label className="mb-6 block">录音</Label>
 
         <div className="flex items-center justify-center mb-6">
           <div className={`h-20 w-20 rounded-full flex items-center justify-center ${isRecording ? "bg-red-500 animate-pulse" : "bg-gray-100"}`}>
@@ -82,9 +84,9 @@ export function AudioRecorder() {
         </p>
 
         {!isRecording ? (
-          <button className="btn btn-primary w-40" onClick={startRecording}>开始录音</button>
+          <Button variant="gradient" className="w-40" onClick={startRecording}>开始录音</Button>
         ) : (
-          <button className="btn btn-primary w-40 bg-red-500" onClick={stopRecording}>停止录音</button>
+          <Button variant="gradient" className="w-40" onClick={stopRecording}>停止录音</Button>
         )}
       </div>
 
@@ -92,13 +94,13 @@ export function AudioRecorder() {
 
       {audioUrl && (
         <div className="glass-card mb-6">
-          <span className="field-label mb-3 block">录音回放</span>
+          <Label className="mb-3 block">录音回放</Label>
           <audio controls src={audioUrl} className="w-full" />
           <div className="flex gap-3 mt-3">
-            <button className="btn btn-primary flex-1" onClick={handleDownload}>下载录音</button>
-            <button className="btn btn-secondary" onClick={() => { setAudioUrl(""); setDuration(0); }}>
+            <Button variant="gradient" className="flex-1" onClick={handleDownload}>下载录音</Button>
+            <Button variant="secondary" onClick={() => { setAudioUrl(""); setDuration(0); }}>
               重新录制
-            </button>
+            </Button>
           </div>
         </div>
       )}

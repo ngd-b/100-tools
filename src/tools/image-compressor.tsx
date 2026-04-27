@@ -1,6 +1,9 @@
 "use client";
 
 import { useState, useCallback, useRef } from "react";
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+import { Slider } from "@/components/ui/slider";
 
 export function ImageCompressor() {
   const [originalSize, setOriginalSize] = useState(0);
@@ -80,26 +83,26 @@ export function ImageCompressor() {
               <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
             </svg>
             <p className="text-sm text-gray-400 mb-1">拖拽图片到此处，或</p>
-            <label className="btn btn-secondary text-sm cursor-pointer">
+            <Button variant="secondary" className="text-sm cursor-pointer">
               选择图片
               <input type="file" accept="image/*" className="hidden"
                 onChange={(e) => { const f = e.target.files?.[0]; if (f) handleFile(f); }} />
-            </label>
+            </Button>
           </div>
         </div>
       ) : (
         <>
           <div className="glass-card mb-6">
-            <span className="field-label mb-3 block">压缩设置</span>
+            <Label className="mb-3 block">压缩设置</Label>
             <div className="flex flex-col gap-4">
               <div>
                 <span className="text-xs text-gray-500 mb-1 block">格式</span>
                 <div className="flex gap-2">
                   {(["webp", "jpeg", "png"] as const).map((f) => (
-                    <button key={f} className={`btn flex-1 text-sm ${format === f ? "btn-primary" : "btn-secondary"}`}
+                    <Button key={f} variant={format === f ? "gradient" : "secondary"} className="flex-1 text-sm"
                       onClick={() => { setFormat(f); setTimeout(() => recompress(), 50); }}>
                       {f.toUpperCase()}
-                    </button>
+                    </Button>
                   ))}
                 </div>
               </div>
@@ -109,11 +112,10 @@ export function ImageCompressor() {
                     <span className="text-xs text-gray-500">质量</span>
                     <span className="font-mono text-xs">{Math.round(quality * 100)}%</span>
                   </div>
-                  <input type="range" min={0.1} max={1} step={0.05} value={quality}
-                    onChange={(e) => setQuality(Number(e.target.value))} className="w-full" />
+                  <Slider value={[quality]} onValueChange={(v) => { const val = Array.isArray(v) ? v[0] : v; setQuality(val as number) }} min={0.1} max={1} step={0.05} className="w-full" />
                 </div>
               )}
-              <button className="btn btn-primary" onClick={recompress}>重新压缩</button>
+              <Button variant="gradient" onClick={recompress}>重新压缩</Button>
             </div>
           </div>
 
@@ -140,14 +142,14 @@ export function ImageCompressor() {
           </div>
 
           <div className="flex gap-3">
-            <button className="btn btn-primary flex-1" onClick={handleDownload} disabled={!compressedSize}>
+            <Button variant="gradient" className="flex-1" onClick={handleDownload} disabled={!compressedSize}>
               下载
-            </button>
-            <button className="btn btn-secondary" onClick={() => {
+            </Button>
+            <Button variant="secondary" onClick={() => {
               setOriginalUrl(""); setCompressedUrl(""); setOriginalSize(0); setCompressedSize(0);
             }}>
               更换图片
-            </button>
+            </Button>
           </div>
         </>
       )}

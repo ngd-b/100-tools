@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import { parseColor, hexToRgb, rgbToHex, rgbToHsl, hslToRgb, generateComplementaryColor, generateHarmony } from "@/utils/color";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
 
 export function ColorTools() {
   const [color, setColor] = useState("#3b82f6");
@@ -25,7 +27,7 @@ export function ColorTools() {
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-[1fr_1.2fr]">
         {/* Picker column */}
         <div className="glass-card">
-          <span className="field-label mb-3 block">选择颜色</span>
+          <Label className="mb-3 block">选择颜色</Label>
           <div className="flex items-center gap-3">
             <label className="h-14 w-14 shrink-0 cursor-pointer overflow-hidden rounded-xl border border-gray-200 shadow-inner">
               <input
@@ -36,12 +38,11 @@ export function ColorTools() {
               />
             </label>
             <div className="min-w-0 flex-1">
-              <input
-                type="text"
+              <Input
                 value={color.toUpperCase()}
                 onChange={(e) => setColor(e.target.value)}
                 placeholder="#3B82F6"
-                className="input font-mono text-sm font-semibold uppercase tracking-widest"
+                className="font-mono text-sm font-semibold uppercase tracking-widest"
               />
             </div>
           </div>
@@ -87,7 +88,7 @@ export function ColorTools() {
 
       {/* ===== Row 3: Palette Strip ===== */}
       <div className="glass-card">
-        <span className="field-label mb-3 block">推荐配色</span>
+        <Label className="mb-3 block">推荐配色</Label>
         <div className="flex h-14 gap-1.5 overflow-hidden rounded-xl">
           {palette.map((c, i) => (
             <SwatchButton key={i} color={c} />
@@ -106,7 +107,7 @@ export function ColorTools() {
       {/* ===== Row 5: Lightness + Saturation ===== */}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div className="glass-card">
-          <span className="field-label mb-3 block">明度</span>
+          <Label className="mb-3 block">明度</Label>
           <div className="flex h-8 gap-0.5 overflow-hidden rounded-lg">
             {[3, 10, 20, 35, 50, 65, 80, 90, 97].map((l, i) => (
               <div
@@ -119,7 +120,7 @@ export function ColorTools() {
           </div>
         </div>
         <div className="glass-card">
-          <span className="field-label mb-3 block">饱和度</span>
+          <Label className="mb-3 block">饱和度</Label>
           <div className="flex h-8 gap-0.5 overflow-hidden rounded-lg">
             {satSteps.map((s, i) => (
               <div
@@ -231,7 +232,7 @@ function HarmonySection({ label, colors }: { label: string; colors: string[] }) 
   return (
     <div className="glass-card">
       <div className="mb-3 flex items-center justify-between">
-        <span className="field-label">{label}</span>
+        <Label>{label}</Label>
       </div>
       <div className="flex h-12 gap-1.5 overflow-hidden rounded-lg">
         {colors.map((c, i) => (

@@ -2,6 +2,9 @@
 
 import { useState, useCallback, useRef, useEffect } from "react";
 import qrcode from "qrcode-generator";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 // --- Tool Component ---
 export function QrCodeGenerator() {
@@ -62,9 +65,9 @@ export function QrCodeGenerator() {
       <canvas ref={canvasRef} className="hidden" />
 
       <div className="glass-card mb-6">
-        <span className="field-label mb-3 block">输入内容</span>
-        <input
-          className="input w-full mb-3"
+        <Label>输入内容</Label>
+        <Input
+          className="w-full mb-3"
           value={text}
           onChange={(e) => setText(e.target.value)}
           onKeyDown={(e) => { if (e.key === "Enter") generate(); }}
@@ -74,9 +77,9 @@ export function QrCodeGenerator() {
           <span>字符数: {text.length}</span>
           <span>EC Level M（中等纠错）</span>
         </div>
-        <button className="btn btn-primary w-full" onClick={generate}>
+        <Button variant="gradient" className="w-full" onClick={generate}>
           生成二维码
-        </button>
+        </Button>
       </div>
 
       {error && (
@@ -87,7 +90,7 @@ export function QrCodeGenerator() {
 
       {qrUrl && (
         <div className="glass-card mb-6">
-          <span className="field-label mb-4 block">二维码预览</span>
+          <Label className="mb-4 block">二维码预览</Label>
           <div className="flex flex-col items-center gap-4">
             <img
               src={qrUrl}
@@ -96,9 +99,9 @@ export function QrCodeGenerator() {
               style={{ imageRendering: "pixelated" }}
             />
           </div>
-          <button className="btn btn-primary w-full mt-4" onClick={handleDownload}>
+          <Button variant="gradient" className="w-full mt-4" onClick={handleDownload}>
             下载 PNG
-          </button>
+          </Button>
         </div>
       )}
 

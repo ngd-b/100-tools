@@ -1,6 +1,9 @@
 "use client";
 
 import { useState, useEffect, useCallback, useMemo } from "react";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
 
 function pad(n: number, d = 2) { return String(n).padStart(d, "0"); }
 
@@ -61,7 +64,7 @@ export function TimestampConverter() {
   return (
     <div>
       <div className="glass-card mb-6">
-        <span className="field-label mb-3 block">当前时间</span>
+        <Label className="mb-3 block">当前时间</Label>
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
           <div className="value-row">
             <span className="text-xs text-gray-500">秒级</span>
@@ -83,15 +86,15 @@ export function TimestampConverter() {
       </div>
 
       <div className="glass-card mb-6">
-        <span className="field-label mb-3 block">时间戳 → 日期</span>
+        <Label className="mb-3 block">时间戳 → 日期</Label>
         <div className="flex gap-3">
-          <input
-            className="input flex-1 font-mono text-sm"
+          <Input
+            className="flex-1 font-mono text-sm"
             placeholder="输入时间戳（秒或毫秒）"
             value={inputTs}
             onChange={(e) => setInputTs(e.target.value)}
           />
-          <button className="btn btn-primary" onClick={handleTsToDate}>转换</button>
+          <Button variant="gradient" onClick={handleTsToDate}>转换</Button>
         </div>
         {convertedDate && (
           <div className="value-row mt-3">
@@ -102,15 +105,15 @@ export function TimestampConverter() {
       </div>
 
       <div className="glass-card mb-6">
-        <span className="field-label mb-3 block">日期 → 时间戳</span>
+        <Label className="mb-3 block">日期 → 时间戳</Label>
         <div className="flex gap-3">
-          <input
-            className="input flex-1"
+          <Input
+            className="flex-1"
             type="datetime-local"
             value={inputDate}
             onChange={(e) => setInputDate(e.target.value)}
           />
-          <button className="btn btn-primary" onClick={handleDateToTs}>转换</button>
+          <Button variant="gradient" onClick={handleDateToTs}>转换</Button>
         </div>
         {convertedTs && (
           <div className="mt-3 grid grid-cols-2 gap-3">

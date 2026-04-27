@@ -1,6 +1,10 @@
 "use client";
 
 import { useState, useCallback, useRef } from "react";
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 export function ImageResizer() {
   const [imageUrl, setImageUrl] = useState("");
@@ -92,59 +96,58 @@ export function ImageResizer() {
               <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
             </svg>
             <p className="text-sm text-gray-400 mb-1">拖拽图片到此处</p>
-            <label className="btn btn-secondary text-sm cursor-pointer">
+            <Button variant="secondary" className="text-sm cursor-pointer">
               选择图片
               <input type="file" accept="image/*" className="hidden"
                 onChange={(e) => { const f = e.target.files?.[0]; if (f) handleFile(f); }} />
-            </label>
+            </Button>
           </div>
         </div>
       ) : (
         <>
           <div className="glass-card mb-6">
-            <span className="field-label mb-3 block">原始尺寸</span>
+            <Label className="mb-3 block">原始尺寸</Label>
             <p className="text-sm text-gray-500">{originalWidth} × {originalHeight} px</p>
           </div>
 
           <div className="glass-card mb-6">
-            <span className="field-label mb-3 block">目标尺寸</span>
+            <Label className="mb-3 block">目标尺寸</Label>
             <div className="flex items-center gap-3 mb-3">
               <div className="flex-1">
                 <span className="text-xs text-gray-500 mb-1 block">宽度 (px)</span>
-                <input type="number" className="input font-mono text-sm" value={width}
+                <Input type="number" className="font-mono text-sm" value={width}
                   onChange={(e) => handleWidthChange(Number(e.target.value))} />
               </div>
               <span className="mt-5 text-gray-400">×</span>
               <div className="flex-1">
                 <span className="text-xs text-gray-500 mb-1 block">高度 (px)</span>
-                <input type="number" className="input font-mono text-sm" value={height}
+                <Input type="number" className="font-mono text-sm" value={height}
                   onChange={(e) => handleHeightChange(Number(e.target.value))} />
               </div>
             </div>
             <label className="flex items-center gap-2 text-sm cursor-pointer">
-              <input type="checkbox" checked={keepRatio} onChange={(e) => setKeepRatio(e.target.checked)}
-                className="h-4 w-4 rounded accent-blue-500" />
+              <Checkbox checked={keepRatio} onCheckedChange={(v) => setKeepRatio(v as boolean)} />
               锁定宽高比
             </label>
           </div>
 
           <div className="glass-card mb-6">
-            <span className="field-label mb-3 block">快速预设</span>
+            <Label className="mb-3 block">快速预设</Label>
             <div className="flex gap-2">
               {presets.map((p) => (
-                <button key={p.label} className="btn btn-secondary flex-1 text-sm"
+                <Button key={p.label} variant="secondary" className="flex-1 text-sm"
                   onClick={() => handleWidthChange(Math.round(originalWidth * p.factor))}>
                   {p.label}
-                </button>
+                </Button>
               ))}
             </div>
           </div>
 
-          <button className="btn btn-primary w-full mb-6" onClick={handleResize}>调整尺寸</button>
+          <Button variant="gradient" className="w-full mb-6" onClick={handleResize}>调整尺寸</Button>
 
           {resultUrl && (
             <div className="glass-card mb-6">
-              <span className="field-label mb-3 block">调整结果</span>
+              <Label className="mb-3 block">调整结果</Label>
               <img src={resultUrl} alt="resized" className="max-h-[200px] w-full rounded-xl object-contain bg-gray-50" />
               <p className="mt-2 text-xs text-gray-500">
                 {width} × {height} px · {formatSize(resultSize)}
@@ -153,12 +156,12 @@ export function ImageResizer() {
           )}
 
           <div className="flex gap-3">
-            <button className="btn btn-primary flex-1" onClick={handleDownload} disabled={!resultUrl}>下载</button>
-            <button className="btn btn-secondary" onClick={() => {
+            <Button variant="gradient" className="flex-1" onClick={handleDownload} disabled={!resultUrl}>下载</Button>
+            <Button variant="secondary" onClick={() => {
               setImageUrl(""); setResultUrl(""); setOriginalWidth(0); setOriginalHeight(0);
             }}>
               更换图片
-            </button>
+            </Button>
           </div>
         </>
       )}

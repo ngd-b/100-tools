@@ -1,6 +1,8 @@
 "use client";
 
 import { useState, useCallback } from "react";
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
 
 function hslToHex(h: number, s: number, l: number): string {
   s /= 100; l /= 100;
@@ -49,7 +51,7 @@ export function RandomPalette() {
   return (
     <div>
       <div className="glass-card mb-6 text-center">
-        <span className="field-label mb-4 block">生成调色板</span>
+        <Label className="mb-4 block">生成调色板</Label>
         <div className="grid grid-cols-5 gap-3 mb-6">
           {colors.map((c, i) => (
             <button
@@ -62,17 +64,18 @@ export function RandomPalette() {
             </button>
           ))}
         </div>
-        <button className="btn btn-primary" onClick={handleGenerate}>🎲 随机生成</button>
+        <Button variant="gradient" onClick={handleGenerate}>🎲 随机生成</Button>
       </div>
 
       <div className="glass-card mb-6">
-        <span className="field-label mb-3 block">主题预设</span>
+        <Label className="mb-3 block">主题预设</Label>
         <div className="flex flex-wrap gap-2">
           {palettes.map((p) => {
             const previewColors = generatePalette(p.hue, 5);
             return (
-              <button key={p.label}
-                className="btn btn-secondary text-sm"
+              <Button key={p.label}
+                variant="secondary"
+                className="text-sm"
                 onClick={() => applyTheme(p.hue)}
                 style={{
                   background: `linear-gradient(90deg, ${previewColors[0]}, ${previewColors[2]}, ${previewColors[4]})`,
@@ -80,27 +83,28 @@ export function RandomPalette() {
                   textShadow: "0 1px 2px rgba(0,0,0,0.3)",
                 }}>
                 {p.label}
-              </button>
+              </Button>
             );
           })}
         </div>
       </div>
 
       <div className="glass-card mb-6">
-        <span className="field-label mb-3 block">颜色数量</span>
+        <Label className="mb-3 block">颜色数量</Label>
         <div className="flex gap-2">
           {[3, 4, 5, 6, 8].map((n) => (
-            <button key={n}
-              className={`btn flex-1 text-sm ${count === n ? "btn-primary" : "btn-secondary"}`}
+            <Button key={n}
+              variant={count === n ? "gradient" : "secondary"}
+              className="flex-1 text-sm"
               onClick={() => { setCount(n); setColors(generatePalette(Math.random() * 360, n)); }}>
               {n} 色
-            </button>
+            </Button>
           ))}
         </div>
       </div>
 
       <div className="glass-card mb-6">
-        <span className="field-label mb-3 block">CSS 变量</span>
+        <Label className="mb-3 block">CSS 变量</Label>
         <code className="rounded-xl bg-gray-50 px-4 py-3 font-mono text-xs block whitespace-pre-wrap">
           {colors.map((c, i) => `  --color-${i + 1}: ${c};`).join("\n")}
         </code>
