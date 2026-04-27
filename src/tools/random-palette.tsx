@@ -36,6 +36,7 @@ const palettes = [
 export function RandomPalette() {
   const [colors, setColors] = useState(() => generatePalette(Math.random() * 360, 6));
   const [count, setCount] = useState(6);
+  const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
 
   const handleGenerate = useCallback(() => {
     setColors(generatePalette(Math.random() * 360, count));
@@ -55,7 +56,7 @@ export function RandomPalette() {
               key={i}
               className="h-20 rounded-xl transition-transform hover:scale-105 cursor-pointer flex flex-col items-center justify-end pb-2"
               style={{ backgroundColor: c }}
-              onClick={() => navigator.clipboard.writeText(c)}
+              onClick={() => { navigator.clipboard.writeText(c); setCopiedIndex(i); setTimeout(() => setCopiedIndex(null), 1500); }}
             >
               <span className="font-mono text-xs bg-white/70 rounded px-1">{c}</span>
             </button>

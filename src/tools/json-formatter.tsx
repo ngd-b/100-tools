@@ -21,8 +21,12 @@ export function JsonFormatter() {
     }
   }, [input]);
 
+  const [copied, setCopied] = useState(false);
+
   const handleCopy = useCallback(() => {
     if (output) navigator.clipboard.writeText(output);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 1500);
   }, [output]);
 
   const handleMinify = useCallback(() => handleFormat(true), [handleFormat]);
@@ -67,7 +71,7 @@ export function JsonFormatter() {
               </span>
             </span>
             <button className="copy-btn text-xs text-blue-500 hover:text-blue-600" onClick={handleCopy}>
-              复制
+              {copied ? "✓" : "复制"}
             </button>
           </div>
           <pre className="rounded-xl bg-gray-50 p-4 font-mono text-xs max-h-[400px] overflow-y-auto whitespace-pre-wrap break-all">

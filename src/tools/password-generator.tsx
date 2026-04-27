@@ -28,6 +28,7 @@ export function PasswordGenerator() {
   const [numbers, setNumbers] = useState(true);
   const [symbols, setSymbols] = useState(true);
   const [passwords, setPasswords] = useState<string[]>([]);
+  const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
 
   const charset = useMemo(() => {
     let c = "";
@@ -88,7 +89,9 @@ export function PasswordGenerator() {
                   <div className="flex items-center justify-between mb-2">
                     <code className="font-mono text-sm break-all flex-1 mr-3">{p}</code>
                     <button className="copy-btn text-xs text-blue-500 hover:text-blue-600"
-                      onClick={() => navigator.clipboard.writeText(p)}>复制</button>
+                      onClick={() => { navigator.clipboard.writeText(p); setCopiedIndex(i); setTimeout(() => setCopiedIndex(null), 1500); }}>
+                      {copiedIndex === i ? "✓" : "复制"}
+                    </button>
                   </div>
                   <div className="h-1.5 w-full rounded-full bg-gray-200">
                     <div className={`h-full rounded-full transition-all ${color}`} style={{ width: `${bar}%` }} />

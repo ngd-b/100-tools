@@ -44,8 +44,12 @@ export function GradientGenerator() {
     setType("linear");
   };
 
+  const [copied, setCopied] = useState(false);
+
   const handleCopy = useCallback(() => {
     navigator.clipboard.writeText(`background: ${cssValue};`);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 1500);
   }, [cssValue]);
 
   return (
@@ -110,7 +114,7 @@ export function GradientGenerator() {
       <div className="glass-card">
         <div className="mb-3 flex items-center justify-between">
           <span className="field-label">CSS 代码</span>
-          <button className="copy-btn text-xs text-blue-500 hover:text-blue-600" onClick={handleCopy}>复制</button>
+          <button className="copy-btn text-xs text-blue-500 hover:text-blue-600" onClick={handleCopy}>{copied ? "✓" : "复制"}</button>
         </div>
         <code className="rounded-xl bg-gray-50 px-4 py-3 font-mono text-sm block">background: {cssValue};</code>
       </div>

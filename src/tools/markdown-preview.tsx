@@ -98,8 +98,12 @@ function simpleMarkdown(md: string): string {
 export function MarkdownPreview() {
   const [md, setMd] = useState(defaultMd);
 
+  const [copied, setCopied] = useState(false);
+
   const handleCopyHtml = useCallback(() => {
     navigator.clipboard.writeText(simpleMarkdown(md));
+    setCopied(true);
+    setTimeout(() => setCopied(false), 1500);
   }, [md]);
 
   const html = simpleMarkdown(md);
@@ -120,7 +124,7 @@ export function MarkdownPreview() {
         <div className="glass-card">
           <div className="mb-3 flex items-center justify-between">
             <span className="field-label mb-0">预览</span>
-            <button className="copy-btn text-xs text-blue-500 hover:text-blue-600" onClick={handleCopyHtml}>复制 HTML</button>
+            <button className="copy-btn text-xs text-blue-500 hover:text-blue-600" onClick={handleCopyHtml}>{copied ? "✓" : "复制 HTML"}</button>
           </div>
           <div
             className="rounded-xl bg-gray-50 p-4 min-h-[300px] max-h-[400px] overflow-y-auto"

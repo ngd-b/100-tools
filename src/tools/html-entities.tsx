@@ -33,8 +33,12 @@ export function HtmlEntities() {
     setOutput(input.replace(/&[a-zA-Z0-9#]+;/g, (entity) => reverseMap[entity] || entity));
   }, [input]);
 
+  const [copied, setCopied] = useState(false);
+
   const handleCopy = useCallback(() => {
     if (output) navigator.clipboard.writeText(output);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 1500);
   }, [output]);
 
   return (
@@ -61,7 +65,7 @@ export function HtmlEntities() {
         <div className="glass-card">
           <div className="mb-3 flex items-center justify-between">
             <span className="field-label">结果</span>
-            <button className="copy-btn text-xs text-blue-500 hover:text-blue-600" onClick={handleCopy}>复制</button>
+            <button className="copy-btn text-xs text-blue-500 hover:text-blue-600" onClick={handleCopy}>{copied ? "✓" : "复制"}</button>
           </div>
           <div className="rounded-xl bg-gray-50 p-4 font-mono text-sm break-all whitespace-pre-wrap">{output}</div>
         </div>

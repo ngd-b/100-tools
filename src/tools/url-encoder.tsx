@@ -26,8 +26,12 @@ export function UrlEncoder() {
     }
   }, [input]);
 
-  const handleCopy = useCallback((text: string) => {
+  const [copiedField, setCopiedField] = useState<string | null>(null);
+
+  const handleCopy = useCallback((text: string, field: string) => {
     navigator.clipboard.writeText(text);
+    setCopiedField(field);
+    setTimeout(() => setCopiedField(null), 1500);
   }, []);
 
   return (
@@ -56,8 +60,8 @@ export function UrlEncoder() {
         <div className="glass-card mb-6">
           <div className="mb-3 flex items-center justify-between">
             <span className="field-label">编码结果</span>
-            <button className="copy-btn text-xs text-blue-500 hover:text-blue-600" onClick={() => handleCopy(encoded)}>
-              复制
+            <button className="copy-btn text-xs text-blue-500 hover:text-blue-600" onClick={() => handleCopy(encoded, "encoded")}>
+              {copiedField === "encoded" ? "✓" : "复制"}
             </button>
           </div>
           <div className="rounded-xl bg-gray-50 p-4 font-mono text-sm break-all">{encoded}</div>
@@ -68,8 +72,8 @@ export function UrlEncoder() {
         <div className="glass-card mb-6">
           <div className="mb-3 flex items-center justify-between">
             <span className="field-label">解码结果</span>
-            <button className="copy-btn text-xs text-blue-500 hover:text-blue-600" onClick={() => handleCopy(decoded)}>
-              复制
+            <button className="copy-btn text-xs text-blue-500 hover:text-blue-600" onClick={() => handleCopy(decoded, "decoded")}>
+              {copiedField === "decoded" ? "✓" : "复制"}
             </button>
           </div>
           <div className="rounded-xl bg-gray-50 p-4 font-mono text-sm break-all whitespace-pre-wrap">{decoded}</div>

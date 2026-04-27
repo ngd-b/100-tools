@@ -23,8 +23,12 @@ export function Base64Tool() {
     }
   }, [input, mode]);
 
+  const [copied, setCopied] = useState(false);
+
   const handleCopy = useCallback(() => {
     navigator.clipboard.writeText(output);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 1500);
   }, [output]);
 
   const handleClear = useCallback(() => {
@@ -79,7 +83,7 @@ export function Base64Tool() {
           <div className="mb-3 flex items-center justify-between">
             <span className="field-label">{mode === "encode" ? "Base64 结果" : "解码结果"}</span>
             <button className="copy-btn text-xs text-blue-500 hover:text-blue-600" onClick={handleCopy}>
-              复制
+              {copied ? "✓" : "复制"}
             </button>
           </div>
           <div className="rounded-xl bg-gray-50 p-4 font-mono text-sm break-all max-h-[300px] overflow-y-auto">

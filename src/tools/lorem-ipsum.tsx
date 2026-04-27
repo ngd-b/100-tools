@@ -44,8 +44,12 @@ export function LoremIpsumGenerator() {
     setResult(lines.join("\n\n"));
   }, [paragraphs, wordCount]);
 
+  const [copied, setCopied] = useState(false);
+
   const handleCopy = useCallback(() => {
     if (result) navigator.clipboard.writeText(result);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 1500);
   }, [result]);
 
   return (
@@ -74,7 +78,7 @@ export function LoremIpsumGenerator() {
         <div className="glass-card">
           <div className="mb-3 flex items-center justify-between">
             <span className="field-label">生成结果</span>
-            <button className="copy-btn text-xs text-blue-500 hover:text-blue-600" onClick={handleCopy}>复制</button>
+            <button className="copy-btn text-xs text-blue-500 hover:text-blue-600" onClick={handleCopy}>{copied ? "✓" : "复制"}</button>
           </div>
           <div className="rounded-xl bg-gray-50 p-4 text-sm leading-relaxed whitespace-pre-wrap max-h-[400px] overflow-y-auto">
             {result}
