@@ -237,9 +237,9 @@ export const tools: Tool[] = [
     nameEn: "Audio Format Converter",
     category: "audio",
     icon: "🔀",
-    description: "录制音频并导出为不同格式，支持采样率调节",
+    description: "上传音频文件并转换为 WAV/WebM/OGG 格式，支持采样率/位深度/比特率调节",
     path: "/audio/convert",
-    tags: ["音频", "格式", "转换", "convert"],
+    tags: ["音频", "格式", "转换", "convert", "wav", "webm", "ogg"],
   },
   {
     id: "audio-wave",
