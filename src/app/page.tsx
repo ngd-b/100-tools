@@ -110,6 +110,9 @@ export default function Home() {
   const [isOpen, setIsOpen] = useState(false);
   const [animating, setAnimating] = useState(false);
 
+  // Mobile sidebar toggle
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
   // Favorites
   const { favorites, toggle } = useFavorites();
   const [mounted, setMounted] = useState(false);
@@ -160,6 +163,7 @@ export default function Home() {
   const selectTool = useCallback((id: string) => {
     if (isOpen) {
       setSelectedId(id);
+      setSidebarOpen(false);
       return;
     }
 
@@ -300,8 +304,16 @@ export default function Home() {
         </div>
       </div>
 
+      {/* ---- SIDEBAR BACKDROP (mobile only) ---- */}
+      {sidebarOpen && (
+        <div
+          className="fixed inset-0 z-10 bg-black/30 md:hidden"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
+
       {/* ---- SIDEBAR ---- */}
-      <div className={`sidebar-section ${sidebarClass}`}>
+      <div className={`sidebar-section ${sidebarClass} ${sidebarOpen ? "sidebar-mobile-open" : ""}`}>
         <div className="sidebar-content">
           <div className="sidebar-header">
             <h3 className="sidebar-title">工具列表</h3>
@@ -400,6 +412,15 @@ export default function Home() {
       {selectedTool && (
         <div className={`tool-section ${toolClass}`}>
           <div className="tool-header">
+            <button
+              className="flex h-9 w-9 items-center justify-center rounded-lg text-gray-500 hover:bg-gray-100 md:hidden"
+              onClick={() => setSidebarOpen(!sidebarOpen)}
+              title="工具列表"
+            >
+              <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+            </button>
             <div className="flex items-center gap-3">
               <div
                 className="flex h-9 w-9 items-center justify-center rounded-lg text-lg text-white"

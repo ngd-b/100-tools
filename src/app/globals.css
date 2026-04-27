@@ -502,6 +502,20 @@ input[type="range"]::-webkit-slider-thumb {
   transform: translateX(0);
 }
 
+/* Mobile: sidebar takes full width, overlays on top of tool */
+@media (max-width: 767px) {
+  .sidebar-section {
+    width: 100%;
+    border-left: none;
+    border-right: none;
+    z-index: 30;
+  }
+
+  .sidebar-section.sidebar-mobile-open {
+    transform: translateX(0);
+  }
+}
+
 .sidebar-content {
   display: flex;
   flex-direction: column;
@@ -707,6 +721,13 @@ input[type="range"]::-webkit-slider-thumb {
 
 .tool-section.tool-open {
   clip-path: inset(0 0% 0 0);
+}
+
+/* Mobile: tool takes full width */
+@media (max-width: 767px) {
+  .tool-section {
+    right: 0;
+  }
 }
 
 .tool-header {
