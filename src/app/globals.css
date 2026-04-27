@@ -502,13 +502,15 @@ input[type="range"]::-webkit-slider-thumb {
   transform: translateX(0);
 }
 
-/* Mobile: sidebar takes full width, overlays on top of tool */
+/* Mobile: drawer-style sidebar, tool stays visible behind backdrop */
 @media (max-width: 767px) {
   .sidebar-section {
-    width: 100%;
+    width: 280px;
+    max-width: 85vw;
     border-left: none;
     border-right: none;
     z-index: 30;
+    box-shadow: -4px 0 24px rgba(0, 0, 0, 0.12);
   }
 
   .sidebar-section.sidebar-mobile-open {
