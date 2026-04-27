@@ -330,7 +330,7 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="sidebar-filters">
+          <div className="sidebar-filters flex-wrap">
             <button
               onClick={() => setActiveCategory("all")}
               className={`sidebar-pill ${activeCategory === "all" ? "active" : ""}`}
@@ -354,7 +354,7 @@ export default function Home() {
             ))}
           </div>
 
-          <div className="sidebar-list">
+          <div className="sidebar-list overflow-x-hidden">
             {filtered.map((tool, index) => {
               const bg = iconBg[tool.category] ?? iconBg.text;
               const isActive = tool.id === selectedId;
@@ -418,7 +418,7 @@ export default function Home() {
               </svg>
             </button>
           </div>
-          <div className="tool-content">
+          <div className="tool-content overflow-x-hidden">
             {toolComponents[selectedTool.id] ?? (
               <div className="glass-card text-center text-gray-400">
                 工具开发中...
