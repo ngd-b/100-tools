@@ -161,9 +161,9 @@ export default function Home() {
 
   // ---- OPEN ----
   const selectTool = useCallback((id: string) => {
+    setSidebarOpen(false);
     if (isOpen) {
       setSelectedId(id);
-      setSidebarOpen(false);
       return;
     }
 
