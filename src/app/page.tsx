@@ -49,7 +49,6 @@ import { JsonMinifier } from "@/tools/json-minifier";
 import { NumberConverter } from "@/tools/number-converter";
 import { MorseCode } from "@/tools/morse-code";
 import { EmojiPicker } from "@/tools/emoji-picker";
-import { MarkdownToHtml } from "@/tools/markdown-to-html";
 import { SvgPlaceholder } from "@/tools/svg-placeholder";
 import { PercentageCalculator } from "@/tools/percentage-calculator";
 import { LoanCalculator } from "@/tools/loan-calculator";
@@ -111,7 +110,6 @@ const toolComponents: Record<string, React.ReactNode> = {
   "number-converter": <NumberConverter />,
   "morse-code": <MorseCode />,
   "emoji-picker": <EmojiPicker />,
-  "markdown-to-html": <MarkdownToHtml />,
   "svg-placeholder": <SvgPlaceholder />,
   "percentage-calculator": <PercentageCalculator />,
   "loan-calculator": <LoanCalculator />,

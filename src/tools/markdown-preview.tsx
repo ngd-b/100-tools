@@ -55,6 +55,10 @@ function simpleMarkdown(md: string): string {
   // Blockquote
   html = html.replace(/^> (.+)$/gm, '<blockquote class="border-l-4 border-blue-400 pl-4 py-2 my-3 text-gray-600 italic">$1</blockquote>');
 
+  // Images & links
+  html = html.replace(/!\[([^\]]*)\]\(([^)]+)\)/g, '<img src="$2" alt="$1" class="rounded-lg max-h-48"/>');
+  html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" class="text-blue-500 underline" target="_blank" rel="noopener">$1</a>');
+
   // Horizontal rule
   html = html.replace(/^---$/gm, '<hr class="my-4 border-gray-200" />');
 

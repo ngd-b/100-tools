@@ -462,16 +462,6 @@ export const tools: Tool[] = [
     tags: ["emoji", "表情", "符号", "图标", "picker"],
   },
   {
-    id: "markdown-to-html",
-    name: "Markdown 转 HTML",
-    nameEn: "Markdown to HTML",
-    category: "text",
-    icon: "🌐",
-    description: "简易 Markdown 实时转 HTML 并预览",
-    path: "/text/md2html",
-    tags: ["markdown", "html", "转换", "preview"],
-  },
-  {
     id: "svg-placeholder",
     name: "SVG 占位图生成器",
     nameEn: "SVG Placeholder",
