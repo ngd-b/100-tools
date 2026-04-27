@@ -33,6 +33,13 @@ import { JwtDecoder } from "@/tools/jwt-decoder";
 import { ImageCrop } from "@/tools/image-crop";
 import { GifMaker } from "@/tools/gif-maker";
 import { QrCodeGenerator } from "@/tools/qr-code";
+import { UnitConverter } from "@/tools/unit-converter";
+import { CurrencyConverter } from "@/tools/currency-converter";
+import { TimerTool } from "@/tools/timer-tool";
+import { BmiCalculator } from "@/tools/bmi-calculator";
+import { PomodoroTimer } from "@/tools/pomodoro-timer";
+import { ScientificCalculator } from "@/tools/scientific-calculator";
+import { WorldClock } from "@/tools/world-clock";
 
 const iconBg: Record<string, string> = {
   color: "linear-gradient(135deg, #f59e0b, #f97316)",
@@ -40,6 +47,7 @@ const iconBg: Record<string, string> = {
   audio: "linear-gradient(135deg, #8b5cf6, #a855f7)",
   text: "linear-gradient(135deg, #0ea5e9, #3b82f6)",
   dev: "linear-gradient(135deg, #6b7280, #4b5563)",
+  daily: "linear-gradient(135deg, #f472b6, #fb7185)",
 };
 
 const toolComponents: Record<string, React.ReactNode> = {
@@ -73,6 +81,13 @@ const toolComponents: Record<string, React.ReactNode> = {
   "image-crop": <ImageCrop />,
   "gif-maker": <GifMaker />,
   "qr-code": <QrCodeGenerator />,
+  "unit-converter": <UnitConverter />,
+  "currency-converter": <CurrencyConverter />,
+  "timer-tool": <TimerTool />,
+  "bmi-calculator": <BmiCalculator />,
+  "pomodoro-timer": <PomodoroTimer />,
+  "scientific-calculator": <ScientificCalculator />,
+  "world-clock": <WorldClock />,
 };
 
 const ANIM_DURATION = 500;
