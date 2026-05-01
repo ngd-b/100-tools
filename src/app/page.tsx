@@ -53,6 +53,11 @@ import { SvgPlaceholder } from "@/tools/svg-placeholder";
 import { PercentageCalculator } from "@/tools/percentage-calculator";
 import { LoanCalculator } from "@/tools/loan-calculator";
 import { DateDiff } from "@/tools/date-diff";
+import { ImageColorPicker } from "@/tools/image-color-picker";
+import { PdfToImage } from "@/tools/pdf-to-image";
+import { ImageExif } from "@/tools/image-exif";
+import { CodeHighlight } from "@/tools/code-highlight";
+import { JsonToTs } from "@/tools/json-to-ts";
 
 const iconBg: Record<string, string> = {
   color: "linear-gradient(135deg, #f59e0b, #f97316)",
@@ -114,6 +119,11 @@ const toolComponents: Record<string, React.ReactNode> = {
   "percentage-calculator": <PercentageCalculator />,
   "loan-calculator": <LoanCalculator />,
   "date-diff": <DateDiff />,
+  "image-color-picker": <ImageColorPicker />,
+  "pdf-to-image": <PdfToImage />,
+  "image-exif": <ImageExif />,
+  "code-highlight": <CodeHighlight />,
+  "json-to-ts": <JsonToTs />,
 };
 
 const ANIM_DURATION = 500;
