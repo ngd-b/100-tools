@@ -106,7 +106,6 @@ console.log(fibonacci(10)); // 55`);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [generating, setGenerating] = useState(false);
   const previewRef = useRef<HTMLDivElement>(null);
-  const captureRef = useRef<HTMLDivElement>(null);
 
   // Load theme CSS dynamically for preview
   useEffect(() => {
@@ -144,24 +143,21 @@ console.log(fibonacci(10)); // 55`);
   }, []);
 
   const handleGenerateImage = useCallback(async () => {
-    if (!captureRef.current) return;
+    if (!previewRef.current) return;
     setGenerating(true);
     try {
-      const dataUrl = await toPng(captureRef.current, {
+      const dataUrl = await toPng(previewRef.current, {
         pixelRatio: 2,
         quality: 1,
-        style: {
-          transform: "none",
-          transformOrigin: "none",
-        },
+        backgroundColor: themeBg[theme] ?? "#ffffff",
       });
       setImagePreview(dataUrl);
-    } catch (e) {
+    } catch (e: unknown) {
       console.error("生成图片失败:", e);
     } finally {
       setGenerating(false);
     }
-  }, []);
+  }, [theme]);
 
   const handleDownloadImage = useCallback(() => {
     if (!imagePreview) return;
@@ -276,32 +272,6 @@ console.log(fibonacci(10)); // 55`);
             </pre>
           </div>
         </div>
-      </div>
-
-      {/* Hidden capture element (identical to preview, used by html-to-image) */}
-      <div
-        ref={captureRef}
-        style={{
-          position: "absolute",
-          left: "-9999px",
-          top: "-9999px",
-          width: "100%",
-          maxWidth: "800px",
-          background: themeBg[theme],
-          padding: "16px",
-          fontFamily: '"Cascadia Code", "Fira Code", "JetBrains Mono", Consolas, monospace',
-          fontSize: "14px",
-          lineHeight: "1.6",
-          borderRadius: "8px",
-          boxSizing: "border-box",
-        }}
-      >
-        <pre style={{ margin: 0, padding: 0 }}>
-          <code
-            className={lang}
-            dangerouslySetInnerHTML={{ __html: codeHtml }}
-          />
-        </pre>
       </div>
 
       {/* Image Preview */}
