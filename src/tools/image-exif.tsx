@@ -165,11 +165,6 @@ export function ImageExif() {
             </div>
           )}
 
-          <div className="mt-4 flex gap-3">
-            <Button variant="secondary" onClick={() => { setImageUrl(""); setExifGroups([]); setRawExif(null); setError(""); }}>
-              更换图片
-            </Button>
-          </div>
         </>
       )}
     </div>
