@@ -512,16 +512,6 @@ export const tools: Tool[] = [
     tags: ["取色", "吸管", "图片", "颜色", "拾取", "eyedropper"],
   },
   {
-    id: "pdf-to-image",
-    name: "PDF 转图片",
-    nameEn: "PDF to Image",
-    category: "image",
-    icon: "📄",
-    description: "PDF 文件转为 PNG/JPG 图片，支持多页渲染和批量下载",
-    path: "/image/pdf",
-    tags: ["pdf", "转图片", "png", "jpg", "转换", "convert"],
-  },
-  {
     id: "image-exif",
     name: "EXIF 信息查看",
     nameEn: "EXIF Viewer",
