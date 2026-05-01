@@ -1,19 +1,19 @@
 "use client";
 
-import { useState, useRef, useCallback, useEffect } from "react";
+import { useState, useRef, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
 
-// Lazy import pdfjs-dist to avoid SSR issues
-let pdfjsLib: typeof import("pdfjs-dist") | null = null;
+// Load PDF.js via dynamic import (Turbopack-safe)
+async function ensurePdfjs(): Promise<any> {
+  const win = window as any;
+  if (win.pdfjsLib) return win.pdfjsLib;
 
-async function ensurePdfjs() {
-  if (!pdfjsLib) {
-    pdfjsLib = await import("pdfjs-dist");
-    pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.mjs`;
-  }
-  return pdfjsLib;
+  const pdfjs = await import("pdfjs-dist");
+  pdfjs.GlobalWorkerOptions.workerSrc = "/pdfjs/pdf.worker.min.mjs";
+  win.pdfjsLib = pdfjs;
+  return pdfjs;
 }
 
 export function PdfToImage() {
