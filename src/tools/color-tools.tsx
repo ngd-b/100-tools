@@ -108,28 +108,24 @@ export function ColorTools() {
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div className="glass-card">
           <Label className="mb-3 block">明度</Label>
-          <div className="flex h-8 gap-0.5 overflow-hidden rounded-lg">
-            {[3, 10, 20, 35, 50, 65, 80, 90, 97].map((l, i) => (
-              <div
-                key={i}
-                className="flex-1 first:rounded-l-lg last:rounded-r-lg"
-                style={{ backgroundColor: `hsl(${pHsl.h}, ${pHsl.s}%, ${l}%)` }}
-                title={`${l}%`}
-              />
-            ))}
+          <div className="flex h-10 gap-0.5 overflow-hidden rounded-lg">
+            {[3, 10, 20, 35, 50, 65, 80, 90, 97].map((l, i) => {
+              const hex = hslToHex(pHsl.h, pHsl.s, l);
+              return (
+                <SwatchBlock key={i} color={hex} tooltip={`L: ${l}%`} />
+              );
+            })}
           </div>
         </div>
         <div className="glass-card">
           <Label className="mb-3 block">饱和度</Label>
-          <div className="flex h-8 gap-0.5 overflow-hidden rounded-lg">
-            {satSteps.map((s, i) => (
-              <div
-                key={i}
-                className="flex-1 first:rounded-l-lg last:rounded-r-lg"
-                style={{ backgroundColor: `hsl(${pHsl.h}, ${s}%, ${pHsl.l}%)` }}
-                title={`${s}%`}
-              />
-            ))}
+          <div className="flex h-10 gap-0.5 overflow-hidden rounded-lg">
+            {satSteps.map((s, i) => {
+              const hex = hslToHex(pHsl.h, s, pHsl.l);
+              return (
+                <SwatchBlock key={i} color={hex} tooltip={`S: ${s}%`} />
+              );
+            })}
           </div>
         </div>
       </div>
@@ -156,6 +152,11 @@ function rgbToCmyk(r: number, g: number, b: number): string {
   const Y = Math.round(((y - k) / (1 - k)) * 100);
   const K = Math.round(k * 100);
   return `cmyk(${C}, ${M}, ${Y}, ${K})`;
+}
+
+function hslToHex(h: number, s: number, l: number): string {
+  const rgb = hslToRgb(h, s, l);
+  return rgbToHex(rgb.r, rgb.g, rgb.b);
 }
 
 /* ---- Components ---- */
@@ -240,5 +241,30 @@ function HarmonySection({ label, colors }: { label: string; colors: string[] }) 
         ))}
       </div>
     </div>
+  );
+}
+
+function SwatchBlock({ color, tooltip }: { color: string; tooltip: string }) {
+  const [copied, setCopied] = useState(false);
+
+  function handleCopy() {
+    navigator.clipboard.writeText(color);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 1200);
+  }
+
+  return (
+    <button
+      onClick={handleCopy}
+      className="group relative flex-1 cursor-pointer first:rounded-l-lg last:rounded-r-lg transition-transform hover:scale-105"
+      style={{ backgroundColor: color }}
+      title={`${tooltip} — ${color}`}
+    >
+      {copied && (
+        <span className="absolute inset-0 flex items-center justify-center text-xs font-bold text-white drop-shadow">
+          ✓
+        </span>
+      )}
+    </button>
   );
 }
