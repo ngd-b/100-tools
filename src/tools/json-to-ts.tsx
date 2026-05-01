@@ -29,6 +29,7 @@ export function JsonToTs() {
   const [outputType, setOutputType] = useState<OutputType>("type");
   const [rootName, setRootName] = useState("RootObject");
   const [error, setError] = useState("");
+  const [copied, setCopied] = useState(false);
 
   const handleConvert = useCallback(() => {
     setError("");
@@ -43,7 +44,12 @@ export function JsonToTs() {
   }, [json, rootName, outputType]);
 
   const handleCopy = useCallback(() => {
-    if (output) navigator.clipboard.writeText(output);
+    if (output) {
+      navigator.clipboard.writeText(output).then(() => {
+        setCopied(true);
+        setTimeout(() => setCopied(false), 1500);
+      });
+    }
   }, [output]);
 
   const handleClear = useCallback(() => {
@@ -87,8 +93,8 @@ export function JsonToTs() {
         <div className="glass-card">
           <div className="mb-2 flex items-center justify-between">
             <Label>输出 TypeScript</Label>
-            <Button variant="secondary" className="text-xs cursor-pointer" onClick={handleCopy} disabled={!output}>
-              复制
+            <Button variant={copied ? "gradient" : "secondary"} className="text-xs cursor-pointer" onClick={handleCopy} disabled={!output}>
+              {copied ? "已复制 ✓" : "复制"}
             </Button>
           </div>
           <div className="h-[288px] overflow-auto rounded-lg border border-gray-100 bg-gray-50/50 p-4 font-mono text-sm leading-relaxed">
