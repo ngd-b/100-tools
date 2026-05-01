@@ -28,7 +28,6 @@ import dockerfile from "highlight.js/lib/languages/dockerfile";
 import lua from "highlight.js/lib/languages/lua";
 import markdown from "highlight.js/lib/languages/markdown";
 import plaintext from "highlight.js/lib/languages/plaintext";
-import { toPng } from "html-to-image";
 
 hljs.registerLanguage("javascript", javascript);
 hljs.registerLanguage("typescript", typescript);
@@ -107,7 +106,7 @@ console.log(fibonacci(10)); // 55`);
   const [generating, setGenerating] = useState(false);
   const previewRef = useRef<HTMLDivElement>(null);
 
-  // Load theme CSS dynamically for preview
+  // Load theme CSS dynamically
   useEffect(() => {
     const id = "hljs-theme-style";
     const existing = document.getElementById(id);
@@ -146,7 +145,8 @@ console.log(fibonacci(10)); // 55`);
     if (!previewRef.current) return;
     setGenerating(true);
     try {
-      const dataUrl = await toPng(previewRef.current, {
+      const htmlToImage = await import("html-to-image");
+      const dataUrl = await htmlToImage.toPng(previewRef.current, {
         pixelRatio: 2,
         quality: 1,
         backgroundColor: themeBg[theme] ?? "#ffffff",
@@ -179,7 +179,7 @@ console.log(fibonacci(10)); // 55`);
     URL.revokeObjectURL(url);
   }, [theme]);
 
-  // Build the inner code HTML for reuse in both preview and capture
+  // Build inner code HTML
   const codeHtml = showLineNumbers
     ? highlighted.split("\n").map((line, i) =>
         `<span class="line-number" style="display:inline-block;width:2.5em;text-align:right;padding-right:1em;color:#999;font-size:0.9em">${i + 1}</span>${line}\n`
