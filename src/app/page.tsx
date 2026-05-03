@@ -350,6 +350,18 @@ export default function Home() {
               </div>
             )}
           </div>
+
+          {/* Footer */}
+          <footer className="border-t border-gray-100 py-6 text-center">
+            <a
+              href="https://hboot.fun"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-sm text-gray-400 transition-colors hover:text-blue-500"
+            >
+              by hboot
+            </a>
+          </footer>
         </div>
       </div>
 
