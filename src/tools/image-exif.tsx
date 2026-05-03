@@ -37,7 +37,7 @@ export function ImageExif() {
         xmp: true,
         icc: false,
         tiff: true,
-        ifd0: true,
+        ifd0: {},
         ifd1: true,
         exif: true,
         gps: true,
@@ -143,7 +143,7 @@ export function ImageExif() {
                   <span className="text-lg">📍</span>
                   <div>
                     <div className="text-sm font-semibold">GPS 位置</div>
-                    <div className="text-xs text-gray-400">{rawExif.latitude.toFixed(6)}, {rawExif.longitude.toFixed(6)}</div>
+                    <div className="text-xs text-gray-400">{Number(rawExif.latitude).toFixed(6)}, {Number(rawExif.longitude).toFixed(6)}</div>
                   </div>
                 </div>
                 <a
