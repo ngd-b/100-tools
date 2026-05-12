@@ -15,7 +15,7 @@ import { GradientGenerator } from "@/tools/gradient-generator";
 import { ContrastChecker } from "@/tools/contrast-checker";
 import { ImageCompressor } from "@/tools/image-compressor";
 import { ImageWatermark } from "@/tools/image-watermark";
-import { AudioRecorder } from "@/tools/audio-recorder";
+import { AudioTools } from "@/tools/audio-tools";
 import { UrlEncoder } from "@/tools/url-encoder";
 import { HtmlEntities } from "@/tools/html-entities";
 import { RegexTester } from "@/tools/regex-tester";
@@ -26,7 +26,6 @@ import { LoremIpsumGenerator } from "@/tools/lorem-ipsum";
 import { CssFilterGenerator } from "@/tools/css-filter";
 import { RandomPalette } from "@/tools/random-palette";
 import { WhiteNoiseGenerator } from "@/tools/white-noise";
-import { AudioConverter } from "@/tools/audio-converter";
 import { AudioVisualizer } from "@/tools/audio-wave";
 import { MarkdownPreview } from "@/tools/markdown-preview";
 import { JwtDecoder } from "@/tools/jwt-decoder";
@@ -80,7 +79,7 @@ const toolComponents: Record<string, React.ReactNode> = {
   "contrast-checker": <ContrastChecker />,
   "image-compressor": <ImageCompressor />,
   "image-watermark": <ImageWatermark />,
-  "audio-recorder": <AudioRecorder />,
+  "audio-tools": <AudioTools />,
   "url-encoder": <UrlEncoder />,
   "html-entities": <HtmlEntities />,
   "regex-tester": <RegexTester />,
@@ -91,7 +90,6 @@ const toolComponents: Record<string, React.ReactNode> = {
   "css-filter": <CssFilterGenerator />,
   "random-palette": <RandomPalette />,
   "white-noise": <WhiteNoiseGenerator />,
-  "audio-converter": <AudioConverter />,
   "audio-wave": <AudioVisualizer />,
   "markdown-preview": <MarkdownPreview />,
   "jwt-decoder": <JwtDecoder />,
