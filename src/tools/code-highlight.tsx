@@ -193,7 +193,7 @@ console.log(fibonacci(10)); // 55`);
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
           <div>
             <Label className="mb-2 block">编程语言</Label>
-            <Select value={lang} onValueChange={setLang}>
+            <Select value={lang} onValueChange={(v) => setLang(v ?? "javascript")}>
               <SelectTrigger>
                 <SelectValue />
               </SelectTrigger>
@@ -206,7 +206,7 @@ console.log(fibonacci(10)); // 55`);
           </div>
           <div>
             <Label className="mb-2 block">代码主题</Label>
-            <Select value={theme} onValueChange={setTheme}>
+            <Select value={theme} onValueChange={(v) => setTheme(v ?? "github")}>
               <SelectTrigger>
                 <SelectValue />
               </SelectTrigger>
