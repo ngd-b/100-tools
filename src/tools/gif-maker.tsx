@@ -3,6 +3,7 @@
 import { useState, useCallback, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
+import { ImageUploadZone } from "@/components/ImageUploadZone";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Slider } from "@/components/ui/slider";
 
@@ -320,17 +321,16 @@ export function GifMaker() {
 
       <div className="glass-card mb-6">
         <span className="field-label mb-3 block">上传帧图片</span>
-        <div className="upload-zone">
-          <svg className="mb-3 h-8 w-8 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-          </svg>
-          <p className="text-sm text-gray-400 mb-2">上传多张图片作为 GIF 帧</p>
-          <Button variant="secondary" className="text-sm cursor-pointer">
-            选择图片
-            <input type="file" accept="image/*" multiple className="hidden"
-              onChange={(e) => { if (e.target.files) handleFiles(e.target.files); }} />
-          </Button>
-        </div>
+        <ImageUploadZone
+          onFiles={handleFiles}
+          multiple
+          title="上传多张图片作为 GIF 帧"
+          icon={
+            <svg className="mb-3 h-8 w-8 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+            </svg>
+          }
+        />
       </div>
 
       {frames.length > 0 && (

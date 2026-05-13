@@ -3,6 +3,7 @@
 import { useState, useCallback, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
+import { ImageUploadZone } from "@/components/ImageUploadZone";
 import { Slider } from "@/components/ui/slider";
 
 export function ImageConverter() {
@@ -77,17 +78,7 @@ export function ImageConverter() {
 
       {!imageUrl ? (
         <div className="glass-card mb-6">
-          <div className="upload-zone">
-            <svg className="mb-4 h-12 w-12 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
-            </svg>
-            <p className="text-sm text-gray-400 mb-1">拖拽图片到此处</p>
-            <Button variant="secondary" className="text-sm cursor-pointer">
-              选择图片
-              <input type="file" accept="image/*" className="hidden"
-                onChange={(e) => { const f = e.target.files?.[0]; if (f) handleFile(f); }} />
-            </Button>
-          </div>
+          <ImageUploadZone onFile={handleFile} />
         </div>
       ) : (
         <>

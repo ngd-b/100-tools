@@ -1,8 +1,9 @@
 "use client";
 
-import { useState, useCallback, useRef } from "react";
+import { useState, useCallback } from "react";
 import * as exifr from "exifr";
 import { Button } from "@/components/ui/button";
+import { ImageUploadZone } from "@/components/ImageUploadZone";
 
 interface ExifGroup {
   label: string;
@@ -17,7 +18,6 @@ export function ImageExif() {
   const [rawExif, setRawExif] = useState<Record<string, unknown> | null>(null);
   const [processing, setProcessing] = useState(false);
   const [error, setError] = useState("");
-  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleFile = useCallback(async (file: File) => {
     if (!file.type.startsWith("image/")) return;
@@ -64,25 +64,15 @@ export function ImageExif() {
     <div>
       {/* Upload Zone */}
       <div className="glass-card mb-6">
-        <div
-          className="upload-zone cursor-pointer"
-          onClick={() => fileInputRef.current?.click()}
-        >
-          <svg className="mb-4 h-12 w-12 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909M3.75 21h16.5A2.25 2.25 0 0 0 22.5 18.75V5.25A2.25 2.25 0 0 0 20.25 3H3.75A2.25 2.25 0 0 0 1.5 5.25v13.5A2.25 2.25 0 0 0 3.75 21ZM8.25 8.25h.008v.008H8.25V8.25Z" />
-          </svg>
-          <p className="text-sm text-gray-400 mb-1">上传图片查看 EXIF 信息</p>
-          <Button variant="secondary" className="text-sm cursor-pointer" onClick={(e) => { e.stopPropagation(); fileInputRef.current?.click(); }}>
-            选择图片
-          </Button>
-          <input
-            ref={fileInputRef}
-            type="file"
-            accept="image/*"
-            className="hidden"
-            onChange={(e) => { const f = e.target.files?.[0]; if (f) handleFile(f); }}
-          />
-        </div>
+        <ImageUploadZone
+          onFile={handleFile}
+          title="上传图片查看 EXIF 信息"
+          icon={
+            <svg className="mb-4 h-12 w-12 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909M3.75 21h16.5A2.25 2.25 0 0 0 22.5 18.75V5.25A2.25 2.25 0 0 0 20.25 3H3.75A2.25 2.25 0 0 0 1.5 5.25v13.5A2.25 2.25 0 0 0 3.75 21ZM8.25 8.25h.008v.008H8.25V8.25Z" />
+            </svg>
+          }
+        />
       </div>
 
       {/* Loading */}
