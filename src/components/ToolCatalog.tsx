@@ -47,7 +47,7 @@ export function ToolCatalog() {
       <header className="mb-10 max-w-2xl">
         <span className="badge mb-5"><span className="badge-dot" />{tools.length} 个工具 · 持续更新</span>
         <h1 className="mb-4 text-3xl font-extrabold tracking-tight sm:text-5xl">
-          日常小事，<span className="gradient-text">顺手解决。</span>
+          免费在线工具，<span className="gradient-text">打开即用。</span>
         </h1>
         <p className="text-base leading-7 text-gray-500">处理图片、整理文本、调试代码。无需注册，找到工具就能开始。</p>
       </header>

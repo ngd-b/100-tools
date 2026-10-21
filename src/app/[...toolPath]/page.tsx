@@ -2,6 +2,9 @@ import type { Metadata } from "next";
 import { notFound, permanentRedirect } from "next/navigation";
 import { ToolPage } from "@/components/ToolPage";
 import { getToolByPath, toolPathRedirects, tools } from "@/data/tools";
+import { toolGuides } from "@/data/tool-guides";
+import { createPageMetadata } from "@/lib/seo";
+import { siteConfig } from "@/lib/site-config";
 
 type Props = { params: Promise<{ toolPath: string[] }> };
 
@@ -21,7 +24,8 @@ async function resolveTool(params: Props["params"]) {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const tool = await resolveTool(params);
-  return { title: `${tool.name} — 100-tools`, description: tool.description };
+  const guide = toolGuides[tool.id];
+  return createPageMetadata({ title: guide.title, description: guide.description, path: tool.path }, siteConfig);
 }
 
 export default async function Page({ params }: Props) {

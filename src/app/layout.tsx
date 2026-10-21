@@ -3,6 +3,8 @@ import Link from "next/link";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Footer } from "@/components/Footer";
+import { siteConfig } from "@/lib/site-config";
+import { homeSeo } from "@/lib/seo";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -15,8 +17,15 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "100-tools — 免费在线工具合集",
-  description: "免费在线图片、文本、开发与生活办公工具，无需注册，打开即用。",
+  metadataBase: siteConfig.url ? new URL(siteConfig.url) : undefined,
+  title: { default: `${homeSeo.title} — 100-tools`, template: "%s — 100-tools" },
+  description: homeSeo.description,
+  applicationName: "100-tools",
+  robots: {
+    index: siteConfig.indexable,
+    follow: true,
+    googleBot: { index: siteConfig.indexable, follow: true, "max-image-preview": "large", "max-snippet": -1 },
+  },
   icons: {
     icon: "/favicon.svg",
     apple: "/favicon.svg",
