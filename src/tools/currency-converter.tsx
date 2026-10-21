@@ -24,29 +24,37 @@ export function CurrencyConverter() {
   const [amount, setAmount] = useState("100");
   const [fromCode, setFromCode] = useState("CNY");
   const [toCode, setToCode] = useState("USD");
+  const [customRate, setCustomRate] = useState("");
+  const hasCustomRate = customRate.trim() !== "";
+  const validCustomRate = Number.isFinite(Number(customRate)) && Number(customRate) > 0;
 
   const result = useMemo(() => {
     const n = parseFloat(amount);
-    if (isNaN(n)) return null;
+    if (!Number.isFinite(n) || (hasCustomRate && !validCustomRate)) return null;
+    if (hasCustomRate) {
+      const converted = n * Number(customRate);
+      return Number.isFinite(converted) ? converted.toFixed(4) : null;
+    }
     const from = CURRENCIES.find((c) => c.code === fromCode)!;
     const to = CURRENCIES.find((c) => c.code === toCode)!;
-    return ((n / from.rate) * to.rate).toFixed(4);
-  }, [amount, fromCode, toCode]);
+    const converted = (n / from.rate) * to.rate;
+    return Number.isFinite(converted) ? converted.toFixed(4) : null;
+  }, [amount, fromCode, toCode, customRate, hasCustomRate, validCustomRate]);
 
   const quickResults = useMemo(() => {
     const n = parseFloat(amount);
-    if (isNaN(n)) return [];
+    if (!Number.isFinite(n) || hasCustomRate) return [];
     const from = CURRENCIES.find((c) => c.code === fromCode)!;
-    return CURRENCIES.filter((c) => c.code !== toCode).map((c) => ({
+    return CURRENCIES.filter((c) => c.code !== toCode && Number.isFinite((n / from.rate) * c.rate)).map((c) => ({
       ...c,
       value: ((n / from.rate) * c.rate).toFixed(4),
     }));
-  }, [amount, fromCode, toCode]);
+  }, [amount, fromCode, toCode, hasCustomRate]);
 
   return (
     <div>
       <div className="rounded-2xl border border-amber-200 bg-amber-50/50 px-4 py-3 mb-6 text-xs text-gray-500">
-        💡 汇率仅供参考，实际交易请以银行或交易所汇率为准。
+        内置汇率是项目预设的参考值，来源和采集日期未记录，不会联网更新。可输入自行查询的汇率进行计算。
       </div>
 
       {/* Main Conversion */}
@@ -54,7 +62,7 @@ export function CurrencyConverter() {
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
           <div>
             <Label>从</Label>
-            <Select value={fromCode} onValueChange={(v) => { if (v) setFromCode(v); }}>
+            <Select value={fromCode} onValueChange={(v) => { if (v) { setFromCode(v); setCustomRate(""); } }}>
               <SelectTrigger className="mt-2"><SelectValue /></SelectTrigger>
               <SelectContent>
                 {CURRENCIES.map((c) => <SelectItem key={c.code} value={c.code}>{c.name}</SelectItem>)}
@@ -64,7 +72,7 @@ export function CurrencyConverter() {
           </div>
           <div>
             <Label>到</Label>
-            <Select value={toCode} onValueChange={(v) => { if (v) setToCode(v); }}>
+            <Select value={toCode} onValueChange={(v) => { if (v) { setToCode(v); setCustomRate(""); } }}>
               <SelectTrigger className="mt-2"><SelectValue /></SelectTrigger>
               <SelectContent>
                 {CURRENCIES.map((c) => <SelectItem key={c.code} value={c.code}>{c.name}</SelectItem>)}
@@ -77,8 +85,16 @@ export function CurrencyConverter() {
         </div>
       </div>
 
+      <div className="glass-card mb-6">
+        <Label htmlFor="custom-rate">自定义汇率：1 {fromCode} = 多少 {toCode}</Label>
+        <Input id="custom-rate" type="number" min="0" step="any" className="mt-3" value={customRate} onChange={(event) => setCustomRate(event.target.value)} placeholder="留空使用内置参考值" />
+        {hasCustomRate && !validCustomRate && <p role="alert" className="mt-2 text-xs text-red-600">请输入大于 0 的有效汇率。</p>}
+        {Number.isFinite(parseFloat(amount)) && (!hasCustomRate || validCustomRate) && result === null && <p role="alert" className="mt-2 text-xs text-red-600">计算结果超出数值范围，请减小金额或汇率。</p>}
+        <p className="mt-2 text-xs text-gray-500">{hasCustomRate ? "使用自定义汇率，切换货币后会清空。" : "使用内置参考汇率。"}</p>
+      </div>
+
       {/* Quick Conversion */}
-      {amount && !isNaN(parseFloat(amount)) && (
+      {quickResults.length > 0 && (
         <div className="glass-card">
           <Label>换算到所有货币</Label>
           <div className="mt-3 grid grid-cols-1 gap-2 sm:grid-cols-2">

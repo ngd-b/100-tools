@@ -1,34 +1,43 @@
 import Link from "next/link";
 import type { Tool } from "@/types/tools";
+import { toolIconBackgrounds } from "@/data/tool-styles";
 
-const iconBg: Record<string, string> = {
-  color: "linear-gradient(135deg, #f59e0b, #f97316)",
-  image: "linear-gradient(135deg, #10b981, #14b8a6)",
-  audio: "linear-gradient(135deg, #8b5cf6, #a855f7)",
-  text: "linear-gradient(135deg, #0ea5e9, #3b82f6)",
-  dev: "linear-gradient(135deg, #6b7280, #4b5563)",
-};
-
-export function ToolCard({ tool }: { tool: Tool }) {
-  const bg = iconBg[tool.category] ?? iconBg.text;
+export function ToolCard({ tool, isFavorite, onToggleFavorite }: {
+  tool: Tool;
+  isFavorite: boolean;
+  onToggleFavorite: () => void;
+}) {
+  const bg = toolIconBackgrounds[tool.category] ?? toolIconBackgrounds.text;
 
   return (
-    <Link href={tool.path} className="tool-card">
-      <div
-        className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl text-xl text-white"
-        style={{ background: bg }}
+    <article className="group relative h-full">
+      <Link href={tool.path} prefetch={false} className="tool-card h-full focus-visible:outline-2 focus-visible:outline-blue-500">
+        <div
+          className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl text-xl text-white"
+          style={{ background: bg }}
+        >
+          {tool.icon}
+        </div>
+        <h3 className="text-base font-semibold tracking-tight text-gray-900">
+          {tool.name}
+        </h3>
+        <p className="mt-0.5 text-xs font-medium tracking-wider text-gray-400 uppercase">
+          {tool.nameEn}
+        </p>
+        <p className="mt-3 text-sm leading-relaxed text-gray-500">
+          {tool.description}
+        </p>
+      </Link>
+      <button
+        type="button"
+        className="fav-star absolute top-3 right-3"
+        aria-label={`${isFavorite ? "取消收藏" : "收藏"}${tool.name}`}
+        aria-pressed={isFavorite}
+        title={isFavorite ? "取消收藏" : "收藏"}
+        onClick={onToggleFavorite}
       >
-        {tool.icon}
-      </div>
-      <h3 className="text-base font-semibold tracking-tight text-gray-900">
-        {tool.name}
-      </h3>
-      <p className="mt-0.5 text-xs font-medium tracking-wider text-gray-400 uppercase">
-        {tool.nameEn}
-      </p>
-      <p className="mt-3 text-sm leading-relaxed text-gray-500">
-        {tool.description}
-      </p>
-    </Link>
+        {isFavorite ? "★" : "☆"}
+      </button>
+    </article>
   );
 }

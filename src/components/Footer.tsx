@@ -10,6 +10,7 @@ export function Footer() {
           100-tools
         </span>
         {" "}— 免费在线工具合集，持续更新中
+        <a href="https://hboot.fun" target="_blank" rel="noopener noreferrer" className="ml-3 hover:text-blue-500">by hboot</a>
       </p>
     </footer>
   );

@@ -56,7 +56,7 @@
 @theme inline {
   --color-background: var(--bg);
   --color-foreground: var(--text-primary);
-  --font-sans: var(--font-sans);
+  --font-sans: var(--font-geist-sans), Arial, "PingFang SC", "Microsoft YaHei", sans-serif;
   --font-mono: var(--font-geist-mono);
   --font-heading: var(--font-sans);
   --color-sidebar-ring: var(--sidebar-ring);
@@ -856,8 +856,31 @@ input[type="range"]::-webkit-slider-thumb {
 }
 
 .group:hover .fav-star,
+.group:focus-within .fav-star,
 .fav-star[data-active="true"] {
   opacity: 1;
+}
+
+@media (hover: none) {
+  .fav-star { opacity: 1; }
+}
+
+.fav-star:focus-visible,
+.filter-pill:focus-visible,
+.copy-btn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+.site-footer {
+  border-top: 1px solid var(--card-border);
+  padding: 24px;
+  text-align: center;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .badge-dot { animation: none; }
+  .tool-card { transition: none; }
 }
 
 .fav-star:hover {

@@ -19,17 +19,22 @@ export function JsonFormatter() {
     try {
       const parsed = JSON.parse(input.trim());
       setOutput(compact ? JSON.stringify(parsed) : JSON.stringify(parsed, null, 2));
-    } catch (e: any) {
-      setError(`JSON 格式错误: ${e.message}`);
+      setIndent(compact ? "compact" : "pretty");
+    } catch (error) {
+      setError(`JSON 格式错误: ${error instanceof Error ? error.message : "请检查输入"}`);
     }
   }, [input]);
 
   const [copied, setCopied] = useState(false);
 
-  const handleCopy = useCallback(() => {
-    if (output) navigator.clipboard.writeText(output);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 1500);
+  const handleCopy = useCallback(async () => {
+    try {
+      await navigator.clipboard.writeText(output);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1500);
+    } catch {
+      setError("复制失败，请选择结果文本手动复制。");
+    }
   }, [output]);
 
   const handleMinify = useCallback(() => handleFormat(true), [handleFormat]);
@@ -38,12 +43,13 @@ export function JsonFormatter() {
   return (
     <div>
       <div className="glass-card mb-6">
-        <Label className="mb-3 block">JSON 输入</Label>
+        <Label htmlFor="json-input" className="mb-3 block">JSON 输入</Label>
         <Textarea
+          id="json-input"
           className="min-h-[140px] w-full resize-y font-mono text-sm"
           placeholder='粘贴 JSON，如 {"name": "工具"}...'
           value={input}
-          onChange={(e) => setInput(e.target.value)}
+          onChange={(e) => { setInput(e.target.value); setOutput(""); setError(""); setCopied(false); }}
         />
       </div>
 

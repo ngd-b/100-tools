@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Footer } from "@/components/Footer";
@@ -15,7 +16,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "100-tools — 免费在线工具合集",
-  description: "颜色提取、图片抠图、文本转语音等免费在线工具",
+  description: "免费在线图片、文本、开发与生活办公工具，无需注册，打开即用。",
   icons: {
     icon: "/favicon.svg",
     apple: "/favicon.svg",
@@ -32,14 +33,14 @@ export default function RootLayout({
       <body className="flex min-h-screen flex-col antialiased">
         <header className="site-header">
           <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
-            <a href="/" className="flex items-center gap-2.5 no-underline">
+            <Link href="/" className="flex items-center gap-2.5 no-underline">
               <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-blue-500 to-purple-500 text-sm font-bold text-white">
                 100
               </div>
               <span className="text-lg font-semibold tracking-tight text-gray-900">
                 tools
               </span>
-            </a>
+            </Link>
             <nav className="flex items-center gap-6">
               <a
                 href="https://github.com/ngd-b/100-tools"
@@ -57,6 +58,7 @@ export default function RootLayout({
         </header>
 
         <main className="flex-1">{children}</main>
+        <Footer />
       </body>
     </html>
   );

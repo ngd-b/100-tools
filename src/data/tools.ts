@@ -75,10 +75,10 @@ export const tools: Tool[] = [
     id: "css-shadow",
     name: "CSS 阴影生成器",
     nameEn: "CSS Shadow Generator",
-    category: "dev",
+    category: "color",
     icon: "🌑",
     description: "可视化调节 box-shadow / text-shadow，实时预览 + 复制代码",
-    path: "/dev/shadow",
+    path: "/color/shadow",
     tags: ["css", "阴影", "shadow", "box-shadow", "生成器", "generator"],
   },
   {
@@ -307,7 +307,7 @@ export const tools: Tool[] = [
     nameEn: "Currency Converter",
     category: "daily",
     icon: "💱",
-    description: "常见货币汇率换算，实时计算结果",
+    description: "按内置参考汇率换算常见货币，可输入自定义汇率",
     path: "/daily/currency",
     tags: ["汇率", "货币", "转换", "currency", "exchange"],
   },
@@ -412,14 +412,14 @@ export const tools: Tool[] = [
     tags: ["cron", "定时任务", "调度", "表达式", "generator"],
   },
   {
-    id: "json-minifier",
-    name: "JSON 压缩/美化",
-    nameEn: "JSON Minifier",
+    id: "json-compare",
+    name: "JSON 结构对比",
+    nameEn: "JSON Compare",
     category: "dev",
     icon: "📦",
-    description: "JSON 压缩去空格或美化缩进，校验语法",
-    path: "/dev/json-min",
-    tags: ["json", "压缩", "美化", "minify", "format"],
+    description: "忽略对象键顺序，按路径查看 JSON 字段新增、删除和值变化",
+    path: "/dev/json-compare",
+    tags: ["json", "对比", "差异", "结构", "compare", "diff"],
   },
   {
     id: "number-converter",
@@ -531,13 +531,48 @@ export const tools: Tool[] = [
     path: "/dev/json-to-ts",
     tags: ["json", "typescript", "类型", "type", "interface", "转换", "生成"],
   },
+  {
+    id: "text-workbench",
+    name: "文本整理工作台",
+    nameEn: "Text Workbench",
+    category: "text",
+    icon: "🧹",
+    description: "在同一处完成文本去重、排序、空白清理、大小写和行前后缀处理",
+    path: "/text/workbench",
+    tags: ["文本", "去重", "排序", "清理", "空行", "大小写", "前缀", "后缀", "text", "sort", "deduplicate"],
+  },
 ];
 
 export const categories = [
-  { id: "color", name: "颜色工具", icon: "🎨" },
+  { id: "color", name: "颜色与样式", icon: "🎨" },
   { id: "image", name: "图片工具", icon: "🖼️" },
   { id: "audio", name: "音频工具", icon: "🔊" },
   { id: "text", name: "文本工具", icon: "📝" },
   { id: "dev", name: "开发工具", icon: "💻" },
   { id: "daily", name: "生活办公", icon: "🏠" },
 ];
+
+// Editorial shortcuts, not a ranking derived from usage statistics.
+export const quickToolIds = [
+  "image-compressor", "image-crop", "image-converter", "qr-code",
+  "text-stats", "text-workbench", "json-formatter", "timestamp-converter",
+  "base64-tool", "diff-checker", "password-generator", "date-diff",
+];
+
+export const legacyToolIds: Record<string, string> = {
+  "json-minifier": "json-formatter",
+};
+
+export const toolPathRedirects: Record<string, string> = {
+  "/dev/json-min": "/dev/json",
+  "/dev/shadow": "/color/shadow",
+};
+
+export function getToolById(id: string) {
+  const resolvedId = Object.hasOwn(legacyToolIds, id) ? legacyToolIds[id] : id;
+  return tools.find((tool) => tool.id === resolvedId);
+}
+
+export function getToolByPath(path: string) {
+  return tools.find((tool) => tool.path === path);
+}
