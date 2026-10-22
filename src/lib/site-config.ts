@@ -4,7 +4,11 @@ export type SiteConfig = {
   indexable: boolean;
 };
 
-export function createSiteConfig(env: { SITE_URL?: string; SITE_INDEXABLE?: string; NODE_ENV?: string }): SiteConfig {
+type SiteEnvironment = { SITE_URL?: string; SITE_INDEXABLE?: string; NODE_ENV?: string };
+
+export const DEFAULT_SITE_URL = "https://tools.hboot.fun";
+
+export function createSiteConfig(env: SiteEnvironment): SiteConfig {
   const value = env.SITE_URL?.trim();
   let url: string | undefined;
   let local = false;
@@ -19,4 +23,12 @@ export function createSiteConfig(env: { SITE_URL?: string; SITE_INDEXABLE?: stri
   return { name: "100-tools", url, indexable: env.SITE_INDEXABLE !== "false" && env.NODE_ENV !== "development" && !local };
 }
 
-export const siteConfig = createSiteConfig(process.env);
+export function getSiteConfig(env: SiteEnvironment): SiteConfig {
+  return createSiteConfig({
+    SITE_URL: env.SITE_URL?.trim() || DEFAULT_SITE_URL,
+    SITE_INDEXABLE: env.SITE_INDEXABLE,
+    NODE_ENV: env.NODE_ENV,
+  });
+}
+
+export const siteConfig = getSiteConfig(process.env);

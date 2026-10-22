@@ -1,12 +1,26 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { createSiteConfig } from "../src/lib/site-config.ts";
+import { createSiteConfig, getSiteConfig, DEFAULT_SITE_URL } from "../src/lib/site-config.ts";
 import { absoluteUrl, createPageMetadata, createSitemap, createRobots, createCollectionSchema, createToolSchema, serializeJsonLd, homeSeo } from "../src/lib/seo.ts";
 import { tools, categories, toolPathRedirects } from "../src/data/tools.ts";
 import { toolGuides } from "../src/data/tool-guides.ts";
 import { categoryGuides } from "../src/data/category-guides.ts";
 
 const site = createSiteConfig({ SITE_URL: "https://tools.example/", NODE_ENV: "production" });
+
+test("production defaults to the confirmed domain, including empty Docker arguments, and supports overrides", () => {
+  assert.equal(DEFAULT_SITE_URL, "https://tools.hboot.fun");
+  for (const value of [undefined, "", "  "]) {
+    const config = getSiteConfig({ SITE_URL: value, NODE_ENV: "production" });
+    assert.equal(config.url, DEFAULT_SITE_URL);
+    assert.equal(config.indexable, true);
+    assert.equal(createRobots(config).sitemap, `${DEFAULT_SITE_URL}/sitemap.xml`);
+  }
+  const preview = getSiteConfig({ SITE_URL: "https://preview.example", SITE_INDEXABLE: "false" });
+  assert.equal(preview.url, "https://preview.example");
+  assert.equal(preview.indexable, false);
+  assert.equal(getSiteConfig({ NODE_ENV: "development" }).indexable, false);
+});
 
 test("site origin is normalized and malformed configurations are rejected", () => {
   assert.equal(site.url, "https://tools.example");

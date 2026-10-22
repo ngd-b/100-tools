@@ -2,9 +2,10 @@ import assert from "node:assert/strict";
 import { tools, categories, toolPathRedirects } from "../src/data/tools.ts";
 import { toolGuides } from "../src/data/tool-guides.ts";
 import { categoryGuides } from "../src/data/category-guides.ts";
+import { getSiteConfig } from "../src/lib/site-config.ts";
 
 const base = process.env.SEO_BASE_URL ?? "http://127.0.0.1:3000";
-const expectedOrigin = process.env.SITE_URL ? new URL(process.env.SITE_URL).origin : undefined;
+const expectedOrigin = getSiteConfig(process.env).url;
 const paths = ["/", ...categories.map((category) => `/category/${category.id}`), ...tools.map((tool) => tool.path)];
 const canonicalPattern = /<link\b(?=[^>]*\brel="canonical")(?=[^>]*\bhref="([^"]+)")[^>]*>/;
 const decode = (text) => text.replace(/&amp;/g, "&").replace(/&quot;/g, '"').replace(/&#x27;/g, "'").replace(/&lt;/g, "<").replace(/&gt;/g, ">");

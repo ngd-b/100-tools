@@ -108,7 +108,7 @@ npm run build
 
 ## SEO 配置
 
-构建前配置 `SITE_URL` 为正式根地址，设置 `SITE_INDEXABLE=true`；预览站点设为 `false`。支持独立页面元数据、canonical、分享图片、分类聚合页、服务端使用说明、结构化数据、robots 和 sitemap。正式域名未配置时不会猜测绝对地址。
+正式域名默认为 `https://tools.hboot.fun`，支持通过 `SITE_URL` 覆盖；正式站点设置 `SITE_INDEXABLE=true`，预览站点设为 `false`。支持独立页面元数据、canonical、分享图片、分类聚合页、服务端使用说明、结构化数据、robots 和 sitemap。修改配置后需要重新构建。
 
 部署变量、Docker 构建参数和 `npm run check:seo` 的使用方法见 [SEO 配置与验收](docs/SEO.md)。
 

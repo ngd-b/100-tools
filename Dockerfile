@@ -1,4 +1,4 @@
-ARG SITE_URL
+ARG SITE_URL=https://tools.hboot.fun
 ARG SITE_INDEXABLE=true
 
 # --- Build stage ---

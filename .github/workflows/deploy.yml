@@ -25,7 +25,7 @@ jobs:
           outputs: type=docker,dest=${{ runner.temp }}/100-tools.tar
           tags: 100-tools:latest
           build-args: |
-            SITE_URL=${{ vars.SITE_URL }}
+            SITE_URL=${{ vars.SITE_URL || 'https://tools.hboot.fun' }}
             SITE_INDEXABLE=${{ vars.SITE_INDEXABLE || 'true' }}
           cache-from: type=gha
           cache-to: type=gha,mode=max

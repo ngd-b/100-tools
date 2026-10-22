@@ -121,4 +121,4 @@ CSS 三角形、缓动曲线、命名颜色速查、雪碧图和音调发生器�
 
 实施 Next.js 代码前，按 [AGENTS.md](AGENTS.md) 要求阅读本地 `node_modules/next/dist/docs/` 对应指南。
 
-后续 SEO 改造已补齐 6 个分类页、54 个工具的服务端说明、规范地址、结构化数据及抓取入口；配置与独立验收记录见 [SEO 配置与验收](docs/SEO.md)。正式域名需通过 `SITE_URL` 配置后重新构建。
+后续 SEO 改造已补齐 6 个分类页、54 个工具的服务端说明、规范地址、结构化数据及抓取入口；配置与独立验收记录见 [SEO 配置与验收](docs/SEO.md)。默认正式域名已确认为 `https://tools.hboot.fun`，可通过 `SITE_URL` 覆盖。
