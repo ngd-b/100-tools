@@ -1,5 +1,5 @@
 import { ArrowUpRight } from "lucide-react";
-import Link from "next/link";
+import { NavigationLink as Link } from "@/components/NavigationLink";
 import { Brand } from "@/components/Brand";
 
 export function Footer() {

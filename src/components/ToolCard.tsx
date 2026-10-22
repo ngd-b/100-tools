@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { NavigationLink as Link } from "@/components/NavigationLink";
 import type { Tool } from "@/types/tools";
 import { ArrowUpRight, Star } from "lucide-react";
 import { ToolIcon } from "@/components/ToolIcon";
@@ -10,7 +10,7 @@ export function ToolCard({ tool, isFavorite, onToggleFavorite }: {
 }) {
   return (
     <article className="catalog-card group relative h-full">
-      <Link href={tool.path} prefetch={false} className="tool-card h-full">
+      <Link href={tool.path} prefetch={false} className="tool-card h-full" pendingStyle="overlay">
         <span className="tool-icon" data-category={tool.category}><ToolIcon id={tool.id} category={tool.category} /></span>
         <h3 className="card-title">{tool.name}</h3>
         <p className="card-description">{tool.description}</p>

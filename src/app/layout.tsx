@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import { NavigationLink as Link } from "@/components/NavigationLink";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ArrowUpRight, Code2 } from "lucide-react";
 import { Brand } from "@/components/Brand";
+import { NavigationProgress } from "@/components/NavigationProgress";
 import { Footer } from "@/components/Footer";
 import { siteConfig } from "@/lib/site-config";
 import { homeSeo } from "@/lib/seo";
@@ -42,6 +43,7 @@ export default function RootLayout({
   return (
     <html lang="zh-CN" className={`${geistSans.variable} ${geistMono.variable}`}>
       <body className="flex min-h-screen flex-col antialiased">
+        <NavigationProgress />
         <header className="site-header">
           <div className="site-container header-inner">
             <Link href="/" aria-label="100-tools 首页"><Brand /></Link>

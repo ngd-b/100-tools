@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import { NavigationLink as Link } from "@/components/NavigationLink";
 
 export default function ToolError() {
   return (

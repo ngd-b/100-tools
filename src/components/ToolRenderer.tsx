@@ -2,10 +2,7 @@
 
 import dynamic from "next/dynamic";
 import type { ComponentType } from "react";
-
-function ToolLoading() {
-  return <div className="glass-card text-sm text-gray-500" role="status">正在加载工具…</div>;
-}
+import { ToolLoading } from "@/components/ToolLoading";
 
 // Keep imports explicit so Next.js can create a separate chunk for each tool.
 export const toolComponents: Record<string, ComponentType> = {

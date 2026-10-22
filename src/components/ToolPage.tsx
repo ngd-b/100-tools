@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { NavigationLink as Link } from "@/components/NavigationLink";
 import type { Tool } from "@/types/tools";
 import { categories, tools } from "@/data/tools";
 import { ArrowLeft, ChevronRight } from "lucide-react";

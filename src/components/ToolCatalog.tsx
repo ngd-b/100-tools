@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
+import { NavigationLink as Link } from "@/components/NavigationLink";
 import { categories, getToolById, quickToolIds, tools } from "@/data/tools";
 import { useFavorites } from "@/hooks/use-favorites";
 import { ToolCard } from "@/components/ToolCard";
