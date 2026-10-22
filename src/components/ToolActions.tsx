@@ -1,5 +1,6 @@
 "use client";
 
+import { Copy, Star } from "lucide-react";
 import { useState } from "react";
 import { useFavorites } from "@/hooks/use-favorites";
 
@@ -19,8 +20,8 @@ export function ToolActions({ id, path }: { id: string; path: string }) {
 
   return (
     <div className="flex flex-wrap items-center gap-2">
-      <button type="button" className="filter-pill" aria-pressed={favorite} onClick={() => toggle(id)}>{favorite ? "★ 已收藏" : "☆ 收藏"}</button>
-      <button type="button" className="filter-pill" onClick={share}>复制链接</button>
+      <button type="button" className="filter-pill" aria-pressed={favorite} onClick={() => toggle(id)}><Star className="size-3.5" fill={favorite ? "currentColor" : "none"} aria-hidden="true" />{favorite ? "已收藏" : "收藏工具"}</button>
+      <button type="button" className="filter-pill" onClick={share}><Copy className="size-3.5" aria-hidden="true" />复制链接</button>
       <span className="text-xs text-gray-500" role="status">{message}</span>
     </div>
   );

@@ -4,7 +4,8 @@ import { notFound } from "next/navigation";
 import { categories, tools } from "@/data/tools";
 import { categoryGuides } from "@/data/category-guides";
 import { toolGuides } from "@/data/tool-guides";
-import { toolIconBackgrounds } from "@/data/tool-styles";
+import { ArrowUpRight, ChevronRight } from "lucide-react";
+import { ToolIcon } from "@/components/ToolIcon";
 import { createCollectionSchema, createPageMetadata } from "@/lib/seo";
 import { siteConfig } from "@/lib/site-config";
 import { JsonLd } from "@/components/JsonLd";
@@ -32,14 +33,14 @@ export default async function CategoryPage({ params }: Props) {
   const guide = categoryGuides[category.id];
   const items = tools.filter((tool) => tool.category === category.id);
   return (
-    <div className="mx-auto max-w-6xl px-5 py-9 sm:px-6">
+    <div className="site-container category-page">
       <JsonLd data={createCollectionSchema({ ...guide, path: `/category/${category.id}` }, items, siteConfig)} />
-      <nav aria-label="当前位置" className="mb-6 flex gap-2 text-sm text-gray-500"><Link href="/" className="hover:text-blue-600">全部工具</Link><span aria-hidden="true">/</span><span aria-current="page">{category.name}</span></nav>
-      <header className="mb-8 max-w-3xl"><p className="mb-3 text-sm text-gray-500">{items.length} 个工具 · 无需注册</p><h1 className="mb-4 text-3xl font-bold">{category.icon} {category.name}</h1><p className="text-sm leading-7 text-gray-600">{guide.intro}</p></header>
-      <section aria-label={`${category.name}列表`} className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {items.map((tool) => <article key={tool.id}><Link href={tool.path} prefetch={false} className="tool-card h-full"><span aria-hidden="true" className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl text-xl" style={{ background: toolIconBackgrounds[tool.category] }}>{tool.icon}</span><h2 className="mb-2 font-semibold">{tool.name}</h2><p className="text-sm leading-6 text-gray-500">{toolGuides[tool.id].description}</p></Link></article>)}
+      <nav aria-label="当前位置" className="breadcrumbs"><Link href="/">全部工具</Link><ChevronRight className="size-3" aria-hidden="true" /><span aria-current="page">{category.name}</span></nav>
+      <header className="category-header"><div><p className="eyebrow">THE COLLECTION / {items.length} 个工具 · 无需注册</p><h1>{category.name}</h1><p>{guide.intro}</p></div><span className="tool-icon" data-category={category.id}><ToolIcon category={category.id} className="size-8" /></span></header>
+      <section aria-label={`${category.name}列表`} className="category-tool-grid">
+        {items.map((tool) => <article key={tool.id}><Link href={tool.path} prefetch={false} className="tool-card h-full"><span className="tool-icon" data-category={tool.category}><ToolIcon id={tool.id} category={tool.category} /></span><h2 className="card-title">{tool.name}</h2><p className="card-description">{toolGuides[tool.id].description}</p><span className="card-meta"><span>{tool.nameEn}</span><ArrowUpRight className="size-4" aria-hidden="true" /></span></Link></article>)}
       </section>
-      <nav aria-label="其他工具分类" className="mt-10 flex flex-wrap gap-3 border-t border-gray-200 pt-6">{categories.filter((item) => item.id !== category.id).map((item) => <Link key={item.id} href={`/category/${item.id}`} className="filter-pill">{item.icon} {item.name}</Link>)}</nav>
+      <nav aria-label="其他工具分类" className="category-navigation">{categories.filter((item) => item.id !== category.id).map((item) => <Link key={item.id} href={`/category/${item.id}`} className="filter-pill"><ToolIcon category={item.id} className="size-3.5" />{item.name}</Link>)}</nav>
     </div>
   );
 }

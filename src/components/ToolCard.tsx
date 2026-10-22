@@ -1,42 +1,30 @@
 import Link from "next/link";
 import type { Tool } from "@/types/tools";
-import { toolIconBackgrounds } from "@/data/tool-styles";
+import { ArrowUpRight, Star } from "lucide-react";
+import { ToolIcon } from "@/components/ToolIcon";
 
 export function ToolCard({ tool, isFavorite, onToggleFavorite }: {
   tool: Tool;
   isFavorite: boolean;
   onToggleFavorite: () => void;
 }) {
-  const bg = toolIconBackgrounds[tool.category] ?? toolIconBackgrounds.text;
-
   return (
-    <article className="group relative h-full">
-      <Link href={tool.path} prefetch={false} className="tool-card h-full focus-visible:outline-2 focus-visible:outline-blue-500">
-        <div
-          className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl text-xl text-white"
-          style={{ background: bg }}
-        >
-          {tool.icon}
-        </div>
-        <h3 className="text-base font-semibold tracking-tight text-gray-900">
-          {tool.name}
-        </h3>
-        <p className="mt-0.5 text-xs font-medium tracking-wider text-gray-400 uppercase">
-          {tool.nameEn}
-        </p>
-        <p className="mt-3 text-sm leading-relaxed text-gray-500">
-          {tool.description}
-        </p>
+    <article className="catalog-card group relative h-full">
+      <Link href={tool.path} prefetch={false} className="tool-card h-full">
+        <span className="tool-icon" data-category={tool.category}><ToolIcon id={tool.id} category={tool.category} /></span>
+        <h3 className="card-title">{tool.name}</h3>
+        <p className="card-description">{tool.description}</p>
+        <span className="card-meta"><span>{tool.nameEn}</span><ArrowUpRight className="size-4" aria-hidden="true" /></span>
       </Link>
       <button
         type="button"
-        className="fav-star absolute top-3 right-3"
+        className="fav-star absolute top-4 right-4"
         aria-label={`${isFavorite ? "取消收藏" : "收藏"}${tool.name}`}
         aria-pressed={isFavorite}
         title={isFavorite ? "取消收藏" : "收藏"}
         onClick={onToggleFavorite}
       >
-        {isFavorite ? "★" : "☆"}
+        <Star className="size-4" fill={isFavorite ? "currentColor" : "none"} strokeWidth={1.6} />
       </button>
     </article>
   );

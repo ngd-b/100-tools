@@ -1,10 +1,10 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <defs>
-    <linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#3b82f6"/>
-      <stop offset="100%" stop-color="#8b5cf6"/>
-    </linearGradient>
-  </defs>
-  <rect x="4" y="4" width="56" height="56" rx="14" fill="url(#g)"/>
-  <text x="32" y="44" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="32" font-weight="800" fill="white">100</text>
+  <rect width="64" height="64" rx="14" fill="#2d6250"/>
+  <g fill="#f8f9f6">
+    <rect x="14" y="14" width="13" height="13" rx="3"/>
+    <rect x="37" y="14" width="13" height="13" rx="3"/>
+    <rect x="14" y="37" width="13" height="13" rx="3"/>
+    <path d="M41 35h5v17h-5z"/>
+    <path d="M35 41h17v5H35z"/>
+  </g>
 </svg>

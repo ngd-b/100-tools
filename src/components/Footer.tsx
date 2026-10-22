@@ -1,17 +1,15 @@
+import { ArrowUpRight } from "lucide-react";
+import Link from "next/link";
+import { Brand } from "@/components/Brand";
+
 export function Footer() {
   return (
     <footer className="site-footer">
-      <p className="text-sm text-gray-400">
-        <span className="font-medium" style={{
-          background: "linear-gradient(135deg, #3b82f6, #8b5cf6)",
-          WebkitBackgroundClip: "text",
-          WebkitTextFillColor: "transparent",
-        }}>
-          100-tools
-        </span>
-        {" "}— 免费在线工具合集，持续更新中
-        <a href="https://hboot.fun" target="_blank" rel="noopener noreferrer" className="ml-3 hover:text-blue-500">by hboot</a>
-      </p>
+      <div className="site-container footer-inner">
+        <Link href="/" aria-label="100-tools 首页"><Brand compact /></Link>
+        <p>免费在线工具，给日常多一点从容。</p>
+        <a href="https://hboot.fun" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5">Made by hboot <ArrowUpRight className="size-3" aria-hidden="true" /></a>
+      </div>
     </footer>
   );
 }
