@@ -1,5 +1,6 @@
 "use client";
 
+import { useI18n } from "@/components/LanguageProvider";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 
@@ -13,6 +14,7 @@ function factorial(n: number): number {
 }
 
 export function ScientificCalculator() {
+  const { t } = useI18n();
   const [display, setDisplay] = useState("0");
   const [expression, setExpression] = useState("");
   const [isNewNumber, setIsNewNumber] = useState(true);
@@ -150,8 +152,7 @@ export function ScientificCalculator() {
           {display}
         </div>
         <Button variant="ghost" size="sm" className="mt-2 w-full text-gray-400" onClick={backspace}>
-          ← 退格
-        </Button>
+          {t("← 退格")}</Button>
       </div>
 
       {/* Buttons Grid */}
@@ -176,7 +177,7 @@ export function ScientificCalculator() {
                 else if (btn.type === "fn") applyFunction(btn.fn!);
               }}
             >
-              {btn.label}
+              {t(btn.label)}
             </Button>
           );
         })}
@@ -195,7 +196,7 @@ export function ScientificCalculator() {
             if (b.type === "const") inputConstant("π");
             else applyFunction(b.fn!);
           }}>
-            {b.label}
+            {t(b.label)}
           </Button>
         ))}
       </div>

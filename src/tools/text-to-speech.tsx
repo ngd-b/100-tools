@@ -1,5 +1,6 @@
 "use client";
 
+import { useI18n } from "@/components/LanguageProvider";
 import { useState, useEffect } from "react";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
@@ -8,7 +9,8 @@ import { Slider } from "@/components/ui/slider";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 export function TextToSpeechTool() {
-  const [text, setText] = useState("Hello, 这是一个文本转语音的示例。");
+  const { t, locale } = useI18n();
+  const [text, setText] = useState(() => t("Hello, 这是一个文本转语音的示例。"));
   const [voices, setVoices] = useState<any[]>([]);
   const [selectedVoice, setSelectedVoice] = useState("");
   const [rate, setRate] = useState(1);
@@ -19,8 +21,8 @@ export function TextToSpeechTool() {
     function loadVoices() {
       const v = window.speechSynthesis.getVoices();
       setVoices(v);
-      const zh = v.find((voice) => voice.lang.startsWith("zh"));
-      if (zh) setSelectedVoice(zh.name);
+      const preferred = v.find((voice) => voice.lang.startsWith(locale));
+      if (preferred) setSelectedVoice(preferred.name);
     }
 
     loadVoices();
@@ -30,7 +32,7 @@ export function TextToSpeechTool() {
       window.speechSynthesis.onvoiceschanged = null;
       window.speechSynthesis.cancel();
     };
-  }, []);
+  }, [locale]);
 
   function handleSpeak() {
     if (!text || speaking) return;
@@ -59,15 +61,15 @@ export function TextToSpeechTool() {
     <div>
       {/* Text Input */}
       <div className="glass-card mb-6">
-        <Label>输入文本</Label>
+        <Label>{t("输入文本")}</Label>
         <Textarea
           value={text}
           onChange={(e) => setText(e.target.value)}
-          placeholder="输入要朗读的文字..."
+          placeholder={t("输入要朗读的文字...")}
           rows={4}
         />
         <div className="mt-3 flex items-center justify-between">
-          <span className="text-xs text-gray-300">{text.length} 字符</span>
+          <span className="text-xs text-gray-300">{text.length} {t(" 字符")}</span>
           {speaking && (
             <span className="flex items-center gap-2 text-xs text-blue-500">
               <span className="wave-bars">
@@ -76,23 +78,22 @@ export function TextToSpeechTool() {
                 <span />
                 <span />
               </span>
-              朗读中
-            </span>
+              {t("朗读中")}</span>
           )}
         </div>
       </div>
 
       {/* Voice Selection */}
       <div className="glass-card mb-6">
-        <Label>语音</Label>
+        <Label>{t("语音")}</Label>
         <Select value={selectedVoice} onValueChange={(v) => v && setSelectedVoice(v)}>
           <SelectTrigger>
-            <SelectValue placeholder="选择语音" />
+            <SelectValue placeholder={t("选择语音")} />
           </SelectTrigger>
           <SelectContent>
             {voices.map((v) => (
               <SelectItem key={v.name} value={v.name}>
-                {v.name} ({v.lang})
+                {t(v.name)} ({v.lang})
               </SelectItem>
             ))}
           </SelectContent>
@@ -103,7 +104,7 @@ export function TextToSpeechTool() {
       <div className="glass-card mb-6">
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
           <div>
-            <Label>语速</Label>
+            <Label>{t("语速")}</Label>
             <Slider
               min={0.5}
               max={2}
@@ -116,7 +117,7 @@ export function TextToSpeechTool() {
             </div>
           </div>
           <div>
-            <Label>音调</Label>
+            <Label>{t("音调")}</Label>
             <Slider
               min={0.5}
               max={2}
@@ -139,15 +140,14 @@ export function TextToSpeechTool() {
           onClick={handleSpeak}
           disabled={!text || speaking}
         >
-          {speaking ? "朗读中..." : "开始朗读"}
+          {speaking ? t("朗读中...") : t("开始朗读")}
         </Button>
         <Button
           variant="secondary"
           onClick={handleStop}
           disabled={!speaking}
         >
-          停止
-        </Button>
+          {t("停止")}</Button>
       </div>
     </div>
   );

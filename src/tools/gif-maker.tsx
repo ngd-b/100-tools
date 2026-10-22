@@ -1,5 +1,6 @@
 "use client";
 
+import { useI18n } from "@/components/LanguageProvider";
 import { useState, useCallback, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
@@ -15,6 +16,7 @@ interface GifFrame {
 }
 
 export function GifMaker() {
+  const { t } = useI18n();
   const [frames, setFrames] = useState<GifFrame[]>([]);
   const [frameDelay, setFrameDelay] = useState(500);
   const [loopCount, setLoopCount] = useState(0);
@@ -150,11 +152,11 @@ export function GifMaker() {
       <canvas ref={previewRef} className="hidden" />
 
       <div className="glass-card mb-6">
-        <span className="field-label mb-3 block">上传帧图片</span>
+        <span className="field-label mb-3 block">{t("上传帧图片")}</span>
         <ImageUploadZone
           onFiles={handleFiles}
           multiple
-          title="上传多张图片作为 GIF 帧"
+          title={t("上传多张图片作为 GIF 帧")}
           icon={
             <svg className="mb-3 h-8 w-8 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
@@ -167,7 +169,7 @@ export function GifMaker() {
         <>
           {/* Frame list */}
           <div className="glass-card mb-6">
-            <Label className="mb-3 block">帧列表 ({frames.length} 帧)</Label>
+            <Label className="mb-3 block">{t("帧列表 (")}{frames.length} {t(" 帧)")}</Label>
             <div className="flex gap-2 overflow-x-auto pb-2">
               {frames.map((frame, i) => (
                 <div
@@ -175,7 +177,7 @@ export function GifMaker() {
                   className={`relative flex-shrink-0 cursor-pointer rounded-lg border-2 overflow-hidden ${i === activeFrame ? "border-blue-500" : "border-transparent"}`}
                   onClick={() => setActiveFrame(i)}
                 >
-                  <img src={frame.url} alt={`frame ${i + 1}`} className="h-16 w-16 object-cover" />
+                  <img src={frame.url} alt={t(`frame ${i + 1}`)} className="h-16 w-16 object-cover" />
                   <span className="absolute top-0.5 left-1 text-[10px] font-bold text-white drop-shadow">
                     {i + 1}
                   </span>
@@ -194,7 +196,7 @@ export function GifMaker() {
 
           {/* Preview */}
           <div className="glass-card mb-6">
-            <Label className="mb-3 block">动画预览</Label>
+            <Label className="mb-3 block">{t("动画预览")}</Label>
             <div className="flex items-center justify-center bg-gray-50 rounded-xl p-4 min-h-[150px]">
               {frames.length > 0 && (
                 <img
@@ -210,46 +212,45 @@ export function GifMaker() {
                 className="flex-1"
                 onClick={() => setPlaying(!playing)}
               >
-                {playing ? "⏸ 暂停" : "▶ 播放"}
+                {playing ? t("⏸ 暂停") : t("▶ 播放")}
               </Button>
               <Button
                 variant="secondary"
                 onClick={() => { setActiveFrame(0); setPlaying(false); }}
               >
-                ⏮ 重置
-              </Button>
+                {t("⏮ 重置")}</Button>
             </div>
           </div>
 
           {/* Settings */}
           <div className="glass-card mb-6">
-            <Label className="mb-4 block">GIF 设置</Label>
+            <Label className="mb-4 block">{t("GIF 设置")}</Label>
             <div className="flex flex-col gap-4">
               <div>
                 <div className="flex justify-between mb-1">
-                  <span className="text-xs text-gray-500">帧延迟</span>
+                  <span className="text-xs text-gray-500">{t("帧延迟")}</span>
                   <span className="font-mono text-xs">{frameDelay} ms</span>
                 </div>
                 <Slider value={[frameDelay]} onValueChange={(v) => { const val = Array.isArray(v) ? v[0] : v; setFrameDelay(val as number) }} min={50} max={2000} step={50} className="w-full" />
               </div>
               <div>
-                <span className="text-xs text-gray-500 mb-2 block">循环次数</span>
+                <span className="text-xs text-gray-500 mb-2 block">{t("循环次数")}</span>
                 <Select value={String(loopCount)} onValueChange={(v) => setLoopCount(Number(v))}>
                   <SelectTrigger className="w-full">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="0">无限循环</SelectItem>
-                    <SelectItem value="1">1 次</SelectItem>
-                    <SelectItem value="2">2 次</SelectItem>
-                    <SelectItem value="3">3 次</SelectItem>
-                    <SelectItem value="5">5 次</SelectItem>
-                    <SelectItem value="10">10 次</SelectItem>
+                    <SelectItem value="0">{t("无限循环")}</SelectItem>
+                    <SelectItem value="1">{t("1 次")}</SelectItem>
+                    <SelectItem value="2">{t("2 次")}</SelectItem>
+                    <SelectItem value="3">{t("3 次")}</SelectItem>
+                    <SelectItem value="5">{t("5 次")}</SelectItem>
+                    <SelectItem value="10">{t("10 次")}</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
               <Button variant="gradient" onClick={generateGif} disabled={generating}>
-                {generating ? "生成中..." : "生成 GIF"}
+                {generating ? t("生成中...") : t("生成 GIF")}
               </Button>
             </div>
           </div>
@@ -257,11 +258,11 @@ export function GifMaker() {
           {/* Result */}
           {gifUrl && (
             <div className="glass-card mb-6">
-              <Label className="mb-4 block">生成结果</Label>
+              <Label className="mb-4 block">{t("生成结果")}</Label>
               <div className="flex flex-col items-center gap-3">
                 <img src={gifUrl} alt="gif" className="max-h-[300px] rounded-xl object-contain bg-gray-50" />
                 <span className="font-mono text-xs text-gray-400">
-                  文件大小: {formatSize(gifSize)}
+                  {t("文件大小:")}{formatSize(gifSize)}
                 </span>
               </div>
               <Button variant="gradient" className="w-full mt-4"
@@ -271,16 +272,14 @@ export function GifMaker() {
                   a.download = "animation.gif";
                   a.click();
                 }}>
-                下载 GIF
-              </Button>
+                {t("下载 GIF")}</Button>
             </div>
           )}
         </>
       )}
 
       <div className="mt-8 rounded-2xl border border-amber-200 bg-amber-50/50 px-5 py-4 text-xs leading-relaxed text-gray-500">
-        💡 上传多张图片作为 GIF 帧，可以拖拽排序、调节帧速和循环次数。生成的 GIF 使用内置编码器，无需上传到服务器。
-      </div>
+        {t("💡 上传多张图片作为 GIF 帧，可以拖拽排序、调节帧速和循环次数。生成的 GIF 使用内置编码器，无需上传到服务器。")}</div>
     </div>
   );
 }

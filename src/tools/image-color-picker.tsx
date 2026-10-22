@@ -1,5 +1,6 @@
 "use client";
 
+import { useI18n } from "@/components/LanguageProvider";
 import { useState, useRef, useCallback, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
@@ -17,6 +18,7 @@ interface ColorEntry {
 }
 
 export function ImageColorPicker() {
+  const { t } = useI18n();
   const [imageUrl, setImageUrl] = useState("");
   const [zoom, setZoom] = useState(1);
   const [pickedColors, setPickedColors] = useState<ColorEntry[]>([]);
@@ -360,10 +362,9 @@ export function ImageColorPicker() {
             <svg className="mb-4 h-12 w-12 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
             </svg>
-            <p className="text-sm text-gray-400 mb-1">上传图片提取颜色</p>
+            <p className="text-sm text-gray-400 mb-1">{t("上传图片提取颜色")}</p>
             <Button variant="secondary" className="text-sm cursor-pointer" onClick={(e) => { e.stopPropagation(); fileInputRef.current?.click(); }}>
-              选择图片
-            </Button>
+              {t("选择图片")}</Button>
           </div>
         </div>
       ) : (
@@ -373,27 +374,24 @@ export function ImageColorPicker() {
             <div className="pointer-events-none fixed top-20 left-1/2 z-50 flex -translate-x-1/2 items-center gap-2 rounded-xl bg-black/80 px-4 py-2 text-white shadow-lg backdrop-blur">
               <div className="h-5 w-5 rounded-md border border-white/40" style={{ backgroundColor: pickToast.hex }} />
               <span className="font-mono text-sm font-semibold uppercase">{pickToast.hex}</span>
-              <span className="text-xs text-white/60">已拾取</span>
+              <span className="text-xs text-white/60">{t("已拾取")}</span>
             </div>
           )}
 
           {/* Zoom Badge */}
           <div className="glass-card mb-4 flex items-center justify-between px-4 py-3">
             <div className="flex items-center gap-3">
-              <span className="text-sm font-semibold text-gray-700">取色</span>
+              <span className="text-sm font-semibold text-gray-700">{t("取色")}</span>
               <span className="rounded-lg bg-blue-50 px-3 py-1 text-sm font-mono font-bold text-blue-600">
                 {zoom.toFixed(1)}x
               </span>
               <span className="text-xs text-gray-400 hidden md:inline">
-                滚轮 / ± 键缩放 · 拖拽平移 · 悬停取色 · 点击拾取
-              </span>
+                {t("滚轮 / ± 键缩放 · 拖拽平移 · 悬停取色 · 点击拾取")}</span>
               <span className="text-xs text-gray-400 md:hidden">
-                双指缩放 · 点击拾取
-              </span>
+                {t("双指缩放 · 点击拾取")}</span>
             </div>
             <Button variant="secondary" className="text-sm cursor-pointer" onClick={() => fileInputRef.current?.click()}>
-              更换图片
-            </Button>
+              {t("更换图片")}</Button>
           </div>
 
           {/* Image */}
@@ -455,7 +453,7 @@ export function ImageColorPicker() {
               >
                 <div className="h-4 w-4 rounded-md border border-white/30" style={{ backgroundColor: cursorColor }} />
                 <span className="font-mono text-xs font-semibold text-white uppercase">{cursorColor}</span>
-                <span className="text-[10px] text-white/50">点击拾取</span>
+                <span className="text-[10px] text-white/50">{t("点击拾取")}</span>
               </div>
             )}
           </div>
@@ -463,7 +461,7 @@ export function ImageColorPicker() {
           {/* Image info */}
           {origW > 0 && (
             <div className="mb-4 text-center text-xs text-gray-400">
-              原图 {origW} × {origH}px · 显示 {displayW} × {displayH}px
+              {t("原图")}{origW} × {origH}{t("px · 显示 ")}{displayW} × {displayH}px
             </div>
           )}
 
@@ -472,14 +470,12 @@ export function ImageColorPicker() {
             <>
               <div className="glass-card mb-6">
                 <div className="flex items-center justify-between mb-4">
-                  <Label>已拾取颜色 ({pickedColors.length})</Label>
+                  <Label>{t("已拾取颜色 (")}{pickedColors.length})</Label>
                   <div className="flex gap-2">
                     <Button variant="secondary" className="text-xs cursor-pointer" onClick={downloadPalette}>
-                      导出调色板
-                    </Button>
+                      {t("导出调色板")}</Button>
                     <Button variant="secondary" className="text-xs cursor-pointer" onClick={() => setPickedColors([])}>
-                      清空
-                    </Button>
+                      {t("清空")}</Button>
                   </div>
                 </div>
                 <div className="grid grid-cols-2 gap-2 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8">
@@ -489,12 +485,11 @@ export function ImageColorPicker() {
                         className="h-14 w-full cursor-pointer rounded-lg border border-gray-100 shadow-sm transition-transform hover:scale-105 relative"
                         style={{ backgroundColor: c.hex }}
                         onClick={() => copyColor(c.hex)}
-                        title={`点击复制 ${c.hex}`}
+                        title={t("点击复制 {0}", [c.hex])}
                       >
                         {copiedHex === c.hex && (
                           <span className="absolute inset-0 flex items-center justify-center rounded-lg bg-black/40 text-xs font-bold text-white">
-                            ✓ 已复制
-                          </span>
+                            {t("✓ 已复制")}</span>
                         )}
                       </div>
                       <div className="mt-1 text-center">

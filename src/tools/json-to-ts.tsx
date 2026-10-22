@@ -1,5 +1,6 @@
 "use client";
 
+import { useI18n } from "@/components/LanguageProvider";
 import { useState, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
@@ -9,6 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 type OutputType = "type" | "interface";
 
 export function JsonToTs() {
+  const { t } = useI18n();
   const [json, setJson] = useState(`{
   "name": "John",
   "age": 30,
@@ -81,7 +83,7 @@ export function JsonToTs() {
     <div>
       <div className="grid grid-cols-1 gap-4 mb-6 sm:grid-cols-2">
         <div className="glass-card">
-          <Label className="mb-2 block">输入 JSON</Label>
+          <Label className="mb-2 block">{t("输入 JSON")}</Label>
           <Textarea
             value={json}
             onChange={(e) => setJson(e.target.value)}
@@ -92,16 +94,16 @@ export function JsonToTs() {
         </div>
         <div className="glass-card">
           <div className="mb-2 flex items-center justify-between">
-            <Label>输出 TypeScript</Label>
+            <Label>{t("输出 TypeScript")}</Label>
             <Button variant={copied ? "gradient" : "secondary"} className="text-xs cursor-pointer" onClick={handleCopy} disabled={!output}>
-              {copied ? "已复制 ✓" : "复制"}
+              {copied ? t("已复制 ✓") : t("复制")}
             </Button>
           </div>
           <div className="h-[288px] overflow-auto rounded-lg border border-gray-100 bg-gray-50/50 p-4 font-mono text-sm leading-relaxed">
             {output ? (
               <pre className="whitespace-pre-wrap text-gray-700">{output}</pre>
             ) : (
-              <span className="text-gray-300">TypeScript 类型定义将显示在这里...</span>
+              <span className="text-gray-300">{t("TypeScript 类型定义将显示在这里...")}</span>
             )}
           </div>
         </div>
@@ -111,7 +113,7 @@ export function JsonToTs() {
       <div className="glass-card mb-6">
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
           <div>
-            <Label className="mb-2 block">根名称</Label>
+            <Label className="mb-2 block">{t("根名称")}</Label>
             <input
               type="text"
               value={rootName}
@@ -121,24 +123,22 @@ export function JsonToTs() {
             />
           </div>
           <div>
-            <Label className="mb-2 block">输出风格</Label>
+            <Label className="mb-2 block">{t("输出风格")}</Label>
             <Select value={outputType} onValueChange={(v) => setOutputType(v as OutputType)}>
               <SelectTrigger>
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="type">Type 别名</SelectItem>
+                <SelectItem value="type">{t("Type 别名")}</SelectItem>
                 <SelectItem value="interface">Interface</SelectItem>
               </SelectContent>
             </Select>
           </div>
           <div className="flex items-end gap-2">
             <Button variant="gradient" className="flex-1 cursor-pointer" onClick={handleConvert} disabled={!json}>
-              转换
-            </Button>
+              {t("转换")}</Button>
             <Button variant="secondary" className="cursor-pointer" onClick={handleClear}>
-              清空
-            </Button>
+              {t("清空")}</Button>
           </div>
         </div>
       </div>
@@ -146,16 +146,15 @@ export function JsonToTs() {
       {/* Error */}
       {error && (
         <div className="rounded-2xl border border-red-200 bg-red-50/50 px-5 py-3 text-sm text-red-600">
-          JSON 解析错误：{error}
+          {t("JSON 解析错误：")}{t(error)}
         </div>
       )}
 
       {/* Tips */}
       {!json && (
         <div className="rounded-2xl border border-amber-200 bg-amber-50/50 px-5 py-4 text-xs leading-relaxed text-gray-500">
-          💡 粘贴合法的 JSON 字符串，自动推断嵌套类型、数组类型和可选属性。点击{" "}
-          <button onClick={handleExample} className="font-medium text-blue-500 underline">加载示例</button> 快速体验。
-        </div>
+          {t("💡 粘贴合法的 JSON 字符串，自动推断嵌套类型、数组类型和可选属性。点击")}{" "}
+          <button onClick={handleExample} className="font-medium text-blue-500 underline">{t("加载示例")}</button> {t("快速体验。")}</div>
       )}
     </div>
   );

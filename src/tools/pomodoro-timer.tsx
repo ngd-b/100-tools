@@ -1,5 +1,6 @@
 "use client";
 
+import { useI18n } from "@/components/LanguageProvider";
 import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
@@ -21,6 +22,7 @@ function playTone(freq: number, duration: number) {
 }
 
 export function PomodoroTimer() {
+  const { t } = useI18n();
   const [workMin, setWorkMin] = useState(25);
   const [breakMin, setBreakMin] = useState(5);
   const [isWork, setIsWork] = useState(true);
@@ -90,14 +92,14 @@ export function PomodoroTimer() {
     <div>
       {/* Settings */}
       <div className="glass-card mb-6">
-        <Label>设置（分钟）</Label>
+        <Label>{t("设置（分钟）")}</Label>
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 mt-3">
           <div>
-            <Label className="text-xs text-gray-400">工作时长</Label>
+            <Label className="text-xs text-gray-400">{t("工作时长")}</Label>
             <Input type="number" min={1} max={90} value={workMin} onChange={(e) => { setWorkMin(parseInt(e.target.value) || 25); handleReset(); }} className="mt-1 text-center font-mono text-lg" />
           </div>
           <div>
-            <Label className="text-xs text-gray-400">休息时长</Label>
+            <Label className="text-xs text-gray-400">{t("休息时长")}</Label>
             <Input type="number" min={1} max={30} value={breakMin} onChange={(e) => { setBreakMin(parseInt(e.target.value) || 5); handleReset(); }} className="mt-1 text-center font-mono text-lg" />
           </div>
         </div>
@@ -106,7 +108,7 @@ export function PomodoroTimer() {
       {/* Timer Display */}
       <div className="glass-card mb-6 text-center">
         <Badge variant={isWork ? "destructive" : "default"} className="mb-4">
-          {isWork ? "🍅 工作中" : "☕ 休息中"}
+          {isWork ? t("🍅 工作中") : t("☕ 休息中")}
         </Badge>
 
         <div className="font-mono text-6xl font-bold tracking-wider mb-4">
@@ -121,19 +123,19 @@ export function PomodoroTimer() {
           />
         </div>
 
-        <div className="mt-3 text-xs text-gray-400">已完成 {cycles} 个番茄</div>
+        <div className="mt-3 text-xs text-gray-400">{t("已完成 ")}{cycles} {t(" 个番茄")}</div>
       </div>
 
       {/* Controls */}
       <div className="flex gap-3">
         {!isRunning ? (
           <Button variant="gradient" className="flex-1" onClick={handleStart}>
-            {elapsed === 0 ? "开始" : "继续"}
+            {elapsed === 0 ? t("开始") : t("继续")}
           </Button>
         ) : (
-          <Button variant="secondary" className="flex-1" onClick={handlePause}>暂停</Button>
+          <Button variant="secondary" className="flex-1" onClick={handlePause}>{t("暂停")}</Button>
         )}
-        <Button variant="outline" onClick={handleReset}>重置</Button>
+        <Button variant="outline" onClick={handleReset}>{t("重置")}</Button>
       </div>
     </div>
   );

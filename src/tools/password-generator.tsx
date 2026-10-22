@@ -1,5 +1,6 @@
 "use client";
 
+import { useI18n } from "@/components/LanguageProvider";
 import { useState, useCallback, useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
@@ -30,6 +31,7 @@ const ALL_SYMBOLS = [..."!@#$%^&*()_+-=[]{}|;:,.<>?"];
 const PAIRS: Record<string, string> = { "(": ")", "[": "]", "{": "}", ")": "(", "]": "[", "}": "{", "<": ">", ">": "<" };
 
 export function PasswordGenerator() {
+  const { t } = useI18n();
   const [length, setLength] = useState(16);
   const [uppercase, setUppercase] = useState(true);
   const [lowercase, setLowercase] = useState(true);
@@ -72,7 +74,7 @@ export function PasswordGenerator() {
   return (
     <div>
       <div className="glass-card mb-6">
-        <Label className="mb-3 block">密码长度</Label>
+        <Label className="mb-3 block">{t("密码长度")}</Label>
         <div className="flex items-center gap-3">
           <Slider min={4} max={64} value={[length]} onValueChange={(v) => { const val = Array.isArray(v) ? v[0] : v; setLength(val as number) }} className="flex-1" />
           <span className="w-12 text-right font-mono text-lg font-bold">{length}</span>
@@ -80,16 +82,16 @@ export function PasswordGenerator() {
       </div>
 
       <div className="glass-card mb-6">
-        <Label className="mb-3 block">字符集</Label>
+        <Label className="mb-3 block">{t("字符集")}</Label>
         <div className="flex flex-col gap-3">
           {[
-            { label: "大写字母 (A-Z)", checked: uppercase, setter: setUppercase },
-            { label: "小写字母 (a-z)", checked: lowercase, setter: setLowercase },
-            { label: "数字 (0-9)", checked: numbers, setter: setNumbers },
+            { label: t("大写字母 (A-Z)"), checked: uppercase, setter: setUppercase },
+            { label: t("小写字母 (a-z)"), checked: lowercase, setter: setLowercase },
+            { label: t("数字 (0-9)"), checked: numbers, setter: setNumbers },
           ].map(({ label, checked, setter }) => (
             <label key={label} className="flex items-center gap-3 cursor-pointer">
               <Checkbox checked={checked} onCheckedChange={(v) => setter(v as boolean)} />
-              <span className="text-sm">{label}</span>
+              <span className="text-sm">{t(label)}</span>
             </label>
           ))}
           <div className="flex flex-col gap-2 pt-1">
@@ -99,9 +101,9 @@ export function PasswordGenerator() {
                   if (v) setSelectedSymbols(new Set(ALL_SYMBOLS));
                   else setSelectedSymbols(new Set());
                 }} />
-              <span className="text-sm">特殊符号</span>
+              <span className="text-sm">{t("特殊符号")}</span>
               <button className="text-xs text-blue-500 hover:text-blue-600 ml-auto"
-                onClick={() => setSelectedSymbols(new Set(ALL_SYMBOLS))}>全选</button>
+                onClick={() => setSelectedSymbols(new Set(ALL_SYMBOLS))}>{t("全选")}</button>
             </div>
             <div className="flex flex-wrap gap-2 pl-8">
               {(() => {
@@ -135,12 +137,11 @@ export function PasswordGenerator() {
       </div>
 
       <Button variant="gradient" className="w-full mb-6" onClick={handleGenerate} disabled={!charset}>
-        生成 5 个密码
-      </Button>
+        {t("生成 5 个密码")}</Button>
 
       {passwords.length > 0 && (
         <div className="glass-card">
-          <Label className="mb-3 block">生成结果</Label>
+          <Label className="mb-3 block">{t("生成结果")}</Label>
           <div className="flex flex-col gap-3">
             {passwords.map((p, i) => {
               const score = strengthScore(p);
@@ -152,7 +153,7 @@ export function PasswordGenerator() {
                     <code className="font-mono text-sm break-all flex-1 mr-3">{p}</code>
                     <button className="copy-btn text-xs text-blue-500 hover:text-blue-600"
                       onClick={() => { navigator.clipboard.writeText(p); setCopiedIndex(i); setTimeout(() => setCopiedIndex(null), 1500); }}>
-                      {copiedIndex === i ? "✓" : "复制"}
+                      {copiedIndex === i ? "✓" : t("复制")}
                     </button>
                   </div>
                   <div className="h-1.5 w-full rounded-full bg-gray-200">
@@ -166,8 +167,7 @@ export function PasswordGenerator() {
       )}
 
       <div className="mt-8 rounded-2xl border border-amber-200 bg-amber-50/50 px-5 py-4 text-xs leading-relaxed text-gray-500">
-        💡 使用 crypto.getRandomValues() 生成密码，比 Math.random() 更安全。
-      </div>
+        {t("💡 使用 crypto.getRandomValues() 生成密码，比 Math.random() 更安全。")}</div>
     </div>
   );
 }

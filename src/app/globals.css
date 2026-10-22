@@ -386,3 +386,8 @@ body:has(.navigation-pending, .tool-loading) .navigation-progress { visibility: 
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation: none !important; transition: none !important; }
 }
+
+.language-switcher { display: inline-flex; flex-shrink: 0; gap: 2px; padding: 3px; border: 1px solid var(--card-border); border-radius: 7px; background: #fff9; font-size: 12px; }
+.language-switcher button { padding: 4px 6px; border-radius: 4px; white-space: nowrap; color: var(--text-secondary); }
+.language-switcher button[aria-pressed="true"] { background: var(--accent-soft); color: var(--accent); }
+@media (max-width: 640px) { .header-nav { gap: 10px; } .language-switcher { font-size: 11px; } .language-switcher button { padding-inline: 4px; } }

@@ -1,11 +1,13 @@
 "use client";
 
+import { useI18n } from "@/components/LanguageProvider";
 import { useState, useMemo, useCallback } from "react";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 
 export function DiffChecker() {
+  const { t } = useI18n();
   const [text1, setText1] = useState("");
   const [text2, setText2] = useState("");
   const [showResult, setShowResult] = useState(false);
@@ -46,19 +48,19 @@ export function DiffChecker() {
     <div>
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div className="glass-card">
-          <Label className="mb-3 block">原文</Label>
+          <Label className="mb-3 block">{t("原文")}</Label>
           <Textarea
             className="min-h-[200px] w-full resize-y font-mono text-xs"
-            placeholder="粘贴原文..."
+            placeholder={t("粘贴原文...")}
             value={text1}
             onChange={(e) => setText1(e.target.value)}
           />
         </div>
         <div className="glass-card">
-          <Label className="mb-3 block">修改后</Label>
+          <Label className="mb-3 block">{t("修改后")}</Label>
           <Textarea
             className="min-h-[200px] w-full resize-y font-mono text-xs"
-            placeholder="粘贴修改后的文本..."
+            placeholder={t("粘贴修改后的文本...")}
             value={text2}
             onChange={(e) => setText2(e.target.value)}
           />
@@ -67,19 +69,17 @@ export function DiffChecker() {
 
       <div className="flex gap-3 mt-6 mb-6">
         <Button variant="gradient" className="flex-1" onClick={handleCompare}>
-          对比差异
-        </Button>
+          {t("对比差异")}</Button>
         <Button variant="secondary" onClick={handleClear}>
-          清空
-        </Button>
+          {t("清空")}</Button>
       </div>
 
       {diff && (
         <div className="glass-card">
           <div className="mb-4 flex flex-wrap gap-3">
-            <span className="rounded-full bg-green-100 px-3 py-1 text-xs font-medium text-green-700">+ {addedCount} 新增</span>
-            <span className="rounded-full bg-red-100 px-3 py-1 text-xs font-medium text-red-700">- {removedCount} 删除</span>
-            <span className="rounded-full bg-yellow-100 px-3 py-1 text-xs font-medium text-yellow-700">~ {changedCount} 修改</span>
+            <span className="rounded-full bg-green-100 px-3 py-1 text-xs font-medium text-green-700">+ {addedCount} {t(" 新增")}</span>
+            <span className="rounded-full bg-red-100 px-3 py-1 text-xs font-medium text-red-700">- {removedCount} {t(" 删除")}</span>
+            <span className="rounded-full bg-yellow-100 px-3 py-1 text-xs font-medium text-yellow-700">~ {changedCount} {t(" 修改")}</span>
           </div>
           <div className="rounded-xl bg-gray-50 p-4 font-mono text-xs leading-relaxed max-h-[400px] overflow-y-auto">
             {diff.map((d, i) => (
@@ -101,8 +101,7 @@ export function DiffChecker() {
       )}
 
       <div className="mt-8 rounded-2xl border border-amber-200 bg-amber-50/50 px-5 py-4 text-xs leading-relaxed text-gray-500">
-        💡 逐行对比文本差异，适用于代码审查、文案修改对比等场景。
-      </div>
+        {t("💡 逐行对比文本差异，适用于代码审查、文案修改对比等场景。")}</div>
     </div>
   );
 }

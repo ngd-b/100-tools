@@ -1,5 +1,6 @@
 "use client";
 
+import { useI18n } from "@/components/LanguageProvider";
 import { useState, useCallback, useMemo } from "react";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
@@ -13,6 +14,7 @@ function base64UrlDecode(str: string): string {
 }
 
 export function JwtDecoder() {
+  const { t } = useI18n();
   const [token, setToken] = useState("");
   const [error, setError] = useState("");
 
@@ -54,22 +56,22 @@ export function JwtDecoder() {
         <Label className="mb-3 block">JWT Token</Label>
         <Textarea
           className="min-h-[80px] w-full resize-y font-mono text-xs"
-          placeholder="粘贴 JWT token，如 eyJhbGciOi..."
+          placeholder={t("粘贴 JWT token，如 eyJhbGciOi...")}
           value={token}
           onChange={(e) => setToken(e.target.value)}
         />
-        <Button variant="secondary" className="mt-3 text-sm" onClick={handlePaste}>从剪贴板粘贴</Button>
+        <Button variant="secondary" className="mt-3 text-sm" onClick={handlePaste}>{t("从剪贴板粘贴")}</Button>
       </div>
 
-      {error && <p className="mb-6 text-sm text-red-500">{error}</p>}
+      {error && <p className="mb-6 text-sm text-red-500">{t(error)}</p>}
 
       {decoded && (
         <>
           {decoded.expInfo && (
             <div className={`glass-card mb-6 ${decoded.expInfo.startsWith("已过期") ? "border-red-200 bg-red-50/50" : "border-green-200 bg-green-50/50"}`}>
-              <Label className="mb-2 block">过期状态</Label>
+              <Label className="mb-2 block">{t("过期状态")}</Label>
               <p className={`text-sm font-medium ${decoded.expInfo.startsWith("已过期") ? "text-red-600" : "text-green-600"}`}>
-                {decoded.expInfo}
+                {t(decoded.expInfo)}
               </p>
             </div>
           )}
@@ -93,8 +95,7 @@ export function JwtDecoder() {
       )}
 
       <div className="mt-8 rounded-2xl border border-amber-200 bg-amber-50/50 px-5 py-4 text-xs leading-relaxed text-gray-500">
-        💡 仅解码 token 内容，不验证签名。JWT 签名部分保持原样不做处理。
-      </div>
+        {t("💡 仅解码 token 内容，不验证签名。JWT 签名部分保持原样不做处理。")}</div>
     </div>
   );
 }

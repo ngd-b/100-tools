@@ -1,5 +1,6 @@
 "use client";
 
+import { useI18n } from "@/components/LanguageProvider";
 import { useState, useRef, useCallback, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -52,6 +53,7 @@ function formatRemaining(totalMs: number, elapsedMs: number): string {
 }
 
 export function TimerTool() {
+  const { t } = useI18n();
   const [timers, setTimers] = useState<Timer[]>([]);
   const tickRef = useRef<number | null>(null);
 
@@ -109,43 +111,43 @@ export function TimerTool() {
     <div>
       {/* Add Timer Buttons */}
       <div className="glass-card mb-6">
-        <Label>添加计时器</Label>
+        <Label>{t("添加计时器")}</Label>
         <div className="flex gap-3 mt-3">
-          <Button variant="gradient" className="flex-1" onClick={addCountdown}>+ 倒计时</Button>
-          <Button variant="secondary" className="flex-1" onClick={addStopwatch}>+ 秒表</Button>
+          <Button variant="gradient" className="flex-1" onClick={addCountdown}>{t("+ 倒计时")}</Button>
+          <Button variant="secondary" className="flex-1" onClick={addStopwatch}>{t("+ 秒表")}</Button>
         </div>
       </div>
 
       {/* Timer List */}
       {timers.length === 0 && (
         <div className="glass-card text-center py-12 text-gray-400">
-          <p>点击上方按钮添加计时器</p>
+          <p>{t("点击上方按钮添加计时器")}</p>
         </div>
       )}
 
       <div className="flex flex-col gap-4">
-        {timers.map((t) => {
-          const targetMs = (t.hours * 3600 + t.minutes * 60 + t.seconds) * 1000;
-          const isFinished = t.mode === "countdown" && t.elapsed >= targetMs && targetMs > 0;
+        {timers.map((timer) => {
+          const targetMs = (timer.hours * 3600 + timer.minutes * 60 + timer.seconds) * 1000;
+          const isFinished = timer.mode === "countdown" && timer.elapsed >= targetMs && targetMs > 0;
 
           return (
-            <div key={t.id} className="glass-card">
+            <div key={timer.id} className="glass-card">
               <div className="flex items-center justify-between mb-3">
-                <Badge variant={t.mode === "countdown" ? "default" : "secondary"}>
-                  {t.mode === "countdown" ? "倒计时" : "秒表"}
+                <Badge variant={timer.mode === "countdown" ? "default" : "secondary"}>
+                  {timer.mode === "countdown" ? t("倒计时") : t("秒表")}
                 </Badge>
-                <Button variant="ghost" size="sm" onClick={() => removeTimer(t.id)} className="text-gray-400 h-6 w-6 p-0">
+                <Button variant="ghost" size="sm" onClick={() => removeTimer(timer.id)} className="text-gray-400 h-6 w-6 p-0">
                   ×
                 </Button>
               </div>
 
               {/* Countdown Setup */}
-              {t.mode === "countdown" && !t.isRunning && t.elapsed === 0 && (
+              {timer.mode === "countdown" && !timer.isRunning && timer.elapsed === 0 && (
                 <div className="flex gap-2 mb-4">
                   {(["hours", "minutes", "seconds"] as const).map((field) => (
                     <div key={field} className="flex-1">
-                      <Label className="text-xs">{field === "hours" ? "时" : field === "minutes" ? "分" : "秒"}</Label>
-                      <Input type="number" min={0} max={99} value={t[field]} onChange={(e) => setTime(t.id, field, parseInt(e.target.value) || 0)} className="mt-1 text-center font-mono text-lg" />
+                      <Label className="text-xs">{field === "hours" ? t("时") : field === "minutes" ? t("分") : t("秒")}</Label>
+                      <Input type="number" min={0} max={99} value={timer[field]} onChange={(e) => setTime(timer.id, field, parseInt(e.target.value) || 0)} className="mt-1 text-center font-mono text-lg" />
                     </div>
                   ))}
                 </div>
@@ -154,16 +156,16 @@ export function TimerTool() {
               {/* Time Display */}
               <div className="text-center mb-4">
                 <div className={`font-mono text-4xl font-bold tracking-wider ${isFinished ? "text-red-500 animate-pulse" : ""}`}>
-                  {t.mode === "countdown" && targetMs > 0 ? formatRemaining(targetMs, t.elapsed) : formatTime(t.elapsed)}
+                  {timer.mode === "countdown" && targetMs > 0 ? formatRemaining(targetMs, timer.elapsed) : formatTime(timer.elapsed)}
                 </div>
               </div>
 
               {/* Controls */}
               <div className="flex gap-2">
-                <Button variant={t.isRunning ? "secondary" : "gradient"} size="sm" className="flex-1" onClick={() => toggleTimer(t.id)}>
-                  {t.isRunning ? "暂停" : "开始"}
+                <Button variant={timer.isRunning ? "secondary" : "gradient"} size="sm" className="flex-1" onClick={() => toggleTimer(timer.id)}>
+                  {timer.isRunning ? t("暂停") : t("开始")}
                 </Button>
-                <Button variant="outline" size="sm" onClick={() => resetTimer(t.id)}>重置</Button>
+                <Button variant="outline" size="sm" onClick={() => resetTimer(timer.id)}>{t("重置")}</Button>
               </div>
             </div>
           );

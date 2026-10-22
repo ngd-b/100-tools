@@ -1,5 +1,6 @@
 "use client";
 
+import { useI18n } from "@/components/LanguageProvider";
 import { useState, useMemo, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
@@ -15,6 +16,7 @@ const presets = [
 ];
 
 export function CssFilterGenerator() {
+  const { t } = useI18n();
   const [blur, setBlur] = useState(0);
   const [brightness, setBrightness] = useState(100);
   const [contrast, setContrast] = useState(100);
@@ -49,7 +51,7 @@ export function CssFilterGenerator() {
   return (
     <div>
       <div className="glass-card mb-6 text-center" style={{ minHeight: "140px" }}>
-        <Label className="mb-4 block">预览效果</Label>
+        <Label className="mb-4 block">{t("预览效果")}</Label>
         <img
           src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=400&h=200&fit=crop"
           alt="preview"
@@ -60,44 +62,44 @@ export function CssFilterGenerator() {
       </div>
 
       <div className="glass-card mb-6">
-        <Label className="mb-3 block">预设</Label>
+        <Label className="mb-3 block">{t("预设")}</Label>
         <div className="grid grid-cols-3 gap-2 sm:grid-cols-6">
           {presets.map((p) => (
-            <Button key={p.label} variant="secondary" className="text-xs" onClick={() => applyPreset(p)}>{p.label}</Button>
+            <Button key={p.label} variant="secondary" className="text-xs" onClick={() => applyPreset(p)}>{t(p.label)}</Button>
           ))}
         </div>
       </div>
 
       <div className="glass-card mb-6">
-        <Label className="mb-4 block">参数调节</Label>
+        <Label className="mb-4 block">{t("参数调节")}</Label>
         <div className="flex flex-col gap-4">
           <div className="flex items-center gap-3">
-            <span className="w-16 text-xs text-gray-600">模糊</span>
+            <span className="w-16 text-xs text-gray-600">{t("模糊")}</span>
             <Slider value={[blur]} onValueChange={(v) => { const val = Array.isArray(v) ? v[0] : v; setBlur(val as number) }} min={0} max={20} className="flex-1" />
             <span className="w-12 text-right font-mono text-xs tabular-nums">{blur}</span>
           </div>
           <div className="flex items-center gap-3">
-            <span className="w-16 text-xs text-gray-600">亮度</span>
+            <span className="w-16 text-xs text-gray-600">{t("亮度")}</span>
             <Slider value={[brightness]} onValueChange={(v) => { const val = Array.isArray(v) ? v[0] : v; setBrightness(val as number) }} min={0} max={300} className="flex-1" />
             <span className="w-12 text-right font-mono text-xs tabular-nums">{brightness}</span>
           </div>
           <div className="flex items-center gap-3">
-            <span className="w-16 text-xs text-gray-600">对比度</span>
+            <span className="w-16 text-xs text-gray-600">{t("对比度")}</span>
             <Slider value={[contrast]} onValueChange={(v) => { const val = Array.isArray(v) ? v[0] : v; setContrast(val as number) }} min={0} max={300} className="flex-1" />
             <span className="w-12 text-right font-mono text-xs tabular-nums">{contrast}</span>
           </div>
           <div className="flex items-center gap-3">
-            <span className="w-16 text-xs text-gray-600">饱和度</span>
+            <span className="w-16 text-xs text-gray-600">{t("饱和度")}</span>
             <Slider value={[saturate]} onValueChange={(v) => { const val = Array.isArray(v) ? v[0] : v; setSaturate(val as number) }} min={0} max={300} className="flex-1" />
             <span className="w-12 text-right font-mono text-xs tabular-nums">{saturate}</span>
           </div>
           <div className="flex items-center gap-3">
-            <span className="w-16 text-xs text-gray-600">色相旋转</span>
+            <span className="w-16 text-xs text-gray-600">{t("色相旋转")}</span>
             <Slider value={[hue]} onValueChange={(v) => { const val = Array.isArray(v) ? v[0] : v; setHue(val as number) }} min={0} max={360} className="flex-1" />
             <span className="w-12 text-right font-mono text-xs tabular-nums">{hue}</span>
           </div>
           <div className="flex items-center gap-3">
-            <span className="w-16 text-xs text-gray-600">棕褐色</span>
+            <span className="w-16 text-xs text-gray-600">{t("棕褐色")}</span>
             <Slider value={[sepia]} onValueChange={(v) => { const val = Array.isArray(v) ? v[0] : v; setSepia(val as number) }} min={0} max={100} className="flex-1" />
             <span className="w-12 text-right font-mono text-xs tabular-nums">{sepia}</span>
           </div>
@@ -106,8 +108,8 @@ export function CssFilterGenerator() {
 
       <div className="glass-card">
         <div className="mb-3 flex items-center justify-between">
-          <Label>CSS 代码</Label>
-          <button className="copy-btn text-xs text-blue-500 hover:text-blue-600" onClick={handleCopy}>{copied ? "✓" : "复制"}</button>
+          <Label>{t("CSS 代码")}</Label>
+          <button className="copy-btn text-xs text-blue-500 hover:text-blue-600" onClick={handleCopy}>{copied ? "✓" : t("复制")}</button>
         </div>
         <code className="rounded-xl bg-gray-50 px-4 py-3 font-mono text-sm block">filter: {filterStr};</code>
       </div>

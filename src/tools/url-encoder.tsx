@@ -1,11 +1,13 @@
 "use client";
 
+import { useI18n } from "@/components/LanguageProvider";
 import { useState, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 
 export function UrlEncoder() {
+  const { t } = useI18n();
   const [input, setInput] = useState("");
   const [encoded, setEncoded] = useState("");
   const [decoded, setDecoded] = useState("");
@@ -40,31 +42,30 @@ export function UrlEncoder() {
   return (
     <div>
       <div className="glass-card mb-6">
-        <Label className="mb-3 block">输入内容</Label>
+        <Label className="mb-3 block">{t("输入内容")}</Label>
         <Textarea
           className="min-h-[100px] w-full resize-y font-mono text-sm"
-          placeholder="输入 URL、文字或编码内容..."
+          placeholder={t("输入 URL、文字或编码内容...")}
           value={input}
           onChange={(e) => setInput(e.target.value)}
         />
       </div>
 
       <div className="flex gap-3 mb-6">
-        <Button variant="gradient" className="flex-1" onClick={handleEncode}>编码</Button>
-        <Button variant="secondary" className="flex-1" onClick={handleDecode}>解码</Button>
+        <Button variant="gradient" className="flex-1" onClick={handleEncode}>{t("编码")}</Button>
+        <Button variant="secondary" className="flex-1" onClick={handleDecode}>{t("解码")}</Button>
         <Button variant="secondary" onClick={() => { setInput(""); setEncoded(""); setDecoded(""); setError(""); }}>
-          清空
-        </Button>
+          {t("清空")}</Button>
       </div>
 
-      {error && <p className="mb-6 text-sm text-red-500">{error}</p>}
+      {error && <p className="mb-6 text-sm text-red-500">{t(error)}</p>}
 
       {encoded && (
         <div className="glass-card mb-6">
           <div className="mb-3 flex items-center justify-between">
-            <Label>编码结果</Label>
+            <Label>{t("编码结果")}</Label>
             <button className="copy-btn text-xs text-blue-500 hover:text-blue-600" onClick={() => handleCopy(encoded, "encoded")}>
-              {copiedField === "encoded" ? "✓" : "复制"}
+              {copiedField === "encoded" ? "✓" : t("复制")}
             </button>
           </div>
           <div className="rounded-xl bg-gray-50 p-4 font-mono text-sm break-all">{encoded}</div>
@@ -74,9 +75,9 @@ export function UrlEncoder() {
       {decoded && (
         <div className="glass-card mb-6">
           <div className="mb-3 flex items-center justify-between">
-            <Label>解码结果</Label>
+            <Label>{t("解码结果")}</Label>
             <button className="copy-btn text-xs text-blue-500 hover:text-blue-600" onClick={() => handleCopy(decoded, "decoded")}>
-              {copiedField === "decoded" ? "✓" : "复制"}
+              {copiedField === "decoded" ? "✓" : t("复制")}
             </button>
           </div>
           <div className="rounded-xl bg-gray-50 p-4 font-mono text-sm break-all whitespace-pre-wrap">{decoded}</div>
@@ -84,10 +85,10 @@ export function UrlEncoder() {
       )}
 
       <div className="glass-card mb-6">
-        <Label className="mb-3 block">常见编码对照</Label>
+        <Label className="mb-3 block">{t("常见编码对照")}</Label>
         <div className="grid grid-cols-1 gap-2 text-sm">
           {[
-            ["空格", "%20"], ["#", "%23"], ["&", "%26"],
+            [t("空格"), "%20"], ["#", "%23"], ["&", "%26"],
             ["?", "%3F"], ["/", "%2F"], ["=", "%3D"],
           ].map(([char, code]) => (
             <div key={char} className="flex items-center justify-between rounded-lg bg-gray-50 px-4 py-2">
@@ -99,8 +100,7 @@ export function UrlEncoder() {
       </div>
 
       <div className="mt-8 rounded-2xl border border-amber-200 bg-amber-50/50 px-5 py-4 text-xs leading-relaxed text-gray-500">
-        💡 encodeURIComponent 会对所有特殊字符进行百分号编码，适用于 URL 查询参数。
-      </div>
+        {t("💡 encodeURIComponent 会对所有特殊字符进行百分号编码，适用于 URL 查询参数。")}</div>
     </div>
   );
 }

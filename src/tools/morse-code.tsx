@@ -1,5 +1,6 @@
 "use client";
 
+import { useI18n } from "@/components/LanguageProvider";
 import { useState, useCallback } from "react";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
@@ -30,6 +31,7 @@ function decodeMorse(morse: string): string {
 }
 
 export function MorseCode() {
+  const { t } = useI18n();
   const [input, setInput] = useState("");
   const [output, setOutput] = useState("");
   const [mode, setMode] = useState<"encode" | "decode">("encode");
@@ -56,40 +58,38 @@ export function MorseCode() {
   return (
     <div>
       <div className="glass-card mb-6">
-        <Label className="mb-3 block">模式</Label>
+        <Label className="mb-3 block">{t("模式")}</Label>
         <div className="flex gap-3">
           <Button variant={mode === "encode" ? "gradient" : "secondary"} className="flex-1" onClick={() => { setMode("encode"); setOutput(""); setError(""); }}>
-            文字 → 摩斯码
-          </Button>
+            {t("文字 → 摩斯码")}</Button>
           <Button variant={mode === "decode" ? "gradient" : "secondary"} className="flex-1" onClick={() => { setMode("decode"); setOutput(""); setError(""); }}>
-            摩斯码 → 文字
-          </Button>
+            {t("摩斯码 → 文字")}</Button>
         </div>
       </div>
 
       <div className="glass-card mb-6">
-        <Label className="mb-3 block">{mode === "encode" ? "输入文字（英文/数字）" : "输入摩斯码"}</Label>
+        <Label className="mb-3 block">{mode === "encode" ? t("输入文字（英文/数字）") : t("输入摩斯码")}</Label>
         <Textarea
           className="min-h-[100px] w-full resize-y font-mono text-sm"
-          placeholder={mode === "encode" ? "Hello World" : ".... . .-.. .-.. --- / .-- --- .-. .-.. -.."}
+          placeholder={t(mode === "encode" ? "Hello World" : ".... . .-.. .-.. --- / .-- --- .-. .-.. -..")}
           value={input}
           onChange={(e) => setInput(e.target.value)}
         />
       </div>
 
       <div className="flex gap-3 mb-6">
-        <Button variant="gradient" className="flex-1" onClick={handleConvert}>转换</Button>
-        <Button variant="secondary" onClick={() => { setInput(""); setOutput(""); }}>清空</Button>
+        <Button variant="gradient" className="flex-1" onClick={handleConvert}>{t("转换")}</Button>
+        <Button variant="secondary" onClick={() => { setInput(""); setOutput(""); }}>{t("清空")}</Button>
       </div>
 
-      {error && <p className="mb-6 text-sm text-red-500">{error}</p>}
+      {error && <p className="mb-6 text-sm text-red-500">{t(error)}</p>}
 
       {output && (
         <div className="glass-card">
           <div className="mb-3 flex items-center justify-between">
-            <Label>转换结果</Label>
+            <Label>{t("转换结果")}</Label>
             <button className="copy-btn text-xs text-blue-500 hover:text-blue-600" onClick={handleCopy}>
-              {copied ? "✓" : "复制"}
+              {copied ? "✓" : t("复制")}
             </button>
           </div>
           <div className="rounded-xl bg-gray-50 p-4 font-mono text-sm break-all">{output}</div>
@@ -97,8 +97,7 @@ export function MorseCode() {
       )}
 
       <div className="mt-8 rounded-2xl border border-amber-200 bg-amber-50/50 px-5 py-4 text-xs leading-relaxed text-gray-500">
-        💡 摩斯码是一种用点（.）和划（-）表示字母的编码方式，支持英文字母、数字和基本标点。
-      </div>
+        {t("💡 摩斯码是一种用点（.）和划（-）表示字母的编码方式，支持英文字母、数字和基本标点。")}</div>
     </div>
   );
 }

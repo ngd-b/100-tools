@@ -1,5 +1,6 @@
 "use client";
 
+import { useI18n } from "@/components/LanguageProvider";
 import { useState, useCallback, useRef, useLayoutEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
@@ -13,6 +14,7 @@ interface CropRect {
 }
 
 export function ImageCrop() {
+  const { t } = useI18n();
   const [imageUrl, setImageUrl] = useState("");
   const [crop, setCrop] = useState<CropRect | null>(null);
   const [previewUrl, setPreviewUrl] = useState("");
@@ -162,8 +164,8 @@ export function ImageCrop() {
       ) : (
         <>
           <div className="glass-card mb-6">
-            <Label className="mb-3 block">裁剪区域</Label>
-            <p className="text-xs text-gray-400 mb-3">在图片上拖拽鼠标选择裁剪区域</p>
+            <Label className="mb-3 block">{t("裁剪区域")}</Label>
+            <p className="text-xs text-gray-400 mb-3">{t("在图片上拖拽鼠标选择裁剪区域")}</p>
             <div className="flex justify-center">
               <div
                 ref={containerRef}
@@ -191,14 +193,14 @@ export function ImageCrop() {
             </div>
             {cropPx && (
               <p className="mt-2 font-mono text-xs text-gray-400">
-                裁剪区域: {cropPx.w} x {cropPx.h} px
+                {t("裁剪区域:")}{cropPx.w} x {cropPx.h} px
               </p>
             )}
           </div>
 
           {previewUrl && (
             <div className="glass-card mb-6">
-              <Label className="mb-4 block">裁剪预览</Label>
+              <Label className="mb-4 block">{t("裁剪预览")}</Label>
               <div className="flex flex-col items-center gap-4">
                 <img src={previewUrl} alt="cropped" className="max-h-62.5 rounded-xl object-contain bg-gray-50" />
               </div>
@@ -206,19 +208,17 @@ export function ImageCrop() {
           )}
 
           <div className="flex gap-3">
-            <Button variant="gradient" className="flex-1" onClick={handleDownload} disabled={!previewUrl}>下载</Button>
+            <Button variant="gradient" className="flex-1" onClick={handleDownload} disabled={!previewUrl}>{t("下载")}</Button>
             <Button variant="secondary" onClick={() => {
               setImageUrl(""); setCrop(null); setPreviewUrl("");
             }}>
-              更换图片
-            </Button>
+              {t("更换图片")}</Button>
           </div>
         </>
       )}
 
       <div className="mt-8 rounded-2xl border border-amber-200 bg-amber-50/50 px-5 py-4 text-xs leading-relaxed text-gray-500">
-        💡 在图片上按住鼠标拖拽，即可选择裁剪区域。松开后自动预览裁剪效果。
-      </div>
+        {t("💡 在图片上按住鼠标拖拽，即可选择裁剪区域。松开后自动预览裁剪效果。")}</div>
     </div>
   );
 }

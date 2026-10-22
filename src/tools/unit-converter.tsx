@@ -1,5 +1,6 @@
 "use client";
 
+import { useI18n } from "@/components/LanguageProvider";
 import { useState, useMemo } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -100,6 +101,7 @@ function formatNumber(n: number): string {
 }
 
 export function UnitConverter() {
+  const { t } = useI18n();
   const [catIdx, setCatIdx] = useState(0);
   const [fromIdx, setFromIdx] = useState(0);
   const [toIdx, setToIdx] = useState(1);
@@ -127,11 +129,11 @@ export function UnitConverter() {
     <div>
       {/* Category Selection */}
       <div className="glass-card mb-6">
-        <Label>分类</Label>
+        <Label>{t("分类")}</Label>
         <div className="flex flex-wrap gap-2 mt-3">
           {CATEGORIES.map((c, i) => (
             <Button key={c.key} variant={catIdx === i ? "default" : "outline"} size="sm" onClick={() => handleCategoryChange(i)}>
-              {c.name}
+              {t(c.name)}
             </Button>
           ))}
         </div>
@@ -141,21 +143,21 @@ export function UnitConverter() {
       <div className="glass-card mb-6">
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
           <div>
-            <Label>从</Label>
+            <Label>{t("从")}</Label>
             <Select value={cat.units[fromIdx].key} onValueChange={(v) => { const idx = cat.units.findIndex((u) => u.key === v); setFromIdx(idx); }}>
               <SelectTrigger className="mt-2"><SelectValue /></SelectTrigger>
               <SelectContent>
-                {cat.units.map((u, i) => <SelectItem key={u.key} value={u.key}>{u.name}</SelectItem>)}
+                {cat.units.map((u, i) => <SelectItem key={u.key} value={u.key}>{t(u.name)}</SelectItem>)}
               </SelectContent>
             </Select>
             <Input className="mt-3" type="number" value={value} onChange={(e) => setValue(e.target.value)} />
           </div>
           <div>
-            <Label>到</Label>
+            <Label>{t("到")}</Label>
             <Select value={cat.units[toIdx].key} onValueChange={(v) => { const idx = cat.units.findIndex((u) => u.key === v); setToIdx(idx); }}>
               <SelectTrigger className="mt-2"><SelectValue /></SelectTrigger>
               <SelectContent>
-                {cat.units.map((u) => <SelectItem key={u.key} value={u.key}>{u.name}</SelectItem>)}
+                {cat.units.map((u) => <SelectItem key={u.key} value={u.key}>{t(u.name)}</SelectItem>)}
               </SelectContent>
             </Select>
             <div className="mt-3 h-10 flex items-center rounded-md border border-input bg-transparent px-3 py-2 text-sm font-mono font-semibold">
@@ -168,7 +170,7 @@ export function UnitConverter() {
       {/* All conversions */}
       {value && !isNaN(parseFloat(value)) && (
         <div className="glass-card">
-          <Label>全部换算</Label>
+          <Label>{t("全部换算")}</Label>
           <div className="mt-3 grid grid-cols-1 gap-2 sm:grid-cols-2">
             {cat.units.map((u, i) => {
               const fromUnit = cat.units[fromIdx];
@@ -176,7 +178,7 @@ export function UnitConverter() {
               const val = u.fromBase(base);
               return i === fromIdx ? null : (
                 <div key={u.key} className="flex items-center justify-between rounded-lg bg-gray-50 px-3 py-2 text-sm">
-                  <span className="text-gray-500">{u.name}</span>
+                  <span className="text-gray-500">{t(u.name)}</span>
                   <span className="font-mono font-semibold">{formatNumber(val)}</span>
                 </div>
               );

@@ -1,5 +1,6 @@
 "use client";
 
+import { useI18n } from "@/components/LanguageProvider";
 import { useState, useCallback, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -61,6 +62,7 @@ function renderWatermark(
 }
 
 export function ImageWatermark() {
+  const { t } = useI18n();
   const [imageUrl, setImageUrl] = useState("");
   const [text, setText] = useState("© 100-tools");
   const [fontSize, setFontSize] = useState(24);
@@ -125,33 +127,33 @@ export function ImageWatermark() {
       ) : (
         <>
           <div className="glass-card mb-6">
-            <Label className="mb-3 block">水印文字</Label>
-            <Input value={text} onChange={(e) => setText(e.target.value)} placeholder="输入水印文字..." />
+            <Label className="mb-3 block">{t("水印文字")}</Label>
+            <Input value={text} onChange={(e) => setText(e.target.value)} placeholder={t("输入水印文字...")} />
           </div>
 
           <div className="glass-card mb-6">
-            <Label className="mb-4 block">参数调节</Label>
+            <Label className="mb-4 block">{t("参数调节")}</Label>
             <div className="flex flex-col gap-4">
               <div>
                 <div className="flex justify-between mb-1">
-                  <span className="text-xs text-gray-500">字号</span>
+                  <span className="text-xs text-gray-500">{t("字号")}</span>
                   <span className="font-mono text-xs">{fontSize}px</span>
                 </div>
                 <Slider value={[fontSize]} onValueChange={(v) => { const val = Array.isArray(v) ? v[0] : v; setFontSize(val as number) }} min={12} max={200} step={1} className="w-full" />
               </div>
               <div>
                 <div className="flex justify-between mb-1">
-                  <span className="text-xs text-gray-500">透明度</span>
+                  <span className="text-xs text-gray-500">{t("透明度")}</span>
                   <span className="font-mono text-xs">{Math.round(opacity * 100)}%</span>
                 </div>
                 <Slider value={[opacity]} onValueChange={(v) => { const val = Array.isArray(v) ? v[0] : v; setOpacity(val as number) }} min={0.1} max={1} step={0.05} className="w-full" />
               </div>
               <div>
-                <span className="text-xs text-gray-500 mb-2 block">位置</span>
+                <span className="text-xs text-gray-500 mb-2 block">{t("位置")}</span>
                 <div className="flex flex-wrap gap-2">
                   {positions.map((p) => (
                     <Button key={p.value} variant={position === p.value ? "gradient" : "secondary"} className="text-xs"
-                      onClick={() => setPosition(p.value)}>{p.label}</Button>
+                      onClick={() => setPosition(p.value)}>{t(p.label)}</Button>
                   ))}
                 </div>
               </div>
@@ -159,39 +161,36 @@ export function ImageWatermark() {
           </div>
 
           <div className="glass-card mb-6">
-            <Label className="mb-4 block">对比预览</Label>
+            <Label className="mb-4 block">{t("对比预览")}</Label>
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               <div className="text-center">
-                <p className="mb-2 text-xs text-gray-400">原始图片</p>
+                <p className="mb-2 text-xs text-gray-400">{t("原始图片")}</p>
                 <img src={imageUrl} alt="original" className="max-h-[250px] w-full rounded-xl object-contain bg-gray-50" />
               </div>
               <div className="text-center">
-                <p className="mb-2 text-xs text-gray-400">水印效果</p>
+                <p className="mb-2 text-xs text-gray-400">{t("水印效果")}</p>
                 {resultUrl ? (
                   <img src={resultUrl} alt="watermarked" className="max-h-[250px] w-full rounded-xl object-contain bg-gray-50" />
                 ) : (
                   <div className="flex h-[100px] items-center justify-center rounded-xl bg-gray-50 text-xs text-gray-400">
-                    渲染中...
-                  </div>
+                    {t("渲染中...")}</div>
                 )}
               </div>
             </div>
           </div>
 
           <div className="flex gap-3">
-            <Button variant="gradient" className="flex-1" onClick={handleDownload} disabled={!resultUrl}>下载</Button>
+            <Button variant="gradient" className="flex-1" onClick={handleDownload} disabled={!resultUrl}>{t("下载")}</Button>
             <Button variant="secondary" onClick={() => {
               setImageUrl(""); setResultUrl(""); imgRef.current = null;
             }}>
-              更换图片
-            </Button>
+              {t("更换图片")}</Button>
           </div>
         </>
       )}
 
       <div className="mt-8 rounded-2xl border border-amber-200 bg-amber-50/50 px-5 py-4 text-xs leading-relaxed text-gray-500">
-        💡 水印为白色文字 + 黑色描边，会根据图片尺寸自动缩放字号，确保在明暗背景上都清晰可见。
-      </div>
+        {t("💡 水印为白色文字 + 黑色描边，会根据图片尺寸自动缩放字号，确保在明暗背景上都清晰可见。")}</div>
     </div>
   );
 }

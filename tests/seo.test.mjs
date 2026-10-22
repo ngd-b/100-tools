@@ -63,7 +63,7 @@ test("every tool and category has distinct descriptive content and three actual 
 test("page canonical and social URLs refer to each page, not the homepage", () => {
   for (const tool of tools) {
     const meta = createPageMetadata({ ...toolGuides[tool.id], path: tool.path }, site);
-    assert.equal(meta.alternates.canonical, site.url + tool.path);
+    assert.equal(meta.alternates.canonical, site.url + "/zh" + tool.path);
     assert.equal(meta.openGraph.url, meta.alternates.canonical);
     assert.equal(meta.description, toolGuides[tool.id].description);
     assert.equal(meta.openGraph.images[0].url, site.url + "/opengraph-image");
@@ -73,7 +73,7 @@ test("page canonical and social URLs refer to each page, not the homepage", () =
 
 test("sitemap includes canonical homepage, categories and tools without aliases or invented timestamps", () => {
   const entries = createSitemap(site, tools, categories);
-  assert.equal(entries.length, tools.length + categories.length + 1);
+  assert.equal(entries.length, 2 * (tools.length + categories.length + 1));
   assert.equal(new Set(entries.map((entry) => entry.url)).size, entries.length);
   for (const entry of entries) {
     assert.equal(new URL(entry.url).origin, site.url);
@@ -89,12 +89,12 @@ test("tool structured data has matching URLs, real breadcrumb levels and no inve
     const schema = createToolSchema(tool, category, toolGuides[tool.id].description, site);
     const app = schema["@graph"][0];
     const breadcrumbs = schema["@graph"][1].itemListElement;
-    assert.equal(app.url, site.url + tool.path);
+    assert.equal(app.url, site.url + "/zh" + tool.path);
     assert.equal(app.description, toolGuides[tool.id].description);
     assert.equal(app.offers.price, "0");
     assert.equal(app.aggregateRating, undefined);
     assert.deepEqual(breadcrumbs.map((item) => item.position), [1, 2, 3]);
-    assert.equal(breadcrumbs[1].item, `${site.url}/category/${category.id}`);
+    assert.equal(breadcrumbs[1].item, `${site.url}/zh/category/${category.id}`);
     assert.equal(breadcrumbs[2].item, app.url);
   }
 });
@@ -103,7 +103,7 @@ test("collection data lists the same tools as its visible category", () => {
   const items = tools.filter((tool) => tool.category === "image");
   const schema = createCollectionSchema({ ...categoryGuides.image, path: "/category/image" }, items, site);
   assert.equal(schema.mainEntity.numberOfItems, items.length);
-  assert.deepEqual(schema.mainEntity.itemListElement.map((item) => item.url), items.map((tool) => site.url + tool.path));
+  assert.deepEqual(schema.mainEntity.itemListElement.map((item) => item.url), items.map((tool) => site.url + "/zh" + tool.path));
 });
 
 test("JSON-LD serialization cannot terminate its script element", () => {

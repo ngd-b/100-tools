@@ -1,5 +1,6 @@
 "use client";
 
+import { useI18n } from "@/components/LanguageProvider";
 import { useState, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -18,6 +19,7 @@ const reverseMap: Record<string, string> = {};
 Object.entries(entityMap).forEach(([k, v]) => { reverseMap[v] = k; });
 
 export function HtmlEntities() {
+  const { t } = useI18n();
   const [input, setInput] = useState("");
   const [output, setOutput] = useState("");
   const [error, setError] = useState("");
@@ -47,35 +49,35 @@ export function HtmlEntities() {
   return (
     <div>
       <div className="glass-card mb-6">
-        <Label className="mb-3 block">输入内容</Label>
+        <Label className="mb-3 block">{t("输入内容")}</Label>
         <Textarea
           className="min-h-[120px] w-full resize-y font-mono text-sm"
-          placeholder='输入含 <> & " 等特殊字符的文本...'
+          placeholder={t("输入含 <> & \" 等特殊字符的文本...")}
           value={input}
           onChange={(e) => setInput(e.target.value)}
         />
       </div>
 
       <div className="flex gap-3 mb-6">
-        <Button variant="gradient" className="flex-1" onClick={handleEncode}>编码</Button>
-        <Button variant="secondary" className="flex-1" onClick={handleDecode}>解码</Button>
-        <Button variant="secondary" onClick={() => { setInput(""); setOutput(""); setError(""); }}>清空</Button>
+        <Button variant="gradient" className="flex-1" onClick={handleEncode}>{t("编码")}</Button>
+        <Button variant="secondary" className="flex-1" onClick={handleDecode}>{t("解码")}</Button>
+        <Button variant="secondary" onClick={() => { setInput(""); setOutput(""); setError(""); }}>{t("清空")}</Button>
       </div>
 
-      {error && <p className="mb-6 text-sm text-red-500">{error}</p>}
+      {error && <p className="mb-6 text-sm text-red-500">{t(error)}</p>}
 
       {output && (
         <div className="glass-card">
           <div className="mb-3 flex items-center justify-between">
-            <Label>结果</Label>
-            <button className="copy-btn text-xs text-blue-500 hover:text-blue-600" onClick={handleCopy}>{copied ? "✓" : "复制"}</button>
+            <Label>{t("结果")}</Label>
+            <button className="copy-btn text-xs text-blue-500 hover:text-blue-600" onClick={handleCopy}>{copied ? "✓" : t("复制")}</button>
           </div>
           <div className="rounded-xl bg-gray-50 p-4 font-mono text-sm break-all whitespace-pre-wrap">{output}</div>
         </div>
       )}
 
       <div className="glass-card mt-6">
-        <Label className="mb-3 block">常用实体对照</Label>
+        <Label className="mb-3 block">{t("常用实体对照")}</Label>
         <div className="grid grid-cols-2 gap-2 text-sm sm:grid-cols-4">
           {[["<", "&lt;"], [">", "&gt;"], ["&", "&amp;"], ['"', "&quot;"],
             ["'", "&#39;"], ["©", "&copy;"], ["®", "&reg;"], ["…", "&hellip;"],
@@ -89,8 +91,7 @@ export function HtmlEntities() {
       </div>
 
       <div className="mt-8 rounded-2xl border border-amber-200 bg-amber-50/50 px-5 py-4 text-xs leading-relaxed text-gray-500">
-        💡 编码可防止 XSS 攻击中的特殊字符被浏览器解析。适用于安全输出用户输入。
-      </div>
+        {t("💡 编码可防止 XSS 攻击中的特殊字符被浏览器解析。适用于安全输出用户输入。")}</div>
     </div>
   );
 }

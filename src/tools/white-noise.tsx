@@ -1,5 +1,6 @@
 "use client";
 
+import { useI18n } from "@/components/LanguageProvider";
 import { useState, useCallback, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
@@ -15,6 +16,7 @@ const noiseTypes = [
 ];
 
 export function WhiteNoiseGenerator() {
+  const { t } = useI18n();
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentType, setCurrentType] = useState("white");
   const [volume, setVolume] = useState(0.5);
@@ -101,17 +103,17 @@ export function WhiteNoiseGenerator() {
   return (
     <div>
       <div className="glass-card mb-6 text-center">
-        <Label className="mb-4 block">播放控制</Label>
+        <Label className="mb-4 block">{t("播放控制")}</Label>
         <Button
           variant={isPlaying ? "destructive" : "gradient"}
           className="text-lg px-12 py-4"
           onClick={isPlaying ? stop : play}>
-          {isPlaying ? "停止" : "播放"}
+          {isPlaying ? t("停止") : t("播放")}
         </Button>
       </div>
 
       <div className="glass-card mb-6">
-        <Label className="mb-3 block">音量</Label>
+        <Label className="mb-3 block">{t("音量")}</Label>
         <div className="flex items-center gap-3">
           <span className="text-sm">🔈</span>
           <Slider min={0} max={1} step={0.01} value={[volume]} onValueChange={(v) => { const val = Array.isArray(v) ? v[0] : v; handleVolumeChange(val as number) }} className="flex-1" />
@@ -120,7 +122,7 @@ export function WhiteNoiseGenerator() {
       </div>
 
       <div className="glass-card mb-6">
-        <Label className="mb-3 block">声音类型</Label>
+        <Label className="mb-3 block">{t("声音类型")}</Label>
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
           {noiseTypes.map((n) => (
             <Button
@@ -128,15 +130,14 @@ export function WhiteNoiseGenerator() {
               variant={currentType === n.type ? "gradient" : "secondary"}
               className="flex-1"
               onClick={() => handleTypeChange(n.type)}>
-              {n.label}
+              {t(n.label)}
             </Button>
           ))}
         </div>
       </div>
 
       <div className="mt-8 rounded-2xl border border-amber-200 bg-amber-50/50 px-5 py-4 text-xs leading-relaxed text-gray-500">
-        💡 使用 Web Audio API 实时生成噪音，无需加载音频文件。适合专注/助眠/白噪音场景。
-      </div>
+        {t("💡 使用 Web Audio API 实时生成噪音，无需加载音频文件。适合专注/助眠/白噪音场景。")}</div>
     </div>
   );
 }

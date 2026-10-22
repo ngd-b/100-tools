@@ -1,5 +1,6 @@
 "use client";
 
+import { useI18n } from "@/components/LanguageProvider";
 import { useState, useCallback, useEffect } from "react";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
@@ -21,6 +22,7 @@ async function sha1(text: string): Promise<string> {
 }
 
 export function HashGenerator() {
+  const { t } = useI18n();
   const [input, setInput] = useState("");
   const [sha256Hash, setSha256Hash] = useState("");
   const [sha1Hash, setSha1Hash] = useState("");
@@ -61,15 +63,15 @@ export function HashGenerator() {
   const HashRow = ({ label, value }: { label: string; value: string }) => (
     <div className="mb-3">
       <div className="mb-1 flex items-center justify-between">
-        <span className="text-xs font-medium text-gray-500">{label}</span>
+        <span className="text-xs font-medium text-gray-500">{t(label)}</span>
         {value && (
           <button className="copy-btn text-xs text-blue-500 hover:text-blue-600" onClick={() => handleCopy(value)}>
-            {copied ? "✓" : "复制"}
+            {copied ? "✓" : t("复制")}
           </button>
         )}
       </div>
       <div className="rounded-xl bg-gray-50 p-3 font-mono text-xs break-all">
-        {value || "等待输入..."}
+        {value || t("等待输入...")}
       </div>
     </div>
   );
@@ -77,10 +79,10 @@ export function HashGenerator() {
   return (
     <div>
       <div className="glass-card mb-6">
-        <Label className="mb-3 block">输入文本</Label>
+        <Label className="mb-3 block">{t("输入文本")}</Label>
         <Textarea
           className="min-h-[100px] w-full resize-y font-mono text-sm"
-          placeholder="输入任意文本..."
+          placeholder={t("输入任意文本...")}
           value={input}
           onChange={(e) => setInput(e.target.value)}
         />
@@ -88,16 +90,15 @@ export function HashGenerator() {
 
       {input && (
         <div className="glass-card">
-          <Label className="mb-4 block">哈希结果</Label>
+          <Label className="mb-4 block">{t("哈希结果")}</Label>
           <HashRow label="SHA-256" value={sha256Hash} />
           <HashRow label="SHA-1" value={sha1Hash} />
-          <HashRow label="CRC32 (模拟)" value={md5Like} />
+          <HashRow label={t("CRC32 (模拟)")} value={md5Like} />
         </div>
       )}
 
       <div className="mt-8 rounded-2xl border border-amber-200 bg-amber-50/50 px-5 py-4 text-xs leading-relaxed text-gray-500">
-        💡 使用浏览器原生 Web Crypto API 计算，无需后端。SHA-256 / SHA-1 适用于文件校验、数据完整性验证等场景。
-      </div>
+        {t("💡 使用浏览器原生 Web Crypto API 计算，无需后端。SHA-256 / SHA-1 适用于文件校验、数据完整性验证等场景。")}</div>
     </div>
   );
 }

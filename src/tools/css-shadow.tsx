@@ -1,5 +1,6 @@
 "use client";
 
+import { useI18n } from "@/components/LanguageProvider";
 import { useState, useCallback, useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
@@ -7,6 +8,7 @@ import { Slider } from "@/components/ui/slider";
 import { Checkbox } from "@/components/ui/checkbox";
 
 export function CssShadowGenerator() {
+  const { t } = useI18n();
   const [shadowType, setShadowType] = useState<"box" | "text">("box");
   const [x, setX] = useState(4);
   const [y, setY] = useState(4);
@@ -57,7 +59,7 @@ export function CssShadowGenerator() {
   return (
     <div>
       <div className="glass-card mb-6">
-        <Label className="mb-3 block">类型</Label>
+        <Label className="mb-3 block">{t("类型")}</Label>
         <div className="flex gap-3">
           <Button
             variant={shadowType === "box" ? "gradient" : "secondary"}
@@ -77,7 +79,7 @@ export function CssShadowGenerator() {
       </div>
 
       <div className="glass-card mb-6">
-        <Label className="mb-4 block">参数调节</Label>
+        <Label className="mb-4 block">{t("参数调节")}</Label>
         <div className="flex flex-col gap-4">
           <div className="flex items-center gap-3">
             <span className="w-12 shrink-0 text-xs text-gray-600">X</span>
@@ -90,31 +92,30 @@ export function CssShadowGenerator() {
             <span className="w-12 shrink-0 text-right font-mono text-xs tabular-nums">{y}px</span>
           </div>
           <div className="flex items-center gap-3">
-            <span className="w-12 shrink-0 text-xs text-gray-600">模糊</span>
+            <span className="w-12 shrink-0 text-xs text-gray-600">{t("模糊")}</span>
             <Slider value={[blur]} onValueChange={(v) => { const val = Array.isArray(v) ? v[0] : v; setBlur(val as number) }} min={0} max={100} className="flex-1" />
             <span className="w-12 shrink-0 text-right font-mono text-xs tabular-nums">{blur}px</span>
           </div>
           <div className="flex items-center gap-3">
-            <span className="w-12 shrink-0 text-xs text-gray-600">扩展</span>
+            <span className="w-12 shrink-0 text-xs text-gray-600">{t("扩展")}</span>
             <Slider value={[spread]} onValueChange={(v) => { const val = Array.isArray(v) ? v[0] : v; setSpread(val as number) }} min={-50} max={50} className="flex-1" />
             <span className="w-12 shrink-0 text-right font-mono text-xs tabular-nums">{spread}px</span>
           </div>
           <div className="flex items-center gap-3">
-            <span className="w-12 shrink-0 text-xs text-gray-600">透明</span>
+            <span className="w-12 shrink-0 text-xs text-gray-600">{t("透明")}</span>
             <Slider value={[opacity]} onValueChange={(v) => { const val = Array.isArray(v) ? v[0] : v; setOpacity(val as number) }} min={0} max={100} className="flex-1" />
             <span className="w-12 shrink-0 text-right font-mono text-xs tabular-nums">{opacity}%</span>
           </div>
           {shadowType === "box" && (
             <label className="flex items-center gap-2 text-sm text-gray-600">
               <Checkbox checked={inset} onCheckedChange={(v) => setInset(v as boolean)} />
-              inset（内阴影）
-            </label>
+              {t("inset（内阴影）")}</label>
           )}
         </div>
       </div>
 
       <div className="glass-card mb-6">
-        <Label className="mb-4 block">预设</Label>
+        <Label className="mb-4 block">{t("预设")}</Label>
         <div className="grid grid-cols-3 gap-2 sm:grid-cols-6">
           {presets.map((p) => (
             <Button
@@ -123,14 +124,14 @@ export function CssShadowGenerator() {
               className="text-xs"
               onClick={() => applyPreset(p)}
             >
-              {p.label}
+              {t(p.label)}
             </Button>
           ))}
         </div>
       </div>
 
       <div className="glass-card mb-6 text-center" style={{ minHeight: "160px" }}>
-        <Label className="mb-4 block">实时预览</Label>
+        <Label className="mb-4 block">{t("实时预览")}</Label>
         {shadowType === "text" ? (
           <span className="text-4xl font-bold text-gray-800" style={previewStyle}>
             Shadow Text
@@ -145,9 +146,9 @@ export function CssShadowGenerator() {
 
       <div className="glass-card">
         <div className="mb-3 flex items-center justify-between">
-          <Label>CSS 代码</Label>
+          <Label>{t("CSS 代码")}</Label>
           <button className="copy-btn text-xs text-blue-500 hover:text-blue-600" onClick={handleCopy}>
-            {copied ? "✓" : "复制"}
+            {copied ? "✓" : t("复制")}
           </button>
         </div>
         <code className="rounded-xl bg-gray-50 px-4 py-3 font-mono text-sm block">

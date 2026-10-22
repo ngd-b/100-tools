@@ -1,5 +1,6 @@
 "use client";
 
+import { useI18n } from "@/components/LanguageProvider";
 import { useState, useMemo, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -7,6 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 
 export function RegexTester() {
+  const { t } = useI18n();
   const [pattern, setPattern] = useState("[a-z]+");
   const [flags, setFlags] = useState("gi");
   const [testText, setTestText] = useState("Hello World 123 Foo Bar 456");
@@ -76,14 +78,14 @@ export function RegexTester() {
   return (
     <div>
       <div className="glass-card mb-6">
-        <Label className="mb-3 block">正则表达式</Label>
+        <Label className="mb-3 block">{t("正则表达式")}</Label>
         <div className="flex items-center gap-2">
           <span className="font-mono text-lg text-gray-400">/</span>
           <Input
             className="flex-1 font-mono text-sm"
             value={pattern}
             onChange={(e) => setPattern(e.target.value)}
-            placeholder="输入正则表达式..."
+            placeholder={t("输入正则表达式...")}
           />
           <span className="font-mono text-lg text-gray-400">/</span>
           <Input
@@ -99,18 +101,18 @@ export function RegexTester() {
               size="sm"
               className="text-xs"
               onClick={() => toggleFlag(f.key)}>
-              {f.key} — {f.label}
+              {f.key} — {t(f.label)}
             </Button>
           ))}
         </div>
       </div>
 
-      {error && <p className="mb-6 text-sm text-red-500 font-mono bg-red-50 rounded-xl px-4 py-2">{error}</p>}
+      {error && <p className="mb-6 text-sm text-red-500 font-mono bg-red-50 rounded-xl px-4 py-2">{t(error)}</p>}
 
       {result && (
         <div className="glass-card mb-6">
           <Label className="mb-3 block">
-            匹配结果: <span className="text-blue-500">{result.count} 个匹配</span>
+            {t("匹配结果:")}<span className="text-blue-500">{result.count} {t(" 个匹配")}</span>
           </Label>
           {result.matches.length > 0 && (
             <div className="flex flex-wrap gap-1">
@@ -119,14 +121,14 @@ export function RegexTester() {
                   [{m.index}] {m.text}
                 </span>
               ))}
-              {result.count > 50 && <span className="text-xs text-gray-400">... 还有 {result.count - 50} 个</span>}
+              {result.count > 50 && <span className="text-xs text-gray-400">{t("... 还有 ")}{result.count - 50} {t(" 个")}</span>}
             </div>
           )}
         </div>
       )}
 
       <div className="glass-card mb-6">
-        <Label className="mb-3 block">测试文本</Label>
+        <Label className="mb-3 block">{t("测试文本")}</Label>
         <Textarea
           className="min-h-[100px] w-full resize-y font-mono text-sm"
           value={testText}
@@ -135,25 +137,25 @@ export function RegexTester() {
       </div>
 
       <div className="glass-card mb-6">
-        <Label className="mb-3 block">高亮显示</Label>
+        <Label className="mb-3 block">{t("高亮显示")}</Label>
         <div className="rounded-xl bg-gray-50 p-4 font-mono text-sm min-h-[60px] whitespace-pre-wrap break-all">
-          {highlighted || <span className="text-gray-400">{testText || "输入测试文本后显示高亮"}</span>}
+          {highlighted || <span className="text-gray-400">{testText || t("输入测试文本后显示高亮")}</span>}
         </div>
       </div>
 
       <div className="glass-card">
-        <Label className="mb-3 block">快速测试用例</Label>
+        <Label className="mb-3 block">{t("快速测试用例")}</Label>
         <div className="grid grid-cols-1 gap-2 text-sm sm:grid-cols-2">
           {[
-            ["邮箱", "[\\w.-]+@[\\w.-]+\\.\\w+", "test@example.com foo@bar.org"],
+            [t("邮箱"), "[\\w.-]+@[\\w.-]+\\.\\w+", "test@example.com foo@bar.org"],
             ["URL", "https?://[^\\s]+", "https://google.com http://test.org"],
-            ["数字", "\\d+", "价格: 123 数量: 456 折扣: 0.7"],
-            ["中文", "[\\u4e00-\\u9fa5]+", "你好世界 Hello World 测试"],
-          ].map(([label, p, t]) => (
+            [t("数字"), "\\d+", t("价格: 123 数量: 456 折扣: 0.7")],
+            [t("中文"), "[\\u4e00-\\u9fa5]+", "你好世界 Hello World 测试"],
+          ].map(([label, p, sample]) => (
             <button key={label}
               className="rounded-lg bg-gray-50 px-4 py-3 text-left hover:bg-gray-100 transition-colors"
-              onClick={() => { setPattern(p); setTestText(t); }}>
-              <span className="font-semibold">{label}</span>
+              onClick={() => { setPattern(p); setTestText(sample); }}>
+              <span className="font-semibold">{t(label)}</span>
               <span className="font-mono text-xs text-gray-400 ml-2 block">{p}</span>
             </button>
           ))}

@@ -1,5 +1,7 @@
 "use client";
 
+import { useI18n } from "@/components/LanguageProvider";
+
 import { useRef, type ReactNode } from "react";
 import { Button } from "@/components/ui/button";
 
@@ -19,6 +21,7 @@ const defaultIcon = (
 );
 
 export function ImageUploadZone({ onFile, onFiles, accept = "image/*", multiple, title = "拖拽图片到此处，或", icon }: ImageUploadZoneProps) {
+  const { t } = useI18n();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   return (
@@ -43,7 +46,7 @@ export function ImageUploadZone({ onFile, onFiles, accept = "image/*", multiple,
         onClick={() => fileInputRef.current?.click()}
       >
         {icon ?? defaultIcon}
-        <p className="text-sm text-gray-400 mb-1">{title}</p>
+        <p className="text-sm text-gray-400 mb-1">{t(title)}</p>
         <Button
           variant="secondary"
           className="text-sm cursor-pointer"
@@ -52,8 +55,7 @@ export function ImageUploadZone({ onFile, onFiles, accept = "image/*", multiple,
             fileInputRef.current?.click();
           }}
         >
-          选择图片
-        </Button>
+          {t("选择图片")}</Button>
       </div>
     </>
   );

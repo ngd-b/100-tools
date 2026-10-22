@@ -1,10 +1,12 @@
 "use client";
 
+import { useI18n } from "@/components/LanguageProvider";
 import { useState, useRef, useCallback, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 
 export function AudioVisualizer() {
+  const { t } = useI18n();
   const [isListening, setIsListening] = useState(false);
   const [mode, setMode] = useState<"waveform" | "bars" | "circle">("bars");
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -158,12 +160,12 @@ export function AudioVisualizer() {
   return (
     <div>
       <div className="glass-card mb-6">
-        <Label className="mb-3 block">可视化模式</Label>
+        <Label className="mb-3 block">{t("可视化模式")}</Label>
         <div className="flex gap-2">
           {(["bars", "waveform", "circle"] as const).map((m) => (
             <Button key={m} variant={mode === m ? "gradient" : "secondary"} className="flex-1"
               onClick={() => setMode(m)}>
-              {m === "bars" ? "频谱柱状" : m === "waveform" ? "波形" : "圆形"}
+              {m === "bars" ? t("频谱柱状") : m === "waveform" ? t("波形") : t("圆形")}
             </Button>
           ))}
         </div>
@@ -174,13 +176,12 @@ export function AudioVisualizer() {
         <Button
           className={`mt-4 ${isListening ? "bg-red-500 text-white" : ""}`}
           onClick={isListening ? stopListening : startListening}>
-          {isListening ? "停止监听" : "开始监听"}
+          {isListening ? t("停止监听") : t("开始监听")}
         </Button>
       </div>
 
       <div className="mt-8 rounded-2xl border border-amber-200 bg-amber-50/50 px-5 py-4 text-xs leading-relaxed text-gray-500">
-        💡 需要浏览器麦克风权限。频谱柱状显示频率分布，波形显示振幅变化，圆形为极坐标可视化。
-      </div>
+        {t("💡 需要浏览器麦克风权限。频谱柱状显示频率分布，波形显示振幅变化，圆形为极坐标可视化。")}</div>
     </div>
   );
 }

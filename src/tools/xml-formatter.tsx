@@ -1,5 +1,6 @@
 "use client";
 
+import { useI18n } from "@/components/LanguageProvider";
 import { useState, useCallback } from "react";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
@@ -39,6 +40,7 @@ function minifyXml(xml: string): string {
 }
 
 export function XmlFormatter() {
+  const { t } = useI18n();
   const [input, setInput] = useState("");
   const [output, setOutput] = useState("");
   const [mode, setMode] = useState<"format" | "minify">("format");
@@ -67,22 +69,20 @@ export function XmlFormatter() {
   return (
     <div>
       <div className="glass-card mb-6">
-        <Label className="mb-3 block">模式</Label>
+        <Label className="mb-3 block">{t("模式")}</Label>
         <div className="flex gap-3">
           <Button variant={mode === "format" ? "gradient" : "secondary"} className="flex-1" onClick={() => { setMode("format"); setOutput(""); setError(""); }}>
-            格式化
-          </Button>
+            {t("格式化")}</Button>
           <Button variant={mode === "minify" ? "gradient" : "secondary"} className="flex-1" onClick={() => { setMode("minify"); setOutput(""); setError(""); }}>
-            压缩
-          </Button>
+            {t("压缩")}</Button>
         </div>
       </div>
 
       <div className="glass-card mb-6">
-        <Label className="mb-3 block">输入 XML</Label>
+        <Label className="mb-3 block">{t("输入 XML")}</Label>
         <Textarea
           className="min-h-[150px] w-full resize-y font-mono text-sm"
-          placeholder="粘贴 XML 内容..."
+          placeholder={t("粘贴 XML 内容...")}
           value={input}
           onChange={(e) => setInput(e.target.value)}
         />
@@ -90,21 +90,20 @@ export function XmlFormatter() {
 
       <div className="flex gap-3 mb-6">
         <Button variant="gradient" className="flex-1" onClick={handleConvert}>
-          {mode === "format" ? "格式化" : "压缩"}
+          {mode === "format" ? t("格式化") : t("压缩")}
         </Button>
         <Button variant="secondary" onClick={handleClear}>
-          清空
-        </Button>
+          {t("清空")}</Button>
       </div>
 
-      {error && <p className="mb-6 text-sm text-red-500">{error}</p>}
+      {error && <p className="mb-6 text-sm text-red-500">{t(error)}</p>}
 
       {output && (
         <div className="glass-card">
           <div className="mb-3 flex items-center justify-between">
-            <Label>输出结果</Label>
+            <Label>{t("输出结果")}</Label>
             <button className="copy-btn text-xs text-blue-500 hover:text-blue-600" onClick={handleCopy}>
-              {copied ? "✓" : "复制"}
+              {copied ? "✓" : t("复制")}
             </button>
           </div>
           <pre className="rounded-xl bg-gray-50 p-4 font-mono text-xs leading-relaxed max-h-[400px] overflow-y-auto whitespace-pre-wrap">
@@ -114,8 +113,7 @@ export function XmlFormatter() {
       )}
 
       <div className="mt-8 rounded-2xl border border-amber-200 bg-amber-50/50 px-5 py-4 text-xs leading-relaxed text-gray-500">
-        💡 支持 XML 格式化（美化缩进）和压缩（去除多余空白），适用于配置文件、SOAP 报文等场景。
-      </div>
+        {t("💡 支持 XML 格式化（美化缩进）和压缩（去除多余空白），适用于配置文件、SOAP 报文等场景。")}</div>
     </div>
   );
 }

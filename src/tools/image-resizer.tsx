@@ -1,5 +1,6 @@
 "use client";
 
+import { useI18n } from "@/components/LanguageProvider";
 import { useState, useCallback, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -8,6 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
 export function ImageResizer() {
+  const { t } = useI18n();
   const [imageUrl, setImageUrl] = useState("");
   const [originalWidth, setOriginalWidth] = useState(0);
   const [originalHeight, setOriginalHeight] = useState(0);
@@ -97,48 +99,47 @@ export function ImageResizer() {
       ) : (
         <>
           <div className="glass-card mb-6">
-            <Label className="mb-3 block">原始尺寸</Label>
+            <Label className="mb-3 block">{t("原始尺寸")}</Label>
             <p className="text-sm text-gray-500">{originalWidth} × {originalHeight} px</p>
           </div>
 
           <div className="glass-card mb-6">
-            <Label className="mb-3 block">目标尺寸</Label>
+            <Label className="mb-3 block">{t("目标尺寸")}</Label>
             <div className="flex items-center gap-3 mb-3">
               <div className="flex-1">
-                <span className="text-xs text-gray-500 mb-1 block">宽度 (px)</span>
+                <span className="text-xs text-gray-500 mb-1 block">{t("宽度 (px)")}</span>
                 <Input type="number" className="font-mono text-sm" value={width}
                   onChange={(e) => handleWidthChange(Number(e.target.value))} />
               </div>
               <span className="mt-5 text-gray-400">×</span>
               <div className="flex-1">
-                <span className="text-xs text-gray-500 mb-1 block">高度 (px)</span>
+                <span className="text-xs text-gray-500 mb-1 block">{t("高度 (px)")}</span>
                 <Input type="number" className="font-mono text-sm" value={height}
                   onChange={(e) => handleHeightChange(Number(e.target.value))} />
               </div>
             </div>
             <label className="flex items-center gap-2 text-sm cursor-pointer">
               <Checkbox checked={keepRatio} onCheckedChange={(v) => setKeepRatio(v as boolean)} />
-              锁定宽高比
-            </label>
+              {t("锁定宽高比")}</label>
           </div>
 
           <div className="glass-card mb-6">
-            <Label className="mb-3 block">快速预设</Label>
+            <Label className="mb-3 block">{t("快速预设")}</Label>
             <div className="flex gap-2">
               {presets.map((p) => (
                 <Button key={p.label} variant="secondary" className="flex-1 text-sm"
                   onClick={() => handleWidthChange(Math.round(originalWidth * p.factor))}>
-                  {p.label}
+                  {t(p.label)}
                 </Button>
               ))}
             </div>
           </div>
 
-          <Button variant="gradient" className="w-full mb-6" onClick={handleResize}>调整尺寸</Button>
+          <Button variant="gradient" className="w-full mb-6" onClick={handleResize}>{t("调整尺寸")}</Button>
 
           {resultUrl && (
             <div className="glass-card mb-6">
-              <Label className="mb-3 block">调整结果</Label>
+              <Label className="mb-3 block">{t("调整结果")}</Label>
               <img src={resultUrl} alt="resized" className="max-h-[200px] w-full rounded-xl object-contain bg-gray-50" />
               <p className="mt-2 text-xs text-gray-500">
                 {width} × {height} px · {formatSize(resultSize)}
@@ -147,19 +148,17 @@ export function ImageResizer() {
           )}
 
           <div className="flex gap-3">
-            <Button variant="gradient" className="flex-1" onClick={handleDownload} disabled={!resultUrl}>下载</Button>
+            <Button variant="gradient" className="flex-1" onClick={handleDownload} disabled={!resultUrl}>{t("下载")}</Button>
             <Button variant="secondary" onClick={() => {
               setImageUrl(""); setResultUrl(""); setOriginalWidth(0); setOriginalHeight(0);
             }}>
-              更换图片
-            </Button>
+              {t("更换图片")}</Button>
           </div>
         </>
       )}
 
       <div className="mt-8 rounded-2xl border border-amber-200 bg-amber-50/50 px-5 py-4 text-xs leading-relaxed text-gray-500">
-        💡 锁定宽高比后，修改宽度会自动计算对应高度，防止图片变形。
-      </div>
+        {t("💡 锁定宽高比后，修改宽度会自动计算对应高度，防止图片变形。")}</div>
     </div>
   );
 }

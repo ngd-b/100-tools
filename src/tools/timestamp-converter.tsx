@@ -1,5 +1,6 @@
 "use client";
 
+import { useI18n } from "@/components/LanguageProvider";
 import { useState, useEffect, useCallback, useMemo } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -12,6 +13,7 @@ function formatDate(d: Date) {
 }
 
 export function TimestampConverter() {
+  const { t } = useI18n();
   const [now, setNow] = useState(Date.now());
   const [inputTs, setInputTs] = useState(Math.floor(now / 1000).toString());
   const [inputDate, setInputDate] = useState("");
@@ -64,18 +66,18 @@ export function TimestampConverter() {
   return (
     <div>
       <div className="glass-card mb-6">
-        <Label className="mb-3 block">当前时间</Label>
+        <Label className="mb-3 block">{t("当前时间")}</Label>
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
           <div className="value-row">
-            <span className="text-xs text-gray-500">秒级</span>
+            <span className="text-xs text-gray-500">{t("秒级")}</span>
             <span className="font-mono text-sm font-semibold">{currentInfo.s}</span>
           </div>
           <div className="value-row">
-            <span className="text-xs text-gray-500">毫秒</span>
+            <span className="text-xs text-gray-500">{t("毫秒")}</span>
             <span className="font-mono text-sm font-semibold">{currentInfo.ms}</span>
           </div>
           <div className="value-row">
-            <span className="text-xs text-gray-500">本地</span>
+            <span className="text-xs text-gray-500">{t("本地")}</span>
             <span className="font-mono text-sm">{currentInfo.date}</span>
           </div>
           <div className="value-row">
@@ -86,26 +88,26 @@ export function TimestampConverter() {
       </div>
 
       <div className="glass-card mb-6">
-        <Label className="mb-3 block">时间戳 → 日期</Label>
+        <Label className="mb-3 block">{t("时间戳 → 日期")}</Label>
         <div className="flex gap-3">
           <Input
             className="flex-1 font-mono text-sm"
-            placeholder="输入时间戳（秒或毫秒）"
+            placeholder={t("输入时间戳（秒或毫秒）")}
             value={inputTs}
             onChange={(e) => setInputTs(e.target.value)}
           />
-          <Button variant="gradient" onClick={handleTsToDate}>转换</Button>
+          <Button variant="gradient" onClick={handleTsToDate}>{t("转换")}</Button>
         </div>
         {convertedDate && (
           <div className="value-row mt-3">
-            <span className="text-xs text-gray-500">结果</span>
+            <span className="text-xs text-gray-500">{t("结果")}</span>
             <span className="font-mono text-sm">{convertedDate}</span>
           </div>
         )}
       </div>
 
       <div className="glass-card mb-6">
-        <Label className="mb-3 block">日期 → 时间戳</Label>
+        <Label className="mb-3 block">{t("日期 → 时间戳")}</Label>
         <div className="flex gap-3">
           <Input
             className="flex-1"
@@ -113,27 +115,26 @@ export function TimestampConverter() {
             value={inputDate}
             onChange={(e) => setInputDate(e.target.value)}
           />
-          <Button variant="gradient" onClick={handleDateToTs}>转换</Button>
+          <Button variant="gradient" onClick={handleDateToTs}>{t("转换")}</Button>
         </div>
         {convertedTs && (
           <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2">
             <div className="value-row">
-              <span className="text-xs text-gray-500">秒级</span>
+              <span className="text-xs text-gray-500">{t("秒级")}</span>
               <span className="font-mono text-sm">{Math.floor(Number(convertedTs) / 1000)}</span>
             </div>
             <div className="value-row">
-              <span className="text-xs text-gray-500">毫秒</span>
+              <span className="text-xs text-gray-500">{t("毫秒")}</span>
               <span className="font-mono text-sm">{convertedTs}</span>
             </div>
           </div>
         )}
       </div>
 
-      {error && <p className="mb-6 text-sm text-red-500">{error}</p>}
+      {error && <p className="mb-6 text-sm text-red-500">{t(error)}</p>}
 
       <div className="mt-8 rounded-2xl border border-amber-200 bg-amber-50/50 px-5 py-4 text-xs leading-relaxed text-gray-500">
-        💡 顶部时钟每秒自动更新。支持秒级和毫秒级时间戳自动识别。
-      </div>
+        {t("💡 顶部时钟每秒自动更新。支持秒级和毫秒级时间戳自动识别。")}</div>
     </div>
   );
 }

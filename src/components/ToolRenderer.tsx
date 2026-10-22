@@ -1,5 +1,7 @@
 "use client";
 
+import { useI18n } from "@/components/LanguageProvider";
+
 import dynamic from "next/dynamic";
 import type { ComponentType } from "react";
 import { ToolLoading } from "@/components/ToolLoading";
@@ -63,6 +65,7 @@ export const toolComponents: Record<string, ComponentType> = {
 };
 
 export function ToolRenderer({ id }: { id: string }) {
+  const { t } = useI18n();
   const Component = toolComponents[id];
-  return Component ? <Component key={id} /> : <p role="alert">工具暂时无法加载，请返回首页重试。</p>;
+  return Component ? <Component key={id} /> : <p role="alert">{t("工具暂时无法加载，请返回首页重试。")}</p>;
 }

@@ -1,5 +1,6 @@
 "use client";
 
+import { useI18n } from "@/components/LanguageProvider";
 import { useState, useRef, useCallback } from "react";
 import { createMp3Encoder, createOggEncoder } from "@arseneyr/wasm-media-encoders";
 import { Encoder } from "@evan/wasm/target/opus/deno.js";
@@ -339,6 +340,7 @@ async function encodeAudio(buffer: AudioBuffer, format: OutputFormat, bitDepth: 
 // ---- Main component ----
 
 export function AudioTools() {
+  const { t } = useI18n();
   const [mode, setMode] = useState<SourceMode>("record");
 
   // Recording state
@@ -619,8 +621,7 @@ export function AudioTools() {
               : "bg-gray-100 text-gray-500 hover:bg-gray-200"
           }`}
         >
-          🎙️ 录制
-        </button>
+          {t("🎙️ 录制")}</button>
         <button
           onClick={() => { setMode("upload"); clearAll(); setRecordError(""); setUploadError(""); }}
           className={`flex-1 rounded-xl px-4 py-2.5 text-sm font-medium transition-all ${
@@ -629,8 +630,7 @@ export function AudioTools() {
               : "bg-gray-100 text-gray-500 hover:bg-gray-200"
           }`}
         >
-          📁 上传文件
-        </button>
+          {t("📁 上传文件")}</button>
       </div>
 
       {/* ---- Source Input ---- */}
@@ -638,7 +638,7 @@ export function AudioTools() {
         <>
           {mode === "record" ? (
             <div className="glass-card mb-6 text-center">
-              <Label className="mb-6 block">录音</Label>
+              <Label className="mb-6 block">{t("录音")}</Label>
 
               <div className="flex items-center justify-center mb-6">
                 <div className={`h-20 w-20 rounded-full flex items-center justify-center ${isRecording ? "bg-red-500 animate-pulse" : "bg-gray-100"}`}>
@@ -659,9 +659,9 @@ export function AudioTools() {
               </p>
 
               {!isRecording ? (
-                <Button variant="gradient" className="w-40" onClick={startRecording}>开始录音</Button>
+                <Button variant="gradient" className="w-40" onClick={startRecording}>{t("开始录音")}</Button>
               ) : (
-                <Button variant="gradient" className="w-40" onClick={stopRecording}>停止录音</Button>
+                <Button variant="gradient" className="w-40" onClick={stopRecording}>{t("停止录音")}</Button>
               )}
             </div>
           ) : (
@@ -674,18 +674,17 @@ export function AudioTools() {
                 <svg className="mb-4 h-12 w-12 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M9 9l10.5-3m0 6.553v3.75a2.25 2.25 0 01-1.632 2.163l-1.32.377a1.803 1.803 0 11-.99-3.467l2.31-.66a2.25 2.25 0 001.632-2.163zm2 1.473V10m-6 6v-2m2.25-5.25L12 3m0 0L7.5 8.75" />
                 </svg>
-                <p className="text-sm text-gray-400 mb-1">拖拽音频文件到此处，或</p>
+                <p className="text-sm text-gray-400 mb-1">{t("拖拽音频文件到此处，或")}</p>
                 <Button variant="secondary" className="text-sm cursor-pointer">
-                  选择文件
-                  <input type="file" accept="audio/*" style={{ position: "absolute", inset: 0, opacity: 0, cursor: "pointer" }} onChange={handleFileInput} />
+                  {t("选择文件")}<input type="file" accept="audio/*" style={{ position: "absolute", inset: 0, opacity: 0, cursor: "pointer" }} onChange={handleFileInput} />
                 </Button>
-                <p className="mt-3 text-xs text-gray-300">支持 MP3 / WAV / OGG / WebM / M4A / FLAC</p>
+                <p className="mt-3 text-xs text-gray-300">{t("支持 MP3 / WAV / OGG / WebM / M4A / FLAC")}</p>
               </div>
             </div>
           )}
 
-          {recordError && <p className="mb-6 text-sm text-red-500 text-center">{recordError}</p>}
-          {uploadError && <p className="mb-6 text-sm text-red-500 text-center">{uploadError}</p>}
+          {recordError && <p className="mb-6 text-sm text-red-500 text-center">{t(recordError)}</p>}
+          {uploadError && <p className="mb-6 text-sm text-red-500 text-center">{t(uploadError)}</p>}
         </>
       )}
 
@@ -699,35 +698,35 @@ export function AudioTools() {
                   {mode === "record" ? "🎙️" : "♪"}
                 </div>
                 <div className="min-w-0">
-                  <p className="text-sm font-semibold truncate">{sourceInfo.name}</p>
+                  <p className="text-sm font-semibold truncate">{t(sourceInfo.name)}</p>
                   <p className="text-xs text-gray-400">{formatFileSize(sourceInfo.size)}</p>
                 </div>
               </div>
               <Button variant="outline" size="sm" onClick={clearAll}>
-                {mode === "record" ? "重新录制" : "更换"}
+                {mode === "record" ? t("重新录制") : t("更换")}
               </Button>
             </div>
             <div className="mt-3 grid grid-cols-2 gap-2 text-xs sm:grid-cols-4">
               <div className="rounded-lg bg-gray-50 px-3 py-2">
-                <span className="text-gray-400">时长</span>
+                <span className="text-gray-400">{t("时长")}</span>
                 <p className="font-mono font-semibold">{sourceInfo.duration > 0 ? formatTime(sourceInfo.duration) : "--"}</p>
               </div>
               <div className="rounded-lg bg-gray-50 px-3 py-2">
-                <span className="text-gray-400">采样率</span>
+                <span className="text-gray-400">{t("采样率")}</span>
                 <p className="font-mono font-semibold">{sourceInfo.sampleRate > 0 ? `${sourceInfo.sampleRate} Hz` : "--"}</p>
               </div>
               <div className="rounded-lg bg-gray-50 px-3 py-2">
-                <span className="text-gray-400">声道</span>
-                <p className="font-mono font-semibold">{sourceInfo.channels === 1 ? "单声道" : sourceInfo.channels === 2 ? "立体声" : sourceInfo.channels > 0 ? `${sourceInfo.channels}ch` : "--"}</p>
+                <span className="text-gray-400">{t("声道")}</span>
+                <p className="font-mono font-semibold">{sourceInfo.channels === 1 ? t("单声道") : sourceInfo.channels === 2 ? t("立体声") : sourceInfo.channels > 0 ? `${sourceInfo.channels}ch` : "--"}</p>
               </div>
               <div className="rounded-lg bg-gray-50 px-3 py-2">
-                <span className="text-gray-400">来源</span>
-                <p className="font-mono font-semibold">{mode === "record" ? "录制" : sourceInfo.name.split(".").pop()?.toUpperCase() || "未知"}</p>
+                <span className="text-gray-400">{t("来源")}</span>
+                <p className="font-mono font-semibold">{mode === "record" ? t("录制") : sourceInfo.name.split(".").pop()?.toUpperCase() || t("未知")}</p>
               </div>
             </div>
             {previewUrl && (
               <div className="mt-3">
-                <Label className="text-xs text-gray-500 mb-2 block">预览</Label>
+                <Label className="text-xs text-gray-500 mb-2 block">{t("预览")}</Label>
                 <audio controls src={previewUrl} className="w-full" />
               </div>
             )}
@@ -735,14 +734,14 @@ export function AudioTools() {
 
           {recordError && (
             <div className="mb-6 rounded-2xl border border-amber-200 bg-amber-50/50 px-5 py-4">
-              <p className="text-sm text-amber-700 mb-3">{recordError}</p>
+              <p className="text-sm text-amber-700 mb-3">{t(recordError)}</p>
               {previewUrl && (
                 <Button variant="secondary" size="sm" onClick={() => {
                   const a = document.createElement("a");
                   a.href = previewUrl;
                   a.download = `recording_${Date.now()}.webm`;
                   a.click();
-                }}>下载 WebM 原文件</Button>
+                }}>{t("下载 WebM 原文件")}</Button>
               )}
             </div>
           )}
@@ -751,7 +750,7 @@ export function AudioTools() {
           {processing && !audioBuffer && (
             <div className="glass-card mb-6 text-center py-8">
               <div className="mx-auto mb-3 h-8 w-8 animate-spin rounded-full border-2 border-purple-500 border-t-transparent" />
-              <p className="text-sm text-gray-500">处理中...</p>
+              <p className="text-sm text-gray-500">{t("处理中...")}</p>
             </div>
           )}
 
@@ -759,15 +758,15 @@ export function AudioTools() {
           {audioBuffer && (
             <>
               <div className="glass-card mb-6">
-                <Label className="mb-4 block">输出设置</Label>
+                <Label className="mb-4 block">{t("输出设置")}</Label>
 
                 <div className="mb-4">
-                  <span className="text-xs text-gray-500 mb-2 block">输出格式</span>
+                  <span className="text-xs text-gray-500 mb-2 block">{t("输出格式")}</span>
                   <div className="flex gap-2">
                     {FORMAT_CONFIG.map((f) => (
                       <Button key={f.value} variant={format === f.value ? "gradient" : "secondary"} className="flex-1 text-sm"
                         onClick={() => setFormat(f.value)}>
-                        {f.label}
+                        {t(f.label)}
                       </Button>
                     ))}
                   </div>
@@ -775,20 +774,20 @@ export function AudioTools() {
 
                 <div className="grid grid-cols-1 gap-4 mb-4 sm:grid-cols-2">
                   <div>
-                    <Label className="text-xs text-gray-500">采样率</Label>
+                    <Label className="text-xs text-gray-500">{t("采样率")}</Label>
                     <Select value={sampleRate} onValueChange={(v) => { if (v) setSampleRate(v); }}>
                       <SelectTrigger className="mt-2"><SelectValue /></SelectTrigger>
                       <SelectContent>
-                        {SAMPLE_RATES.map((r) => <SelectItem key={r.value} value={r.value}>{r.label}</SelectItem>)}
+                        {SAMPLE_RATES.map((r) => <SelectItem key={r.value} value={r.value}>{t(r.label)}</SelectItem>)}
                       </SelectContent>
                     </Select>
                   </div>
                   <div>
-                    <Label className="text-xs text-gray-500">声道数</Label>
+                    <Label className="text-xs text-gray-500">{t("声道数")}</Label>
                     <Select value={channels} onValueChange={(v) => { if (v) setChannels(v); }}>
                       <SelectTrigger className="mt-2"><SelectValue /></SelectTrigger>
                       <SelectContent>
-                        {CHANNEL_OPTIONS.map((c) => <SelectItem key={c.value} value={c.value}>{c.label}</SelectItem>)}
+                        {CHANNEL_OPTIONS.map((c) => <SelectItem key={c.value} value={c.value}>{t(c.label)}</SelectItem>)}
                       </SelectContent>
                     </Select>
                   </div>
@@ -796,11 +795,11 @@ export function AudioTools() {
 
                 {format === "wav" && (
                   <div className="mb-4">
-                    <Label className="text-xs text-gray-500">位深度</Label>
+                    <Label className="text-xs text-gray-500">{t("位深度")}</Label>
                     <Select value={bitDepth} onValueChange={(v) => { if (v) setBitDepth(v); }}>
                       <SelectTrigger className="mt-2"><SelectValue /></SelectTrigger>
                       <SelectContent>
-                        {BIT_DEPTHS.map((b) => <SelectItem key={b.value} value={b.value}>{b.label}</SelectItem>)}
+                        {BIT_DEPTHS.map((b) => <SelectItem key={b.value} value={b.value}>{t(b.label)}</SelectItem>)}
                       </SelectContent>
                     </Select>
                   </div>
@@ -808,11 +807,11 @@ export function AudioTools() {
 
                 {(format === "webm" || format === "ogg" || format === "mp3") && (
                   <div className="mb-4">
-                    <Label className="text-xs text-gray-500">比特率</Label>
+                    <Label className="text-xs text-gray-500">{t("比特率")}</Label>
                     <Select value={bitRate} onValueChange={(v) => { if (v) setBitRate(v); }}>
                       <SelectTrigger className="mt-2"><SelectValue /></SelectTrigger>
                       <SelectContent>
-                        {BIT_RATES.map((b) => <SelectItem key={b.value} value={b.value}>{b.label}</SelectItem>)}
+                        {BIT_RATES.map((b) => <SelectItem key={b.value} value={b.value}>{t(b.label)}</SelectItem>)}
                       </SelectContent>
                     </Select>
                   </div>
@@ -823,34 +822,34 @@ export function AudioTools() {
               {converting && (
                 <div className="mb-4 text-center">
                   <div className="mx-auto mb-2 h-6 w-6 animate-spin rounded-full border-2 border-purple-500 border-t-transparent" />
-                  <p className="text-xs text-gray-400">正在编码，请稍候...</p>
+                  <p className="text-xs text-gray-400">{t("正在编码，请稍候...")}</p>
                 </div>
               )}
               <Button variant="gradient" className="w-full mb-6" onClick={handleConvert} disabled={converting}>
-                {converting ? "转换中..." : "转换并导出"}
+                {converting ? t("转换中...") : t("转换并导出")}
               </Button>
 
-              {convertError && <p className="mb-6 text-sm text-red-500 text-center">{convertError}</p>}
+              {convertError && <p className="mb-6 text-sm text-red-500 text-center">{t(convertError)}</p>}
 
               {/* ---- Result ---- */}
               {resultUrl && (
                 <div className="glass-card">
-                  <Label className="mb-3 block">导出结果</Label>
+                  <Label className="mb-3 block">{t("导出结果")}</Label>
                   <audio controls src={resultUrl} className="w-full mb-3" />
                   <div className="flex items-center justify-between text-sm mb-3">
                     <span className="text-gray-400">
                       {formatFileSize(originalSize)} → {formatFileSize(resultSize)}
                       {resultSize > 0 && (
                         <span className={resultSize < originalSize ? "text-green-600" : "text-orange-500"}>
-                          {resultSize < originalSize ? ` 减少 ${((1 - resultSize / originalSize) * 100).toFixed(1)}%` : ` 增加 ${((resultSize / originalSize - 1) * 100).toFixed(1)}%`}
+                          {resultSize < originalSize ? t(" 减少 {0}%", [((1 - resultSize / originalSize) * 100).toFixed(1)]) : t(" 增加 {0}%", [((resultSize / originalSize - 1) * 100).toFixed(1)])}
                         </span>
                       )}
                     </span>
                     <span className="text-xs text-gray-400 uppercase">{format}</span>
                   </div>
                   <div className="flex gap-3">
-                    <Button variant="gradient" className="flex-1" onClick={handleDownload}>下载</Button>
-                    <Button variant="secondary" onClick={handleConvert}>再次转换</Button>
+                    <Button variant="gradient" className="flex-1" onClick={handleDownload}>{t("下载")}</Button>
+                    <Button variant="secondary" onClick={handleConvert}>{t("再次转换")}</Button>
                   </div>
                 </div>
               )}

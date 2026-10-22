@@ -1,11 +1,13 @@
 "use client";
 
+import { useI18n } from "@/components/LanguageProvider";
 import { useState } from "react";
 import { parseColor, hexToRgb, rgbToHex, rgbToHsl, hslToRgb, generateComplementaryColor, generateHarmony } from "@/utils/color";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 
 export function ColorTools() {
+  const { t } = useI18n();
   const [color, setColor] = useState("#3b82f6");
   const rgb = hexToRgb(color);
   const hsl = rgb ? rgbToHsl(rgb.r, rgb.g, rgb.b) : null;
@@ -27,7 +29,7 @@ export function ColorTools() {
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-[1fr_1.2fr]">
         {/* Picker column */}
         <div className="glass-card">
-          <Label className="mb-3 block">选择颜色</Label>
+          <Label className="mb-3 block">{t("选择颜色")}</Label>
           <div className="flex items-center gap-3">
             <label className="h-14 w-14 shrink-0 cursor-pointer overflow-hidden rounded-xl border border-gray-200 shadow-inner">
               <input
@@ -88,7 +90,7 @@ export function ColorTools() {
 
       {/* ===== Row 3: Palette Strip ===== */}
       <div className="glass-card">
-        <Label className="mb-3 block">推荐配色</Label>
+        <Label className="mb-3 block">{t("推荐配色")}</Label>
         <div className="flex h-14 gap-1.5 overflow-hidden rounded-xl">
           {palette.map((c, i) => (
             <SwatchButton key={i} color={c} />
@@ -97,17 +99,17 @@ export function ColorTools() {
       </div>
 
       {/* ===== Row 4: Color Harmonies ===== */}
-      <HarmonySection label="互补色" colors={complementary} />
-      <HarmonySection label="邻近色" colors={analogous} />
+      <HarmonySection label={t("互补色")} colors={complementary} />
+      <HarmonySection label={t("邻近色")} colors={analogous} />
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-        <HarmonySection label="三角色" colors={triadic} />
-        <HarmonySection label="分裂互补" colors={split} />
+        <HarmonySection label={t("三角色")} colors={triadic} />
+        <HarmonySection label={t("分裂互补")} colors={split} />
       </div>
 
       {/* ===== Row 5: Lightness + Saturation ===== */}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div className="glass-card">
-          <Label className="mb-3 block">明度</Label>
+          <Label className="mb-3 block">{t("明度")}</Label>
           <div className="flex h-10 gap-0.5 overflow-hidden rounded-lg">
             {[3, 10, 20, 35, 50, 65, 80, 90, 97].map((l, i) => {
               const hex = hslToHex(pHsl.h, pHsl.s, l);
@@ -118,7 +120,7 @@ export function ColorTools() {
           </div>
         </div>
         <div className="glass-card">
-          <Label className="mb-3 block">饱和度</Label>
+          <Label className="mb-3 block">{t("饱和度")}</Label>
           <div className="flex h-10 gap-0.5 overflow-hidden rounded-lg">
             {satSteps.map((s, i) => {
               const hex = hslToHex(pHsl.h, s, pHsl.l);
@@ -162,6 +164,7 @@ function hslToHex(h: number, s: number, l: number): string {
 /* ---- Components ---- */
 
 function SwatchCard({ label, value, preview }: { label: string; value: string; preview?: string }) {
+  const { t } = useI18n();
   const [copied, setCopied] = useState(false);
 
   function handleCopy() {
@@ -180,7 +183,7 @@ function SwatchCard({ label, value, preview }: { label: string; value: string; p
       )}
       <div className="min-w-0 flex-1">
         <div className="text-[10px] font-bold tracking-widest text-gray-400 uppercase">
-          {label}
+          {t(label)}
         </div>
         <div className="truncate font-mono text-xs font-medium text-gray-700">
           {value}
@@ -190,13 +193,14 @@ function SwatchCard({ label, value, preview }: { label: string; value: string; p
         onClick={handleCopy}
         className="shrink-0 rounded-md px-2 py-1 text-xs font-medium text-blue-500 transition-colors hover:bg-blue-50"
       >
-        {copied ? "✓" : "复制"}
+        {copied ? "✓" : t("复制")}
       </button>
     </div>
   );
 }
 
 function SwatchButton({ color }: { color: string }) {
+  const { t } = useI18n();
   const [copied, setCopied] = useState(false);
 
   function handleCopy() {
@@ -210,7 +214,7 @@ function SwatchButton({ color }: { color: string }) {
       onClick={handleCopy}
       className="group relative flex-1 overflow-hidden rounded-lg transition-transform hover:scale-105"
       style={{ backgroundColor: color }}
-      title={`${color} — 点击复制`}
+      title={t("{0} — 点击复制", [color])}
     >
       <span
         className="absolute inset-x-0 bottom-1 mx-auto truncate text-[9px] font-medium opacity-0 transition-opacity group-hover:opacity-70"
@@ -228,12 +232,13 @@ function SwatchButton({ color }: { color: string }) {
 }
 
 function HarmonySection({ label, colors }: { label: string; colors: string[] }) {
+  const { t } = useI18n();
   if (!colors.length) return null;
 
   return (
     <div className="glass-card">
       <div className="mb-3 flex items-center justify-between">
-        <Label>{label}</Label>
+        <Label>{t(label)}</Label>
       </div>
       <div className="flex h-12 gap-1.5 overflow-hidden rounded-lg">
         {colors.map((c, i) => (
@@ -245,6 +250,7 @@ function HarmonySection({ label, colors }: { label: string; colors: string[] }) 
 }
 
 function SwatchBlock({ color, tooltip }: { color: string; tooltip: string }) {
+  const { t } = useI18n();
   const [copied, setCopied] = useState(false);
 
   function handleCopy() {
@@ -258,7 +264,7 @@ function SwatchBlock({ color, tooltip }: { color: string; tooltip: string }) {
       onClick={handleCopy}
       className="group relative flex-1 cursor-pointer first:rounded-l-lg last:rounded-r-lg transition-transform hover:scale-105"
       style={{ backgroundColor: color }}
-      title={`${tooltip} — ${color}`}
+      title={t(`${tooltip} — ${color}`)}
     >
       {copied && (
         <span className="absolute inset-0 flex items-center justify-center text-xs font-bold text-white drop-shadow">

@@ -2,6 +2,8 @@ import type { Metadata, MetadataRoute } from "next";
 import type { Tool } from "@/types/tools";
 import type { SiteConfig } from "./site-config";
 
+import { localePath, locales, type Locale } from "./i18n/locale.ts";
+
 type PageDetails = { title: string; description: string; path: string };
 type Category = { id: string; name: string };
 
@@ -17,21 +19,22 @@ export function absoluteUrl(path: string, site: SiteConfig): string | undefined 
   return url.pathname === "/" && !url.search && !url.hash ? url.origin : url.href;
 }
 
-export function createPageMetadata(page: PageDetails, site: SiteConfig): Metadata {
-  const url = absoluteUrl(page.path, site);
+export function createPageMetadata(page: PageDetails, site: SiteConfig, locale: Locale = "zh"): Metadata {
+  const url = absoluteUrl(localePath(page.path, locale), site);
   const image = absoluteUrl("/opengraph-image", site);
   return {
     title: page.title,
     description: page.description,
-    alternates: url ? { canonical: url } : undefined,
+    alternates: url ? { canonical: url, languages: Object.fromEntries(locales.map((language) => [language === "zh" ? "zh-CN" : "en", absoluteUrl(localePath(page.path, language), site)!])) } : undefined,
     openGraph: {
       type: "website",
       title: `${page.title} — ${site.name}`,
       description: page.description,
       siteName: site.name,
-      locale: "zh_CN",
+      locale: locale === "zh" ? "zh_CN" : "en_US",
+      alternateLocale: locale === "zh" ? ["en_US"] : ["zh_CN"],
       url,
-      images: image ? [{ url: image, width: 1200, height: 630, alt: "100-tools 免费在线工具合集" }] : undefined,
+      images: image ? [{ url: image, width: 1200, height: 630, alt: locale === "zh" ? "100-tools 免费在线工具合集" : "100-tools free online tools" }] : undefined,
     },
     twitter: {
       card: "summary_large_image",
@@ -45,7 +48,10 @@ export function createPageMetadata(page: PageDetails, site: SiteConfig): Metadat
 export function createSitemap(site: SiteConfig, tools: Tool[], categories: Category[]): MetadataRoute.Sitemap {
   if (!site.url || !site.indexable) return [];
   const paths = ["/", ...categories.map((category) => `/category/${category.id}`), ...tools.map((tool) => tool.path)];
-  return [...new Set(paths)].map((path) => ({ url: absoluteUrl(path, site)! }));
+  return locales.flatMap((locale) => [...new Set(paths)].map((path) => ({
+    url: absoluteUrl(localePath(path, locale), site)!,
+    alternates: { languages: Object.fromEntries(locales.map((language) => [language === "zh" ? "zh-CN" : "en", absoluteUrl(localePath(path, language), site)!])) },
+  })));
 }
 
 export function createRobots(site: SiteConfig): MetadataRoute.Robots {
@@ -59,25 +65,25 @@ export function serializeJsonLd(value: unknown): string {
   return JSON.stringify(value).replace(/</g, "\\u003c").replace(/\u2028/g, "\\u2028").replace(/\u2029/g, "\\u2029");
 }
 
-export function createCollectionSchema(page: PageDetails, items: Tool[], site: SiteConfig) {
+export function createCollectionSchema(page: PageDetails, items: Tool[], site: SiteConfig, locale: Locale = "zh") {
   if (!site.url) return null;
   return {
     "@context": "https://schema.org",
     "@type": "CollectionPage",
     name: page.title,
     description: page.description,
-    url: absoluteUrl(page.path, site),
-    inLanguage: "zh-CN",
-    isPartOf: { "@type": "WebSite", "@id": `${site.url}/#website`, name: site.name, url: absoluteUrl("/", site) },
+    url: absoluteUrl(localePath(page.path, locale), site),
+    inLanguage: locale === "zh" ? "zh-CN" : "en",
+    isPartOf: { "@type": "WebSite", "@id": `${site.url}/#website`, name: site.name, url: absoluteUrl(localePath("/", locale), site) },
     mainEntity: {
       "@type": "ItemList",
       numberOfItems: items.length,
-      itemListElement: items.map((tool, index) => ({ "@type": "ListItem", position: index + 1, name: tool.name, url: absoluteUrl(tool.path, site) })),
+      itemListElement: items.map((tool, index) => ({ "@type": "ListItem", position: index + 1, name: tool.name, url: absoluteUrl(localePath(tool.path, locale), site) })),
     },
   };
 }
 
-export function createToolSchema(tool: Tool, category: Category, description: string, site: SiteConfig) {
+export function createToolSchema(tool: Tool, category: Category, description: string, site: SiteConfig, locale: Locale = "zh") {
   if (!site.url) return null;
   const applicationCategories: Record<string, string> = { color: "DesignApplication", image: "MultimediaApplication", audio: "MultimediaApplication", text: "UtilitiesApplication", dev: "DeveloperApplication", daily: "ProductivityApplication" };
   return {
@@ -85,24 +91,24 @@ export function createToolSchema(tool: Tool, category: Category, description: st
     "@graph": [
       {
         "@type": "WebApplication",
-        "@id": `${absoluteUrl(tool.path, site)}#application`,
+        "@id": `${absoluteUrl(localePath(tool.path, locale), site)}#application`,
         name: tool.name,
         alternateName: tool.nameEn,
         description,
-        url: absoluteUrl(tool.path, site),
+        url: absoluteUrl(localePath(tool.path, locale), site),
         applicationCategory: applicationCategories[tool.category] ?? "UtilitiesApplication",
         operatingSystem: "Any",
         browserRequirements: "Requires JavaScript and a modern web browser",
-        inLanguage: "zh-CN",
+        inLanguage: locale === "zh" ? "zh-CN" : "en",
         isAccessibleForFree: true,
         offers: { "@type": "Offer", price: "0", priceCurrency: "CNY" },
       },
       {
         "@type": "BreadcrumbList",
         itemListElement: [
-          { "@type": "ListItem", position: 1, name: "全部工具", item: absoluteUrl("/", site) },
-          { "@type": "ListItem", position: 2, name: category.name, item: absoluteUrl(`/category/${category.id}`, site) },
-          { "@type": "ListItem", position: 3, name: tool.name, item: absoluteUrl(tool.path, site) },
+          { "@type": "ListItem", position: 1, name: locale === "zh" ? "全部工具" : "All tools", item: absoluteUrl(localePath("/", locale), site) },
+          { "@type": "ListItem", position: 2, name: category.name, item: absoluteUrl(localePath(`/category/${category.id}`, locale), site) },
+          { "@type": "ListItem", position: 3, name: tool.name, item: absoluteUrl(localePath(tool.path, locale), site) },
         ],
       },
     ],

@@ -1,5 +1,6 @@
 "use client";
 
+import { useI18n } from "@/components/LanguageProvider";
 import { useState, useCallback, useRef, useEffect } from "react";
 import qrcode from "qrcode-generator";
 import { Button } from "@/components/ui/button";
@@ -8,6 +9,7 @@ import { Label } from "@/components/ui/label";
 
 // --- Tool Component ---
 export function QrCodeGenerator() {
+  const { t } = useI18n();
   const [text, setText] = useState("https://github.com/ngd-b/100-tools");
   const [qrUrl, setQrUrl] = useState("");
   const [error, setError] = useState("");
@@ -65,32 +67,31 @@ export function QrCodeGenerator() {
       <canvas ref={canvasRef} className="hidden" />
 
       <div className="glass-card mb-6">
-        <Label>输入内容</Label>
+        <Label>{t("输入内容")}</Label>
         <Input
           className="w-full mb-3"
           value={text}
           onChange={(e) => setText(e.target.value)}
           onKeyDown={(e) => { if (e.key === "Enter") generate(); }}
-          placeholder="输入网址、文本或其他内容..."
+          placeholder={t("输入网址、文本或其他内容...")}
         />
         <div className="flex justify-between text-xs text-gray-400 mb-4">
-          <span>字符数: {text.length}</span>
-          <span>EC Level M（中等纠错）</span>
+          <span>{t("字符数: ")}{text.length}</span>
+          <span>{t("EC Level M（中等纠错）")}</span>
         </div>
         <Button variant="gradient" className="w-full" onClick={generate}>
-          生成二维码
-        </Button>
+          {t("生成二维码")}</Button>
       </div>
 
       {error && (
         <div className="glass-card mb-6 text-center text-sm text-red-500">
-          {error}
+          {t(error)}
         </div>
       )}
 
       {qrUrl && (
         <div className="glass-card mb-6">
-          <Label className="mb-4 block">二维码预览</Label>
+          <Label className="mb-4 block">{t("二维码预览")}</Label>
           <div className="flex flex-col items-center gap-4">
             <img
               src={qrUrl}
@@ -100,14 +101,12 @@ export function QrCodeGenerator() {
             />
           </div>
           <Button variant="gradient" className="w-full mt-4" onClick={handleDownload}>
-            下载 PNG
-          </Button>
+            {t("下载 PNG")}</Button>
         </div>
       )}
 
       <div className="mt-8 rounded-2xl border border-amber-200 bg-amber-50/50 px-5 py-4 text-xs leading-relaxed text-gray-500">
-        💡 使用 qrcode-generator 库，支持自动选择版本、EC Level M 纠错，本地生成无需外部 API。
-      </div>
+        {t("💡 使用 qrcode-generator 库，支持自动选择版本、EC Level M 纠错，本地生成无需外部 API。")}</div>
     </div>
   );
 }

@@ -1,5 +1,6 @@
 "use client";
 
+import { useI18n } from "@/components/LanguageProvider";
 import { useState, useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
@@ -26,6 +27,7 @@ function contrastRatio(l1: number, l2: number): number {
 }
 
 export function ContrastChecker() {
+  const { t } = useI18n();
   const [fg, setFg] = useState("#111827");
   const [bg, setBg] = useState("#ffffff");
   const [size, setSize] = useState<"normal" | "large">("normal");
@@ -57,7 +59,7 @@ export function ContrastChecker() {
   return (
     <div>
       <div className="glass-card mb-6">
-        <Label className="mb-3 block">前景色</Label>
+        <Label className="mb-3 block">{t("前景色")}</Label>
         <div className="flex items-center gap-3">
           <input type="color" value={fg} onChange={(e) => setFg(e.target.value)}
             className="h-12 w-12 cursor-pointer rounded-lg border-0 p-0" />
@@ -66,7 +68,7 @@ export function ContrastChecker() {
       </div>
 
       <div className="glass-card mb-6">
-        <Label className="mb-3 block">背景色</Label>
+        <Label className="mb-3 block">{t("背景色")}</Label>
         <div className="flex items-center gap-3">
           <input type="color" value={bg} onChange={(e) => setBg(e.target.value)}
             className="h-12 w-12 cursor-pointer rounded-lg border-0 p-0" />
@@ -75,35 +77,35 @@ export function ContrastChecker() {
       </div>
 
       <div className="glass-card mb-6">
-        <Label className="mb-3 block">文字大小</Label>
+        <Label className="mb-3 block">{t("文字大小")}</Label>
         <div className="flex gap-3">
           <Button variant={size === "normal" ? "gradient" : "secondary"}
             className="flex-1"
-            onClick={() => setSize("normal")}>普通文字 (≥14px)</Button>
+            onClick={() => setSize("normal")}>{t("普通文字 (≥14px)")}</Button>
           <Button variant={size === "large" ? "gradient" : "secondary"}
             className="flex-1"
-            onClick={() => setSize("large")}>大字 (≥18px / 粗体≥14px)</Button>
+            onClick={() => setSize("large")}>{t("大字 (≥18px / 粗体≥14px)")}</Button>
         </div>
       </div>
 
       {result && (
         <div className="glass-card mb-6">
-          <Label className="mb-4 block">检测结果</Label>
+          <Label className="mb-4 block">{t("检测结果")}</Label>
           <div className="text-center mb-6">
             <div className={`text-5xl font-bold ${levelColor}`}>{level}</div>
-            <p className="mt-2 text-sm text-gray-500">对比度: {result.ratio.toFixed(2)}:1</p>
+            <p className="mt-2 text-sm text-gray-500">{t("对比度: ")}{result.ratio.toFixed(2)}:1</p>
           </div>
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
             <div className={`value-row ${result.aa ? "border-green-200 bg-green-50/30" : "border-red-200 bg-red-50/30"}`}>
               <span className="text-sm">WCAG AA</span>
               <span className={`text-lg font-bold ${result.aa ? "text-green-600" : "text-red-500"}`}>
-                {result.aa ? "通过" : "不通过"}
+                {result.aa ? t("通过") : t("不通过")}
               </span>
             </div>
             <div className={`value-row ${result.aaa ? "border-green-200 bg-green-50/30" : "border-red-200 bg-red-50/30"}`}>
               <span className="text-sm">WCAG AAA</span>
               <span className={`text-lg font-bold ${result.aaa ? "text-green-600" : "text-red-500"}`}>
-                {result.aaa ? "通过" : "不通过"}
+                {result.aaa ? t("通过") : t("不通过")}
               </span>
             </div>
           </div>
@@ -111,10 +113,9 @@ export function ContrastChecker() {
       )}
 
       <div className="glass-card text-center" style={{ minHeight: "120px" }}>
-        <Label className="mb-4 block">预览</Label>
+        <Label className="mb-4 block">{t("预览")}</Label>
         <div className="rounded-2xl p-6 text-lg font-medium" style={{ color: fg, backgroundColor: bg }}>
-          The quick brown fox jumps over the lazy dog. 快速棕色狐狸跳过懒狗。
-        </div>
+          {t("The quick brown fox jumps over the lazy dog. 快速棕色狐狸跳过懒狗。")}</div>
       </div>
     </div>
   );

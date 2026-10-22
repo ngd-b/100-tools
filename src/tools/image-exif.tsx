@@ -1,5 +1,6 @@
 "use client";
 
+import { useI18n } from "@/components/LanguageProvider";
 import { useState, useCallback } from "react";
 import * as exifr from "exifr";
 import { Button } from "@/components/ui/button";
@@ -12,6 +13,7 @@ interface ExifGroup {
 }
 
 export function ImageExif() {
+  const { t } = useI18n();
   const [imageUrl, setImageUrl] = useState("");
   const [filename, setFilename] = useState("");
   const [exifGroups, setExifGroups] = useState<ExifGroup[]>([]);
@@ -66,7 +68,7 @@ export function ImageExif() {
       <div className="glass-card mb-6">
         <ImageUploadZone
           onFile={handleFile}
-          title="上传图片查看 EXIF 信息"
+          title={t("上传图片查看 EXIF 信息")}
           icon={
             <svg className="mb-4 h-12 w-12 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
               <path strokeLinecap="round" strokeLinejoin="round" d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909M3.75 21h16.5A2.25 2.25 0 0 0 22.5 18.75V5.25A2.25 2.25 0 0 0 20.25 3H3.75A2.25 2.25 0 0 0 1.5 5.25v13.5A2.25 2.25 0 0 0 3.75 21ZM8.25 8.25h.008v.008H8.25V8.25Z" />
@@ -83,15 +85,14 @@ export function ImageExif() {
               <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
               <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
             </svg>
-            读取 EXIF 信息中...
-          </div>
+            {t("读取 EXIF 信息中...")}</div>
         </div>
       )}
 
       {/* Error */}
       {error && !processing && (
         <div className="glass-card mb-6 py-4 text-center">
-          <p className="text-sm text-amber-600">{error}</p>
+          <p className="text-sm text-amber-600">{t(error)}</p>
         </div>
       )}
 
@@ -100,7 +101,7 @@ export function ImageExif() {
         <>
           {/* Image preview */}
           <div className="glass-card mb-6 text-center">
-            <img src={imageUrl} alt={filename} className="mx-auto max-h-48 rounded-xl object-contain" />
+            <img src={imageUrl} alt={t(filename)} className="mx-auto max-h-48 rounded-xl object-contain" />
             <p className="mt-2 text-xs text-gray-400">{filename}</p>
           </div>
 
@@ -110,14 +111,14 @@ export function ImageExif() {
               <div key={group.label} className="glass-card">
                 <div className="mb-3 flex items-center gap-2">
                   <span className="text-lg">{group.icon}</span>
-                  <h3 className="font-semibold">{group.label}</h3>
+                  <h3 className="font-semibold">{t(group.label)}</h3>
                   <span className="text-xs text-gray-400">({group.items.length})</span>
                 </div>
                 <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3">
                   {group.items.map((item) => (
                     <div key={item.label} className="rounded-lg bg-gray-50/50 px-3 py-2">
-                      <div className="text-[10px] font-bold tracking-widest text-gray-400 uppercase">{item.label}</div>
-                      <div className="mt-0.5 text-sm font-medium text-gray-700">{item.value}</div>
+                      <div className="text-[10px] font-bold tracking-widest text-gray-400 uppercase">{t(item.label)}</div>
+                      <div className="mt-0.5 text-sm font-medium text-gray-700">{item.label === "闪光灯" ? t(item.value) : item.value}</div>
                     </div>
                   ))}
                 </div>
@@ -132,7 +133,7 @@ export function ImageExif() {
                 <div className="flex items-center gap-2">
                   <span className="text-lg">📍</span>
                   <div>
-                    <div className="text-sm font-semibold">GPS 位置</div>
+                    <div className="text-sm font-semibold">{t("GPS 位置")}</div>
                     <div className="text-xs text-gray-400">{Number(rawExif.latitude).toFixed(6)}, {Number(rawExif.longitude).toFixed(6)}</div>
                   </div>
                 </div>
@@ -142,8 +143,7 @@ export function ImageExif() {
                   rel="noopener noreferrer"
                   className="text-xs font-medium text-blue-500 hover:text-blue-600"
                 >
-                  在地图查看 →
-                </a>
+                  {t("在地图查看 →")}</a>
               </div>
             </div>
           )}
@@ -151,8 +151,7 @@ export function ImageExif() {
           {/* Privacy warning */}
           {rawExif && (rawExif.latitude != null || rawExif.Model || rawExif.Make) && (
             <div className="mt-6 rounded-2xl border border-red-200 bg-red-50/50 px-5 py-4 text-xs leading-relaxed text-gray-500">
-              ⚠️ 此图片包含位置或设备信息。分享前建议用系统自带工具的"删除属性"功能清除隐私数据。
-            </div>
+              {t("⚠️ 此图片包含位置或设备信息。分享前建议用系统自带工具的\"删除属性\"功能清除隐私数据。")}</div>
           )}
 
         </>

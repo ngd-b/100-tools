@@ -1,10 +1,12 @@
 "use client";
 
+import { useI18n } from "@/components/LanguageProvider";
 import { useState, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 
 export function ImageCutoutTool() {
+  const { t } = useI18n();
   const [image, setImage] = useState<string | null>(null);
   const [processing, setProcessing] = useState(false);
   const [result, setResult] = useState<string | null>(null);
@@ -83,11 +85,9 @@ export function ImageCutoutTool() {
             📁
           </div>
           <p className="text-sm font-medium text-gray-500">
-            拖拽图片到这里，或点击上传
-          </p>
+            {t("拖拽图片到这里，或点击上传")}</p>
           <p className="mt-1 text-xs text-gray-300">
-            支持 JPG、PNG、WebP 格式
-          </p>
+            {t("支持 JPG、PNG、WebP 格式")}</p>
           <input
             type="file"
             accept="image/*"
@@ -118,24 +118,22 @@ export function ImageCutoutTool() {
                   <svg className="h-4 w-4 animate-spin" viewBox="0 0 24 24" fill="none">
                     <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="3" strokeDasharray="32" strokeDashoffset="32" strokeLinecap="round" />
                   </svg>
-                  处理中...
-                </span>
+                  {t("处理中...")}</span>
               ) : (
-                "去除背景"
+                t("去除背景")
               )}
             </Button>
             <Button
               variant="secondary"
               onClick={() => { setImage(null); setResult(null); }}
             >
-              重新选择
-            </Button>
+              {t("重新选择")}</Button>
           </div>
 
           {/* Result */}
           {result && (
             <div className="glass-card">
-              <Label className="mb-3 block">处理结果</Label>
+              <Label className="mb-3 block">{t("处理结果")}</Label>
               <div
                 className="mb-4 rounded-xl p-3"
                 style={{
@@ -148,21 +146,19 @@ export function ImageCutoutTool() {
                 <img src={result} alt="result" className="mx-auto max-h-64 rounded-lg" />
               </div>
               <Button variant="gradient" className="w-full" onClick={handleDownload}>
-                下载 PNG
-              </Button>
+                {t("下载 PNG")}</Button>
             </div>
           )}
 
           {error && (
-            <p className="mt-3 text-sm text-red-500">{error}</p>
+            <p className="mt-3 text-sm text-red-500">{t(error)}</p>
           )}
         </>
       )}
 
       {/* Info Note */}
       <div className="mt-8 rounded-2xl border border-amber-200 bg-amber-50/50 px-5 py-4 text-xs leading-relaxed text-gray-500">
-        💡 当前使用简单的白色背景移除算法。后续可集成 AI 模型实现更精确的抠图效果。
-      </div>
+        {t("💡 当前使用简单的白色背景移除算法。后续可集成 AI 模型实现更精确的抠图效果。")}</div>
     </div>
   );
 }

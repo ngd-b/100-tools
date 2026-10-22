@@ -1,5 +1,6 @@
 "use client";
 
+import { useI18n } from "@/components/LanguageProvider";
 import { useState, useCallback } from "react";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
@@ -102,7 +103,8 @@ function simpleMarkdown(md: string): string {
 }
 
 export function MarkdownPreview() {
-  const [md, setMd] = useState(defaultMd);
+  const { t } = useI18n();
+  const [md, setMd] = useState(() => t(defaultMd));
 
   const [copied, setCopied] = useState(false);
 
@@ -118,7 +120,7 @@ export function MarkdownPreview() {
     <div>
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
         <div className="glass-card">
-          <Label className="mb-3 block">Markdown 编辑</Label>
+          <Label className="mb-3 block">{t("Markdown 编辑")}</Label>
           <Textarea
             className="font-mono text-sm min-h-[300px] w-full resize-y"
             value={md}
@@ -129,8 +131,8 @@ export function MarkdownPreview() {
 
         <div className="glass-card">
           <div className="mb-3 flex items-center justify-between">
-            <Label className="mb-0">预览</Label>
-            <button className="copy-btn text-xs text-blue-500 hover:text-blue-600" onClick={handleCopyHtml}>{copied ? "✓" : "复制 HTML"}</button>
+            <Label className="mb-0">{t("预览")}</Label>
+            <button className="copy-btn text-xs text-blue-500 hover:text-blue-600" onClick={handleCopyHtml}>{copied ? "✓" : t("复制 HTML")}</button>
           </div>
           <div
             className="rounded-xl bg-gray-50 p-4 min-h-[300px] max-h-[400px] overflow-y-auto"
@@ -140,8 +142,7 @@ export function MarkdownPreview() {
       </div>
 
       <div className="mt-8 rounded-2xl border border-amber-200 bg-amber-50/50 px-5 py-4 text-xs leading-relaxed text-gray-500">
-        💡 支持标题、列表、粗体、斜体、代码块、引用、表格等常用语法。
-      </div>
+        {t("💡 支持标题、列表、粗体、斜体、代码块、引用、表格等常用语法。")}</div>
     </div>
   );
 }

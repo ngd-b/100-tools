@@ -1,5 +1,6 @@
 "use client";
 
+import { useI18n } from "@/components/LanguageProvider";
 import { useState, useMemo } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -13,6 +14,7 @@ const CATEGORIES = [
 ];
 
 export function BmiCalculator() {
+  const { t } = useI18n();
   const [height, setHeight] = useState("170");
   const [weight, setWeight] = useState("65");
 
@@ -38,11 +40,11 @@ export function BmiCalculator() {
       <div className="glass-card mb-6">
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
           <div>
-            <Label>身高 (cm)</Label>
+            <Label>{t("身高 (cm)")}</Label>
             <Input type="number" min={1} value={height} onChange={(e) => setHeight(e.target.value)} className="mt-3" />
           </div>
           <div>
-            <Label>体重 (kg)</Label>
+            <Label>{t("体重 (kg)")}</Label>
             <Input type="number" min={1} value={weight} onChange={(e) => setWeight(e.target.value)} className="mt-3" />
           </div>
         </div>
@@ -55,13 +57,13 @@ export function BmiCalculator() {
             <div className="text-5xl font-bold font-mono mb-1">{bmi.toFixed(1)}</div>
             <div className="text-sm text-gray-400">BMI</div>
             <div className={`mt-3 inline-block px-4 py-1 rounded-full text-sm font-semibold text-white ${category.color}`}>
-              {category.label}
+              {t(category.label)}
             </div>
           </div>
 
           {/* BMI Scale */}
           <div className="glass-card">
-            <Label>BMI 刻度</Label>
+            <Label>{t("BMI 刻度")}</Label>
             <div className="mt-4 relative">
               <div className="h-4 w-full rounded-full overflow-hidden flex">
                 <div className="bg-blue-400" style={{ width: `${((18.5 - 15) / 35) * 100}%` }} />
@@ -78,7 +80,7 @@ export function BmiCalculator() {
               {CATEGORIES.map((c) => (
                 <div key={c.label} className="text-center">
                   <div className={`inline-block w-3 h-3 rounded-full ${c.color} mb-1`} />
-                  <div>{c.label}</div>
+                  <div>{t(c.label)}</div>
                   <div className="text-gray-300 mt-0.5">{c.range}</div>
                 </div>
               ))}
@@ -88,8 +90,7 @@ export function BmiCalculator() {
       )}
 
       <div className="mt-6 rounded-2xl border border-amber-200 bg-amber-50/50 px-4 py-3 text-xs leading-relaxed text-gray-500">
-        💡 BMI（身体质量指数）= 体重(kg) / 身高²(m²)，仅供参考，不能替代专业医疗建议。
-      </div>
+        {t("💡 BMI（身体质量指数）= 体重(kg) / 身高²(m²)，仅供参考，不能替代专业医疗建议。")}</div>
     </div>
   );
 }

@@ -1,5 +1,6 @@
 "use client";
 
+import { useI18n } from "@/components/LanguageProvider";
 import { useState, useRef, useCallback, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
@@ -91,6 +92,7 @@ const themeBg: Record<string, string> = {
 const isDarkTheme = (t: string) => ["github-dark", "atom-one-dark", "monokai", "dracula", "tokyo-night-dark", "xcode-dark"].includes(t);
 
 export function CodeHighlight() {
+  const { t } = useI18n();
   const [code, setCode] = useState(`function fibonacci(n) {
   if (n <= 1) return n;
   return fibonacci(n - 1) + fibonacci(n - 2);
@@ -192,20 +194,20 @@ console.log(fibonacci(10)); // 55`);
       <div className="glass-card mb-6">
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
           <div>
-            <Label className="mb-2 block">编程语言</Label>
+            <Label className="mb-2 block">{t("编程语言")}</Label>
             <Select value={lang} onValueChange={(v) => setLang(v ?? "javascript")}>
               <SelectTrigger>
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
                 {languages.map((l) => (
-                  <SelectItem key={l.value} value={l.value}>{l.label}</SelectItem>
+                  <SelectItem key={l.value} value={l.value}>{t(l.label)}</SelectItem>
                 ))}
               </SelectContent>
             </Select>
           </div>
           <div>
-            <Label className="mb-2 block">代码主题</Label>
+            <Label className="mb-2 block">{t("代码主题")}</Label>
             <Select value={theme} onValueChange={(v) => setTheme(v ?? "github")}>
               <SelectTrigger>
                 <SelectValue />
@@ -225,13 +227,13 @@ console.log(fibonacci(10)); // 55`);
             </Select>
           </div>
           <div>
-            <Label className="mb-2 block">行号</Label>
+            <Label className="mb-2 block">{t("行号")}</Label>
             <Button
               variant={showLineNumbers ? "gradient" : "secondary"}
               className="w-full cursor-pointer"
               onClick={() => setShowLineNumbers(!showLineNumbers)}
             >
-              {showLineNumbers ? "已开启" : "已关闭"}
+              {showLineNumbers ? t("已开启") : t("已关闭")}
             </Button>
           </div>
         </div>
@@ -239,11 +241,11 @@ console.log(fibonacci(10)); // 55`);
 
       {/* Code Input */}
       <div className="mb-6">
-        <Label className="mb-2 block">输入代码</Label>
+        <Label className="mb-2 block">{t("输入代码")}</Label>
         <Textarea
           value={code}
           onChange={(e) => setCode(e.target.value)}
-          placeholder="粘贴你的代码..."
+          placeholder={t("粘贴你的代码...")}
           rows={8}
           className="font-mono text-sm"
         />
@@ -252,17 +254,16 @@ console.log(fibonacci(10)); // 55`);
       {/* Preview */}
       <div className="glass-card mb-6">
         <div className="mb-3 flex items-center justify-between">
-          <Label>预览</Label>
+          <Label>{t("预览")}</Label>
           <div className="flex gap-2">
             <Button variant={copied === "html" ? "gradient" : "secondary"} className="text-xs cursor-pointer" onClick={handleCopyHtml}>
-              {copied === "html" ? "已复制 ✓" : "复制 HTML"}
+              {copied === "html" ? t("已复制 ✓") : t("复制 HTML")}
             </Button>
             <Button variant={imagePreview ? "gradient" : "secondary"} className="text-xs cursor-pointer" onClick={handleGenerateImage} disabled={generating}>
-              {generating ? "生成中..." : imagePreview ? "重新生成" : "生成图片"}
+              {generating ? t("生成中...") : imagePreview ? t("重新生成") : t("生成图片")}
             </Button>
             <Button variant="gradient" className="text-xs cursor-pointer" onClick={handleDownloadHtml}>
-              下载 HTML
-            </Button>
+              {t("下载 HTML")}</Button>
           </div>
         </div>
         <div className="overflow-x-auto rounded-lg border border-gray-100">
@@ -278,18 +279,16 @@ console.log(fibonacci(10)); // 55`);
       {imagePreview && (
         <div className="glass-card mb-6">
           <div className="mb-3 flex items-center justify-between">
-            <Label>图片预览</Label>
+            <Label>{t("图片预览")}</Label>
             <Button variant="gradient" className="text-xs cursor-pointer" onClick={handleDownloadImage}>
-              下载 PNG
-            </Button>
+              {t("下载 PNG")}</Button>
           </div>
           <img src={imagePreview} alt="Code image" className="w-full rounded-lg border border-gray-100" />
         </div>
       )}
 
       <div className="mt-8 rounded-2xl border border-amber-200 bg-amber-50/50 px-5 py-4 text-xs leading-relaxed text-gray-500">
-        💡 支持 20+ 种编程语言，10 种代码高亮主题。生成图片使用浏览器原生渲染，和预览效果完全一致。
-      </div>
+        {t("💡 支持 20+ 种编程语言，10 种代码高亮主题。生成图片使用浏览器原生渲染，和预览效果完全一致。")}</div>
     </div>
   );
 }

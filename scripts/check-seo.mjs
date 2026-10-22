@@ -1,12 +1,13 @@
 import assert from "node:assert/strict";
 import { tools, categories, toolPathRedirects } from "../src/data/tools.ts";
-import { toolGuides } from "../src/data/tool-guides.ts";
-import { categoryGuides } from "../src/data/category-guides.ts";
+import { getCategoryGuide, getToolGuide } from "../src/lib/i18n/content.ts";
+import { locales, localePath, stripLocale } from "../src/lib/i18n/locale.ts";
 import { getSiteConfig } from "../src/lib/site-config.ts";
 
 const base = process.env.SEO_BASE_URL ?? "http://127.0.0.1:3000";
 const expectedOrigin = getSiteConfig(process.env).url;
-const paths = ["/", ...categories.map((category) => `/category/${category.id}`), ...tools.map((tool) => tool.path)];
+const barePaths = ["/", ...categories.map((category) => `/category/${category.id}`), ...tools.map((tool) => tool.path)];
+const paths = locales.flatMap((locale) => barePaths.map((path) => localePath(path, locale)));
 const canonicalPattern = /<link\b(?=[^>]*\brel="canonical")(?=[^>]*\bhref="([^"]+)")[^>]*>/;
 const decode = (text) => text.replace(/&amp;/g, "&").replace(/&quot;/g, '"').replace(/&#x27;/g, "'").replace(/&lt;/g, "<").replace(/&gt;/g, ">");
 function meta(html, key) {
@@ -15,6 +16,8 @@ function meta(html, key) {
 }
 const results = [];
 for (const path of paths) {
+  const locale = path.split("/")[1];
+  const barePath = stripLocale(path);
   const response = await fetch(new URL(path, base));
   assert.equal(response.status, 200, path);
   const html = await response.text();
@@ -40,19 +43,24 @@ for (const path of paths) {
   assert.equal((html.match(/<h1(?:\s|>)/g) ?? []).length, 1, path);
   const schemas = [...html.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)].map((match) => JSON.parse(match[1]));
   assert.ok(schemas.length, path);
-  const tool = tools.find((item) => item.path === path);
+  assert.match(html, new RegExp(`<html[^>]*lang="${locale === "zh" ? "zh-CN" : "en"}"`));
+  for (const language of locales) {
+    const alternate = new URL(localePath(barePath, language), url.origin).href;
+    assert.ok(head.includes(`href="${alternate}"`), `${path}: language alternate missing`);
+  }
+  const tool = tools.find((item) => item.path === barePath);
   if (tool) {
-    const guide = toolGuides[tool.id];
-    assert.ok(html.includes(guide.note), `${path}: usage notes must be present without JavaScript`);
-    for (const step of guide.steps) assert.ok(html.includes(step), `${path}: steps must be rendered on the server`);
+    const guide = getToolGuide(tool.id, locale);
+    assert.ok(decode(html).includes(guide.note), `${path}: usage notes must be present without JavaScript`);
+    for (const step of guide.steps) assert.ok(decode(html).includes(step), `${path}: steps must be rendered on the server`);
     const graph = schemas[0]["@graph"];
     assert.equal(graph[0].url, canonical);
-    assert.equal(graph[1].itemListElement[1].item, `${url.origin}/category/${tool.category}`);
-  } else if (path !== "/") {
+    assert.equal(graph[1].itemListElement[1].item, `${url.origin}/${locale}/category/${tool.category}`);
+  } else if (barePath !== "/") {
     const category = path.split("/").at(-1);
-    assert.ok(html.includes(categoryGuides[category].intro));
+    assert.ok(decode(html).includes(getCategoryGuide(category, locale).intro));
   } else {
-    for (const item of paths.slice(1)) assert.ok(html.includes(`href="${item}"`), `homepage does not link to ${item}`);
+    for (const item of barePaths.slice(1)) assert.ok(html.includes(`href="${localePath(item, locale)}"`), `homepage does not link to ${item}`);
   }
   results.push({ path, canonical, title, description });
 }
@@ -69,18 +77,18 @@ assert.equal(robotsResponse.status, 200);
 const robots = await robotsResponse.text();
 assert.ok(robots.includes(`Sitemap: ${origin}/sitemap.xml`));
 assert.ok(robots.includes("Allow: /"));
-for (const [path, target] of Object.entries(toolPathRedirects)) {
-  const response = await fetch(new URL(path, base), { redirect: "manual" });
+for (const locale of locales) for (const [path, target] of Object.entries(toolPathRedirects)) {
+  const response = await fetch(new URL(localePath(path, locale), base), { redirect: "manual" });
   assert.equal(response.status, 308);
-  assert.equal(new URL(response.headers.get("location"), base).pathname, target);
+  assert.equal(new URL(response.headers.get("location"), base).pathname, localePath(target, locale));
 }
-for (const path of ["/seo-check-unknown-page", "/category/unknown"]) {
+for (const path of locales.flatMap((locale) => ["/seo-check-unknown-page", "/category/unknown"].map((path) => localePath(path, locale)))) {
   const unknown = await fetch(new URL(path, base));
   assert.equal(unknown.status, 404, path);
   assert.match(await unknown.text(), /content="noindex"/);
 }
-const query = await fetch(new URL("/dev/json?utm_source=seo-check", base)).then((response) => response.text());
-assert.equal(query.match(canonicalPattern)?.[1], origin + "/dev/json");
+const query = await fetch(new URL("/en/dev/json?utm_source=seo-check", base)).then((response) => response.text());
+assert.equal(query.match(canonicalPattern)?.[1], origin + "/en/dev/json");
 const imageResponse = await fetch(new URL("/opengraph-image", base));
 assert.equal(imageResponse.status, 200);
 assert.match(imageResponse.headers.get("content-type"), /image\/png/);

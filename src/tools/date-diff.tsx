@@ -1,10 +1,12 @@
 "use client";
 
+import { useI18n } from "@/components/LanguageProvider";
 import { useState, useMemo } from "react";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 
 export function DateDiff() {
+  const { t } = useI18n();
   const [date1, setDate1] = useState("2024-01-01");
   const [date2, setDate2] = useState("");
 
@@ -48,11 +50,11 @@ export function DateDiff() {
     <div>
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div className="glass-card">
-          <Label className="mb-3 block">起始日期</Label>
+          <Label className="mb-3 block">{t("起始日期")}</Label>
           <Input type="date" value={date1} onChange={(e) => setDate1(e.target.value)} className="w-full" />
         </div>
         <div className="glass-card">
-          <Label className="mb-3 block">结束日期（留空则为今天）</Label>
+          <Label className="mb-3 block">{t("结束日期（留空则为今天）")}</Label>
           <Input type="date" value={date2} onChange={(e) => setDate2(e.target.value)} className="w-full" />
         </div>
       </div>
@@ -61,42 +63,42 @@ export function DateDiff() {
         <>
           <div className="glass-card mb-6 mt-6 text-center">
             <div className="text-5xl font-extrabold text-blue-600">{result.diffDays.toLocaleString()}</div>
-            <div className="mt-1 text-sm text-gray-500">天</div>
+            <div className="mt-1 text-sm text-gray-500">{t("天")}</div>
             <div className="mt-2 text-sm text-gray-400">
-              {result.earlier} ({result.day1}) → {result.later} ({result.day2})
+              {result.earlier} ({t(result.day1)}) → {result.later} ({t(result.day2)})
             </div>
           </div>
 
           <div className="glass-card mb-6">
-            <Label className="mb-4 block">精确时间差</Label>
+            <Label className="mb-4 block">{t("精确时间差")}</Label>
             <div className="grid grid-cols-3 gap-3 text-center">
               <div className="rounded-xl bg-gray-50 p-4">
                 <div className="text-2xl font-bold text-gray-900">{result.years}</div>
-                <div className="mt-1 text-xs text-gray-500">年</div>
+                <div className="mt-1 text-xs text-gray-500">{t("年")}</div>
               </div>
               <div className="rounded-xl bg-gray-50 p-4">
                 <div className="text-2xl font-bold text-gray-900">{result.months}</div>
-                <div className="mt-1 text-xs text-gray-500">月</div>
+                <div className="mt-1 text-xs text-gray-500">{t("月")}</div>
               </div>
               <div className="rounded-xl bg-gray-50 p-4">
                 <div className="text-2xl font-bold text-gray-900">{result.remainingDays}</div>
-                <div className="mt-1 text-xs text-gray-500">天</div>
+                <div className="mt-1 text-xs text-gray-500">{t("天")}</div>
               </div>
             </div>
           </div>
 
           <div className="glass-card">
-            <Label className="mb-4 block">其他单位</Label>
+            <Label className="mb-4 block">{t("其他单位")}</Label>
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
               {[
-                { label: "总周数", value: result.diffWeeks.toLocaleString() + " 周" },
-                { label: "总小时", value: result.diffHours.toLocaleString() + " 小时" },
-                { label: "总分钟", value: result.diffMinutes.toLocaleString() + " 分钟" },
-                { label: "总秒数", value: (result.diffMinutes * 60).toLocaleString() + " 秒" },
+                { label: t("总周数"), value: result.diffWeeks.toLocaleString() + t(" 周") },
+                { label: t("总小时"), value: result.diffHours.toLocaleString() + t(" 小时") },
+                { label: t("总分钟"), value: result.diffMinutes.toLocaleString() + t(" 分钟") },
+                { label: t("总秒数"), value: (result.diffMinutes * 60).toLocaleString() + t(" 秒") },
               ].map((item) => (
                 <div key={item.label} className="flex flex-col items-center rounded-xl bg-gray-50 p-4">
                   <span className="text-lg font-bold text-gray-900">{item.value}</span>
-                  <span className="mt-1 text-xs text-gray-500">{item.label}</span>
+                  <span className="mt-1 text-xs text-gray-500">{t(item.label)}</span>
                 </div>
               ))}
             </div>
@@ -105,8 +107,7 @@ export function DateDiff() {
       )}
 
       <div className="mt-8 rounded-2xl border border-amber-200 bg-amber-50/50 px-5 py-4 text-xs leading-relaxed text-gray-500">
-        💡 计算两个日期之间的天数、周数、年月日差等。结束日期留空则自动使用当天日期。
-      </div>
+        {t("💡 计算两个日期之间的天数、周数、年月日差等。结束日期留空则自动使用当天日期。")}</div>
     </div>
   );
 }

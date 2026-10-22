@@ -106,6 +106,14 @@ npm run build
 
 工具元数据位于 `src/data/tools.ts`，组件通过 `src/components/ToolRenderer.tsx` 按需加载，独立页面由 `src/app/[...toolPath]/page.tsx` 统一生成。新增工具需要同步注册元数据和组件，并更新文档。旧 `/#工具ID` 分享链接会自动转到独立页面。
 
+## 界面语言
+
+支持简体中文和英文，分别使用 `/zh` 和 `/en` 路径。首次访问无语言前缀的旧链接时，根据浏览器 `Accept-Language` 选择支持的语言；没有匹配项时使用英文。浏览器提供繁体中文时，显示简体中文界面。
+
+页头可以手动切换语言，并保留当前工具、查询参数和锚点。手动选择写入 localStorage 和一年有效、访问时续期的 Cookie，此后优先于浏览器语言；自动选择不会保存成固定偏好。收藏在两种语言间共用。工具界面、说明、页面元数据、结构化数据和 sitemap 均对应中英文版本；用户输入和生成的数据保持原样。
+
+翻译位于 `src/lib/i18n/en.json`，语言检测与链接处理位于 `src/lib/i18n/locale.ts`，旧链接重定向由 `src/proxy.ts` 处理。新增文案时同步补齐英文翻译。
+
 ## SEO 配置
 
 正式域名默认为 `https://tools.hboot.fun`，支持通过 `SITE_URL` 覆盖；正式站点设置 `SITE_INDEXABLE=true`，预览站点设为 `false`。支持独立页面元数据、canonical、分享图片、分类聚合页、服务端使用说明、结构化数据、robots 和 sitemap。修改配置后需要重新构建。

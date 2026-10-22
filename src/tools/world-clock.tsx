@@ -1,5 +1,6 @@
 "use client";
 
+import { useI18n } from "@/components/LanguageProvider";
 import { useState, useEffect, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -23,14 +24,15 @@ const TIMEZONES = [
   { city: "曼谷", flag: "🇹🇭", timezone: "Asia/Bangkok" },
 ];
 
-function getTime(timezone: string) {
+function getTime(timezone: string, locale: string) {
   const now = new Date();
-  const timeStr = now.toLocaleTimeString("zh-CN", { timeZone: timezone, hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: false });
-  const dateStr = now.toLocaleDateString("zh-CN", { timeZone: timezone, weekday: "short", month: "short", day: "numeric" });
+  const timeStr = now.toLocaleTimeString(locale, { timeZone: timezone, hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: false });
+  const dateStr = now.toLocaleDateString(locale, { timeZone: timezone, weekday: "short", month: "short", day: "numeric" });
   return { timeStr, dateStr };
 }
 
 export function WorldClock() {
+  const { t, locale } = useI18n();
   const [selected, setSelected] = useState<string[]>(["Asia/Shanghai", "America/New_York", "Europe/London", "Asia/Tokyo"]);
   const [, setTick] = useState(0);
 
@@ -54,15 +56,15 @@ export function WorldClock() {
       {/* Add Clock */}
       {available.length > 0 && (
         <div className="glass-card mb-6">
-          <Label>添加城市</Label>
+          <Label>{t("添加城市")}</Label>
           <div className="flex gap-2 mt-3">
             <Select onValueChange={(v) => {
               if (typeof v === "string") addClock(v);
             }}>
-              <SelectTrigger><SelectValue placeholder="选择城市..." /></SelectTrigger>
+              <SelectTrigger><SelectValue placeholder={t("选择城市...")} /></SelectTrigger>
               <SelectContent>
                 {available.map((tz) => (
-                  <SelectItem key={tz.timezone} value={tz.timezone}>{tz.flag} {tz.city}</SelectItem>
+                  <SelectItem key={tz.timezone} value={tz.timezone}>{tz.flag} {t(tz.city)}</SelectItem>
                 ))}
               </SelectContent>
             </Select>
@@ -74,7 +76,7 @@ export function WorldClock() {
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         {selected.map((tz) => {
           const info = TIMEZONES.find((t) => t.timezone === tz);
-          const { timeStr, dateStr } = getTime(tz);
+          const { timeStr, dateStr } = getTime(tz, locale === "zh" ? "zh-CN" : "en-US");
           const isLocal = tz === Intl.DateTimeFormat().resolvedOptions().timeZone;
 
           return (
@@ -88,8 +90,8 @@ export function WorldClock() {
               <div className="flex items-center gap-2 mb-2">
                 <span className="text-lg">{info?.flag}</span>
                 <div>
-                  <div className="text-sm font-semibold">{info?.city}</div>
-                  {isLocal && <Badge variant="secondary" className="text-xs px-1 py-0 h-auto">本地</Badge>}
+                  <div className="text-sm font-semibold">{t(info?.city)}</div>
+                  {isLocal && <Badge variant="secondary" className="text-xs px-1 py-0 h-auto">{t("本地")}</Badge>}
                 </div>
               </div>
               <div className="font-mono text-2xl font-bold">{timeStr}</div>

@@ -1,5 +1,6 @@
 "use client";
 
+import { useI18n } from "@/components/LanguageProvider";
 import { useState, useMemo } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -21,6 +22,7 @@ const CURRENCIES = [
 ];
 
 export function CurrencyConverter() {
+  const { t } = useI18n();
   const [amount, setAmount] = useState("100");
   const [fromCode, setFromCode] = useState("CNY");
   const [toCode, setToCode] = useState("USD");
@@ -54,28 +56,27 @@ export function CurrencyConverter() {
   return (
     <div>
       <div className="rounded-2xl border border-amber-200 bg-amber-50/50 px-4 py-3 mb-6 text-xs text-gray-500">
-        内置汇率是项目预设的参考值，来源和采集日期未记录，不会联网更新。可输入自行查询的汇率进行计算。
-      </div>
+        {t("内置汇率是项目预设的参考值，来源和采集日期未记录，不会联网更新。可输入自行查询的汇率进行计算。")}</div>
 
       {/* Main Conversion */}
       <div className="glass-card mb-6">
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
           <div>
-            <Label>从</Label>
+            <Label>{t("从")}</Label>
             <Select value={fromCode} onValueChange={(v) => { if (v) { setFromCode(v); setCustomRate(""); } }}>
               <SelectTrigger className="mt-2"><SelectValue /></SelectTrigger>
               <SelectContent>
-                {CURRENCIES.map((c) => <SelectItem key={c.code} value={c.code}>{c.name}</SelectItem>)}
+                {CURRENCIES.map((c) => <SelectItem key={c.code} value={c.code}>{t(c.name)}</SelectItem>)}
               </SelectContent>
             </Select>
-            <Input className="mt-3" type="number" value={amount} onChange={(e) => setAmount(e.target.value)} placeholder="输入金额" />
+            <Input className="mt-3" type="number" value={amount} onChange={(e) => setAmount(e.target.value)} placeholder={t("输入金额")} />
           </div>
           <div>
-            <Label>到</Label>
+            <Label>{t("到")}</Label>
             <Select value={toCode} onValueChange={(v) => { if (v) { setToCode(v); setCustomRate(""); } }}>
               <SelectTrigger className="mt-2"><SelectValue /></SelectTrigger>
               <SelectContent>
-                {CURRENCIES.map((c) => <SelectItem key={c.code} value={c.code}>{c.name}</SelectItem>)}
+                {CURRENCIES.map((c) => <SelectItem key={c.code} value={c.code}>{t(c.name)}</SelectItem>)}
               </SelectContent>
             </Select>
             <div className="mt-3 h-10 flex items-center rounded-md border border-input bg-transparent px-3 py-2 text-sm font-mono font-semibold">
@@ -86,17 +87,17 @@ export function CurrencyConverter() {
       </div>
 
       <div className="glass-card mb-6">
-        <Label htmlFor="custom-rate">自定义汇率：1 {fromCode} = 多少 {toCode}</Label>
-        <Input id="custom-rate" type="number" min="0" step="any" className="mt-3" value={customRate} onChange={(event) => setCustomRate(event.target.value)} placeholder="留空使用内置参考值" />
-        {hasCustomRate && !validCustomRate && <p role="alert" className="mt-2 text-xs text-red-600">请输入大于 0 的有效汇率。</p>}
-        {Number.isFinite(parseFloat(amount)) && (!hasCustomRate || validCustomRate) && result === null && <p role="alert" className="mt-2 text-xs text-red-600">计算结果超出数值范围，请减小金额或汇率。</p>}
-        <p className="mt-2 text-xs text-gray-500">{hasCustomRate ? "使用自定义汇率，切换货币后会清空。" : "使用内置参考汇率。"}</p>
+        <Label htmlFor="custom-rate">{t("自定义汇率：1 ")}{fromCode} {t(" = 多少 ")}{toCode}</Label>
+        <Input id="custom-rate" type="number" min="0" step="any" className="mt-3" value={customRate} onChange={(event) => setCustomRate(event.target.value)} placeholder={t("留空使用内置参考值")} />
+        {hasCustomRate && !validCustomRate && <p role="alert" className="mt-2 text-xs text-red-600">{t("请输入大于 0 的有效汇率。")}</p>}
+        {Number.isFinite(parseFloat(amount)) && (!hasCustomRate || validCustomRate) && result === null && <p role="alert" className="mt-2 text-xs text-red-600">{t("计算结果超出数值范围，请减小金额或汇率。")}</p>}
+        <p className="mt-2 text-xs text-gray-500">{hasCustomRate ? t("使用自定义汇率，切换货币后会清空。") : t("使用内置参考汇率。")}</p>
       </div>
 
       {/* Quick Conversion */}
       {quickResults.length > 0 && (
         <div className="glass-card">
-          <Label>换算到所有货币</Label>
+          <Label>{t("换算到所有货币")}</Label>
           <div className="mt-3 grid grid-cols-1 gap-2 sm:grid-cols-2">
             {quickResults.map((c) => (
               <div key={c.code} className="flex items-center justify-between rounded-lg bg-gray-50 px-3 py-2 text-sm">

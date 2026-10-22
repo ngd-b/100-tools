@@ -1,5 +1,6 @@
 "use client";
 
+import { useI18n } from "@/components/LanguageProvider";
 import { useState, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
@@ -31,6 +32,7 @@ function generateParagraph(minWords: number, maxWords: number): string {
 }
 
 export function LoremIpsumGenerator() {
+  const { t } = useI18n();
   const [paragraphs, setParagraphs] = useState(3);
   const [wordCount, setWordCount] = useState(50);
   const [result, setResult] = useState("");
@@ -58,7 +60,7 @@ export function LoremIpsumGenerator() {
   return (
     <div>
       <div className="glass-card mb-6">
-        <Label className="mb-3 block">段落数</Label>
+        <Label className="mb-3 block">{t("段落数")}</Label>
         <div className="flex items-center gap-3">
           <Slider
             value={[paragraphs]}
@@ -73,7 +75,7 @@ export function LoremIpsumGenerator() {
       </div>
 
       <div className="glass-card mb-6">
-        <Label className="mb-3 block">每段大约字数</Label>
+        <Label className="mb-3 block">{t("每段大约字数")}</Label>
         <div className="flex items-center gap-3">
           <Slider
             value={[wordCount]}
@@ -88,27 +90,24 @@ export function LoremIpsumGenerator() {
       </div>
 
       <Button variant="gradient" className="w-full mb-6" onClick={handleGenerate}>
-        生成文本
-      </Button>
+        {t("生成文本")}</Button>
 
       {result && (
         <div className="glass-card">
           <div className="mb-3 flex items-center justify-between">
-            <Label>生成结果</Label>
-            <button className="copy-btn text-xs text-blue-500 hover:text-blue-600" onClick={handleCopy}>{copied ? "✓" : "复制"}</button>
+            <Label>{t("生成结果")}</Label>
+            <button className="copy-btn text-xs text-blue-500 hover:text-blue-600" onClick={handleCopy}>{copied ? "✓" : t("复制")}</button>
           </div>
           <div className="rounded-xl bg-gray-50 p-4 text-sm leading-relaxed whitespace-pre-wrap max-h-[400px] overflow-y-auto">
             {result}
           </div>
           <p className="mt-2 text-xs text-gray-400">
-            {result.split(/\s+/).length} 词 · {result.length} 字符 · {paragraphs} 段落
-          </p>
+            {result.split(/\s+/).length} {t(" 词 · ")}{result.length} {t(" 字符 · ")}{paragraphs} {t("段落")}</p>
         </div>
       )}
 
       <div className="mt-8 rounded-2xl border border-amber-200 bg-amber-50/50 px-5 py-4 text-xs leading-relaxed text-gray-500">
-        💡 适用于设计稿、原型、页面占位等场景，生成的 Lorem Ipsum 文本符合传统排版习惯。
-      </div>
+        {t("💡 适用于设计稿、原型、页面占位等场景，生成的 Lorem Ipsum 文本符合传统排版习惯。")}</div>
     </div>
   );
 }

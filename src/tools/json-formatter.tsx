@@ -1,11 +1,13 @@
 "use client";
 
+import { useI18n } from "@/components/LanguageProvider";
 import { useState, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 
 export function JsonFormatter() {
+  const { t } = useI18n();
   const [input, setInput] = useState("");
   const [output, setOutput] = useState("");
   const [error, setError] = useState("");
@@ -43,11 +45,11 @@ export function JsonFormatter() {
   return (
     <div>
       <div className="glass-card mb-6">
-        <Label htmlFor="json-input" className="mb-3 block">JSON 输入</Label>
+        <Label htmlFor="json-input" className="mb-3 block">{t("JSON 输入")}</Label>
         <Textarea
           id="json-input"
           className="min-h-[140px] w-full resize-y font-mono text-sm"
-          placeholder='粘贴 JSON，如 {"name": "工具"}...'
+          placeholder={t("粘贴 JSON，如 {\"name\": \"工具\"}...")}
           value={input}
           onChange={(e) => { setInput(e.target.value); setOutput(""); setError(""); setCopied(false); }}
         />
@@ -55,32 +57,29 @@ export function JsonFormatter() {
 
       <div className="flex gap-3 mb-6">
         <Button variant="gradient" className="flex-1" onClick={handlePrettify}>
-          格式化
-        </Button>
+          {t("格式化")}</Button>
         <Button variant="secondary" className="flex-1" onClick={handleMinify}>
-          压缩
-        </Button>
+          {t("压缩")}</Button>
         <Button
           variant="secondary"
           onClick={() => { setInput(""); setOutput(""); setError(""); }}
         >
-          清空
-        </Button>
+          {t("清空")}</Button>
       </div>
 
-      {error && <p className="mb-6 text-sm text-red-500">{error}</p>}
+      {error && <p className="mb-6 text-sm text-red-500">{t(error)}</p>}
 
       {output && (
         <div className="glass-card">
           <div className="mb-3 flex items-center justify-between">
             <Label>
-              {indent === "pretty" ? "格式化结果" : "压缩结果"}
+              {indent === "pretty" ? t("格式化结果") : t("压缩结果")}
               <span className="ml-2 text-xs text-gray-400 normal-case font-normal">
                 ({(new Blob([output]).size / 1024).toFixed(1)} KB)
               </span>
             </Label>
             <button className="copy-btn text-xs text-blue-500 hover:text-blue-600" onClick={handleCopy}>
-              {copied ? "✓" : "复制"}
+              {copied ? "✓" : t("复制")}
             </button>
           </div>
           <pre className="rounded-xl bg-gray-50 p-4 font-mono text-xs max-h-[400px] overflow-y-auto whitespace-pre-wrap break-all">
@@ -90,8 +89,7 @@ export function JsonFormatter() {
       )}
 
       <div className="mt-8 rounded-2xl border border-amber-200 bg-amber-50/50 px-5 py-4 text-xs leading-relaxed text-gray-500">
-        💡 格式化以 2 空格缩进，压缩移除所有空白字符。支持任意合法的 JSON 内容。
-      </div>
+        {t("💡 格式化以 2 空格缩进，压缩移除所有空白字符。支持任意合法的 JSON 内容。")}</div>
     </div>
   );
 }

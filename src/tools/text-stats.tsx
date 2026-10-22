@@ -1,10 +1,12 @@
 "use client";
 
+import { useI18n } from "@/components/LanguageProvider";
 import { useState, useMemo } from "react";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 
 export function TextStats() {
+  const { t } = useI18n();
   const [text, setText] = useState("");
 
   const stats = useMemo(() => {
@@ -29,7 +31,7 @@ export function TextStats() {
     <div className="flex flex-col items-center rounded-xl bg-gray-50 p-4">
       <span className="text-2xl font-bold text-gray-900">{value.toLocaleString()}</span>
       <span className="mt-1 text-xs text-gray-500">
-        {label}{unit ? ` (${unit})` : ""}
+        {t(label)}{unit ? ` (${unit})` : ""}
       </span>
     </div>
   );
@@ -37,58 +39,56 @@ export function TextStats() {
   return (
     <div>
       <div className="glass-card mb-6">
-        <Label className="mb-3 block">输入文本</Label>
+        <Label className="mb-3 block">{t("输入文本")}</Label>
         <Textarea
           className="min-h-[160px] w-full resize-y font-mono text-sm"
-          placeholder="粘贴或输入任意文本..."
+          placeholder={t("粘贴或输入任意文本...")}
           value={text}
           onChange={(e) => setText(e.target.value)}
         />
         {text && (
           <p className="mt-2 text-xs text-gray-400">
-            {text.length} 字符 · {text.split("\n").length} 行
-          </p>
+            {text.length} {t(" 字符 · ")}{text.split("\n").length} {t("行")}</p>
         )}
       </div>
 
       {stats && (
         <>
           <div className="glass-card mb-6">
-            <Label className="mb-4 block">基础统计</Label>
+            <Label className="mb-4 block">{t("基础统计")}</Label>
             <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-              <StatItem label="字符" value={stats.chars} />
-              <StatItem label="字符(无空格)" value={stats.charsNoSpace} />
-              <StatItem label="词数" value={stats.words} />
-              <StatItem label="句子" value={stats.sentences} />
+              <StatItem label={t("字符")} value={stats.chars} />
+              <StatItem label={t("字符(无空格)")} value={stats.charsNoSpace} />
+              <StatItem label={t("词数")} value={stats.words} />
+              <StatItem label={t("句子")} value={stats.sentences} />
             </div>
           </div>
 
           <div className="glass-card mb-6">
-            <Label className="mb-4 block">字符构成</Label>
+            <Label className="mb-4 block">{t("字符构成")}</Label>
             <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-              <StatItem label="中文" value={stats.chinese} />
-              <StatItem label="英文" value={stats.english} />
-              <StatItem label="数字" value={stats.digits} />
-              <StatItem label="字节" value={stats.bytes} unit="B" />
+              <StatItem label={t("中文")} value={stats.chinese} />
+              <StatItem label={t("英文")} value={stats.english} />
+              <StatItem label={t("数字")} value={stats.digits} />
+              <StatItem label={t("字节")} value={stats.bytes} unit="B" />
             </div>
           </div>
 
           <div className="glass-card mb-6">
-            <Label className="mb-4 block">预估时间</Label>
+            <Label className="mb-4 block">{t("预估时间")}</Label>
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-              <StatItem label="阅读" value={stats.readTime} unit="分钟" />
-              <StatItem label="朗读" value={stats.speakTime} unit="分钟" />
+              <StatItem label={t("阅读")} value={stats.readTime} unit={t("分钟")} />
+              <StatItem label={t("朗读")} value={stats.speakTime} unit={t("分钟")} />
             </div>
             <p className="mt-3 text-xs text-gray-400">
-              阅读按 200词/分，朗读按 250字符/分估算
-            </p>
+              {t("阅读按 200词/分，朗读按 250字符/分估算")}</p>
           </div>
         </>
       )}
 
       {!text && (
         <div className="glass-card text-center py-12">
-          <p className="text-gray-400">输入文本后将自动显示统计</p>
+          <p className="text-gray-400">{t("输入文本后将自动显示统计")}</p>
         </div>
       )}
     </div>
