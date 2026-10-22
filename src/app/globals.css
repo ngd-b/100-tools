@@ -375,26 +375,12 @@ input[type="range"] { accent-color: var(--accent); }
   .workbench-links a { padding-inline: 8px; font-size: 10px; }
 }
 .navigation-link { position: relative; }
-.navigation-link:has(.navigation-pending) { cursor: progress; }
-.navigation-pending { position: absolute; inset: 0; z-index: 2; display: flex; align-items: center; justify-content: center; gap: 9px; border-radius: inherit; background: #fffffff2; color: var(--accent); pointer-events: none; }
-.navigation-pending--overlay { font-size: 13px; font-weight: 500; }
-.loading-spinner { display: inline-block; flex-shrink: 0; width: 17px; height: 17px; border: 2px solid #2d625033; border-top-color: var(--accent); border-radius: 50%; animation: loading-spin .7s linear infinite; }
 .navigation-progress { visibility: hidden; pointer-events: none; }
 body:has(.navigation-pending, .tool-loading) .navigation-progress { visibility: visible; }
 .navigation-progress-track { position: fixed; top: 0; left: 0; right: 0; height: 3px; z-index: 70; overflow: hidden; background: #dce7dc; }
 .navigation-progress-track > span { display: block; width: 35%; height: 100%; background: var(--accent); animation: navigation-progress 1.2s ease-in-out infinite; }
-.navigation-progress-label { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); z-index: 70; display: flex; align-items: center; gap: 10px; border: 1px solid #c7d8c4; border-radius: 9px; padding: 12px 18px; background: #fffffff5; box-shadow: 0 4px 20px #243a2710; color: var(--accent); font-size: 12px; white-space: nowrap; }
-body:has(.tool-loading):not(:has(.navigation-pending)) .navigation-progress-label { visibility: hidden; }
 .tool-loading { min-height: 265px; }
-.tool-loading-heading { display: flex; align-items: center; gap: 10px; color: var(--accent); font-size: 14px; font-weight: 500; }
-.tool-loading > p { margin-top: 12px; color: var(--text-secondary); font-size: 12px; }
-.tool-loading-skeleton { display: grid; gap: 14px; margin-top: 26px; }
-.tool-loading-skeleton span { height: 14px; border-radius: 5px; background: #edf1e8; animation: loading-pulse 1.5s ease-in-out infinite; }
-.tool-loading-skeleton span:nth-child(2) { height: 70px; animation-delay: .15s; }
-.tool-loading-skeleton span:nth-child(3) { width: 35%; height: 32px; animation-delay: .3s; }
-@keyframes loading-spin { to { transform: rotate(360deg); } }
 @keyframes navigation-progress { from { transform: translateX(-100%); } to { transform: translateX(390%); } }
-@keyframes loading-pulse { 50% { opacity: .5; } }
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }

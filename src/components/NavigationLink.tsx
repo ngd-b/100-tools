@@ -3,23 +3,20 @@
 import Link, { useLinkStatus } from "next/link";
 import { useState, type ComponentProps } from "react";
 
-type PendingStyle = "inline" | "overlay";
-
-function NavigationFeedback({ style }: { style: PendingStyle }) {
+function NavigationFeedback() {
   const { pending } = useLinkStatus();
   if (!pending) return null;
 
   return (
-    <span className={`navigation-pending navigation-pending--${style}`} role="status">
-      <span className="loading-spinner" aria-hidden="true" />
-      <span className={style === "inline" ? "sr-only" : undefined}>正在打开…</span>
+    <span className="navigation-pending sr-only" role="status">
+      正在打开页面…
     </span>
   );
 }
 
 export function NavigationLink({
-  children, className, pendingStyle = "inline", prefetch, onMouseEnter, onFocus, ...props
-}: ComponentProps<typeof Link> & { pendingStyle?: PendingStyle }) {
+  children, className, prefetch, onMouseEnter, onFocus, ...props
+}: ComponentProps<typeof Link>) {
   const [intent, setIntent] = useState(false);
 
   return (
@@ -31,7 +28,7 @@ export function NavigationLink({
       onFocus={(event) => { setIntent(true); onFocus?.(event); }}
     >
       {children}
-      <NavigationFeedback style={pendingStyle} />
+      <NavigationFeedback />
     </Link>
   );
 }

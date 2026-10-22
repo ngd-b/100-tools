@@ -19,7 +19,7 @@ export default function Home() {
       <section className="site-container discovery-section" aria-labelledby="browse-categories">
         <div className="discovery-heading"><h2 id="browse-categories">按使用场景，找到顺手的工具。</h2><span>6 个分类，覆盖日常工作的小需求</span></div>
         <div className="category-discovery-grid">
-          {categories.map((category) => <article key={category.id}><Link href={`/category/${category.id}`} className="category-discovery" pendingStyle="overlay"><h3><ToolIcon category={category.id} className="size-4" />{category.name}<ArrowUpRight className="size-4" aria-hidden="true" /></h3><p>{categoryGuides[category.id].description}</p></Link></article>)}
+          {categories.map((category) => <article key={category.id}><Link href={`/category/${category.id}`} className="category-discovery"><h3><ToolIcon category={category.id} className="size-4" />{category.name}<ArrowUpRight className="size-4" aria-hidden="true" /></h3><p>{categoryGuides[category.id].description}</p></Link></article>)}
         </div>
         <div className="about-tools">
           <h2>如何选择合适的在线工具<span className="mt-2 block text-[10px] tracking-widest text-muted-foreground">A LITTLE HELP, EVERY DAY.</span></h2>
