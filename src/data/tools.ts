@@ -1,6 +1,7 @@
 import type { Tool } from "@/types/tools";
 
 export const tools: Tool[] = [
+  {"id": "pdf-merge", "name": "PDF 合并", "nameEn": "Merge PDFs", "category": "document", "icon": "🧰", "description": "将多个 PDF 文件按指定顺序合并，查看各文件页数，调整顺序后在浏览器本地生成并下载。", "path": "/document/merge", "tags": ["PDF 合并", "Merge PDFs", "pdf", "merge"]},
   {"id": "image-to-pdf", "name": "图片转 PDF", "nameEn": "Images to PDF", "category": "document", "icon": "🧰", "description": "将 PNG、JPEG 或 WebP 图片按顺序生成 PDF，设置 A4 或自适应页面、方向和页边距，本地下载。", "path": "/document/image-to-pdf", "tags": ["图片转 PDF", "Images to PDF", "image", "to", "pdf"]},
   {"id": "image-collage", "name": "图片拼接", "nameEn": "Image Collage", "category": "image", "icon": "🧰", "description": "将多张图片按横向、纵向或网格排列，调整顺序、尺寸、间距和背景，预览并下载拼图。", "path": "/image/collage", "tags": ["图片拼接", "Image Collage", "image", "collage"]},
   {"id": "random-picker", "name": "随机抽取", "nameEn": "Random Picker", "category": "daily", "icon": "🧰", "description": "在浏览器本地从名单或整数范围随机抽取，设置是否重复，复制或下载抽取结果。", "path": "/daily/random", "tags": ["随机抽取", "Random Picker", "random", "picker"]},

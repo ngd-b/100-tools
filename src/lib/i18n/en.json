@@ -1346,5 +1346,22 @@
   "文档工具": "Document Tools",
   "在线文档工具：图片转 PDF 与 PDF 合并": "Online Document Tools: Images to PDF and PDF Merge",
   "在浏览器本地生成和整理 PDF 文档，按顺序将图片转为页面或合并多个 PDF 文件。": "Create and organize PDFs locally in your browser, turning ordered images into pages or merging PDF files.",
-  "准备打印或分享材料时，可以先将图片按顺序转成 PDF，也可以将已有 PDF 合并为一个文件。所有文件在浏览器中处理，页面尺寸、顺序和支持范围见各工具说明。": "Prepare materials for printing or sharing by turning images into ordered PDF pages or merging existing PDFs into one file. Files are processed in your browser. See each tool for page sizing, ordering and supported inputs."
+  "准备打印或分享材料时，可以先将图片按顺序转成 PDF，也可以将已有 PDF 合并为一个文件。所有文件在浏览器中处理，页面尺寸、顺序和支持范围见各工具说明。": "Prepare materials for printing or sharing by turning images into ordered PDF pages or merging existing PDFs into one file. Files are processed in your browser. See each tool for page sizing, ordering and supported inputs.",
+  "PDF 合并": "Merge PDFs",
+  "将多个 PDF 文件按指定顺序合并，查看各文件页数，调整顺序后在浏览器本地生成并下载。": "Combine PDF files in your chosen order. View page counts, reorder files, and generate and download the result locally.",
+  "添加需要合并的 PDF 文件并查看页数。": "Add PDF files and check their page counts.",
+  "调整文件顺序，删除不需要的文件。": "Reorder the files and remove unwanted ones.",
+  "点击合并 PDF，下载并检查结果。": "Merge the PDFs, download and inspect the result.",
+  "只合并页面，不保留文档书签、附件和数字签名；加密、损坏和交互表单 PDF 不支持。": "Only pages are merged. Document bookmarks, attachments and digital signatures are not preserved. Encrypted, damaged and interactive-form PDFs are unsupported.",
+  "最多 20 个 PDF，总大小不超过 50 MB。": "Up to 20 PDFs and 50 MB combined.",
+  "请选择 PDF 文件。": "Choose PDF files.",
+  "不支持加密 PDF，请先解除密码保护。": "Encrypted PDFs are unsupported. Remove password protection first.",
+  "PDF 无法读取，文件可能已损坏。": "Cannot read PDF. The file may be damaged.",
+  "不支持交互表单 PDF，请先导出为普通 PDF。": "Interactive-form PDFs are unsupported. Export a regular PDF first.",
+  "PDF 页数必须在 1–500 页之间，合计不超过 500 页。": "Each PDF must have 1–500 pages, with no more than 500 combined.",
+  "请选择 2–20 个 PDF 进行合并。": "Choose 2–20 PDFs to merge.",
+  "{0} 页": "{0} pages",
+  "合并 PDF": "Merge PDFs",
+  "正在读取和处理 PDF…": "Reading and processing PDFs…",
+  "本地合并 2–20 个 PDF，总大小不超过 50 MB、总页数不超过 500 页。不支持加密、损坏或交互表单文件；仅合并页面，不保留文档书签、附件和数字签名。": "Merge 2–20 PDFs locally, up to 50 MB and 500 pages combined. Encrypted, damaged and interactive-form files are unsupported. Only pages are merged; document bookmarks, attachments and digital signatures are not preserved."
 }
