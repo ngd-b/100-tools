@@ -2,12 +2,12 @@ ARG SITE_URL=https://tools.hboot.fun
 ARG SITE_INDEXABLE=true
 
 # --- Build stage ---
-FROM node:22-alpine AS builder
+FROM node:24.22.1-alpine AS builder
 ARG SITE_URL
 ARG SITE_INDEXABLE
 WORKDIR /app
 COPY package*.json ./
-RUN npm ci
+RUN node --version && npm ci && npm run audit:production
 COPY . .
 ENV NEXT_TELEMETRY_DISABLED=1
 ENV SITE_URL=${SITE_URL}
@@ -15,7 +15,7 @@ ENV SITE_INDEXABLE=${SITE_INDEXABLE}
 RUN npm run build
 
 # --- Production stage ---
-FROM node:22-alpine AS runner
+FROM node:24.22.1-alpine AS runner
 ARG SITE_URL
 ARG SITE_INDEXABLE
 WORKDIR /app

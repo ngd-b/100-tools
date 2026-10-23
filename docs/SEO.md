@@ -49,7 +49,7 @@ docker build --build-arg SITE_URL="$SITE_URL" --build-arg SITE_INDEXABLE=true -t
 
 ## 验证
 
-使用 Node.js 22.18+ 或 24+，完成构建并启动站点后运行：
+使用 Node.js 24.22.1+（24.x），完成构建并启动站点后运行：
 
 ```bash
 npm test

@@ -86,6 +86,8 @@
 
 ## 本地运行
 
+需要 Node.js **24.22.1 或更新的 24.x 安全版本**，项目通过 `.nvmrc` 固定当前基线。使用 nvm 时先运行 `nvm install && nvm use`。
+
 ```bash
 npm install
 npm run dev
@@ -100,9 +102,10 @@ npm test
 npx tsc --noEmit
 npm run lint
 npm run build
+npm run audit:production
 ```
 
-`npm test` 使用 Node.js 原生 TypeScript 支持，需要 Node.js 22.18+ 或 24+，覆盖 JSON 结构对比、文本处理、工具注册和旧收藏迁移。全仓 lint 目前仍有旧工具的历史问题，详见 [验收记录](ROADMAP.md#本轮验收)。
+`npm test` 使用 Node.js 原生 TypeScript 支持，需要 Node.js 24.22.1+（24.x），覆盖 JSON 结构对比、文本处理、工具注册和旧收藏迁移。全仓 lint 目前仍有旧工具的历史问题，详见 [验收记录](ROADMAP.md#本轮验收)。
 
 工具元数据位于 `src/data/tools.ts`，组件通过 `src/components/ToolRenderer.tsx` 按需加载，独立页面由 `src/app/[...toolPath]/page.tsx` 统一生成。新增工具需要同步注册元数据和组件，并更新文档。旧 `/#工具ID` 分享链接会自动转到独立页面。
 
@@ -126,7 +129,9 @@ npm run build
 docker-compose up -d
 ```
 
-应用监听 `127.0.0.1:3000`，建议通过反向代理暴露到公网。
+构建与运行镜像均固定为 `node:24.22.1-alpine`。GitHub Actions 构建时拉取基础镜像，并在镜像构建阶段执行生产依赖高危审计。应用监听 `127.0.0.1:3000`，建议通过反向代理暴露到公网。
+
+安全升级与开发工具剩余告警见 [安全升级记录](docs/SECURITY.md)。
 
 ## CI/CD
 
