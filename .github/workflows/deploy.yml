@@ -38,10 +38,15 @@ jobs:
             -C ${{ runner.temp }} 100-tools.tar docker-compose.yml
 
       - name: Upload to server via SCP
+        timeout-minutes: 4
         run: |
           mkdir -p ~/.ssh && chmod 700 ~/.ssh
           echo "${SSH_KEY}" > ~/.ssh/deploy_key && chmod 600 ~/.ssh/deploy_key
-          scp -i ~/.ssh/deploy_key \
+          scp -O -v -i ~/.ssh/deploy_key \
+              -o BatchMode=yes \
+              -o ConnectTimeout=20 \
+              -o ServerAliveInterval=15 \
+              -o ServerAliveCountMax=3 \
               -o StrictHostKeyChecking=no \
               -P "${SSH_PORT}" \
               "${{ runner.temp }}/deploy.tar.gz" \
