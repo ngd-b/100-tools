@@ -1,6 +1,7 @@
 import type { Tool } from "@/types/tools";
 
 export const tools: Tool[] = [
+  {"id": "json-csv", "name": "JSON ↔ CSV", "nameEn": "JSON ↔ CSV", "category": "dev", "icon": "🧰", "description": "JSON 对象数组与 CSV 表格互转，预览并下载结果", "path": "/dev/json-csv", "tags": ["JSON ↔ CSV", "JSON ↔ CSV", "json", "csv"]},
   {
     id: "color-tools",
     name: "颜色工具箱",

@@ -6,6 +6,7 @@ export type ToolGuide = {
 };
 
 export const toolGuides: Record<string, ToolGuide> = {
+  "json-csv": {"title": "JSON ↔ CSV", "description": "在浏览器中将 JSON 对象数组与 CSV 表格互相转换，选择分隔符、检查表格预览并复制或下载结果。", "steps": ["粘贴 JSON 对象数组或 CSV 表格。", "选择转换方向和分隔符后转换。", "检查表格预览，复制或下载结果。"], "note": "CSV 转 JSON 保留字符串，空值不区分 null 和缺失字段，不支持嵌套结构。"},
   "color-tools": {
     title: "颜色工具箱：在线 HEX、RGB、HSL 颜色转换与配色",
     description: "通过色板选择或输入颜色，查看 HEX、RGB、HSL 等格式的色值，并调整明度、饱和度与参考配色，方便将同一颜色用于网页与设计稿。",
