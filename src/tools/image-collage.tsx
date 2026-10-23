@@ -1,21 +1,279 @@
 "use client";
-import {useEffect,useState} from 'react';
-import {useI18n} from '@/components/LanguageProvider';
-import {Button} from '@/components/ui/button';
-import {Input} from '@/components/ui/input';
-import {LocalFileQueue} from '@/components/LocalFileQueue';
-import {collageLayout} from '@/lib/image-layout';
-import {validateImageFiles,readBitmap,canvasBlob,downloadBlob} from '@/lib/local-images';
-export function ImageCollage(){
- const {t}=useI18n();const [files,setFiles]=useState<File[]>([]);const [mode,setMode]=useState('horizontal');const [size,setSize]=useState('400');const [gap,setGap]=useState('10');const [columns,setColumns]=useState('3');const [background,setBackground]=useState('#ffffff');const [format,setFormat]=useState('image/png');const [transparent,setTransparent]=useState(false);const [busy,setBusy]=useState(false);const [error,setError]=useState('');const [result,setResult]=useState<{url:string;blob:Blob;width:number;height:number}|null>(null);
- useEffect(()=>()=>{if(result)URL.revokeObjectURL(result.url);},[result]);
- function reset(){setResult(null);setError('');}
- function change(next:File[]){setFiles(next);reset();}
- async function generate(){reset();setBusy(true);try{validateImageFiles(files);const dimensions=[];for(const file of files){const im=await readBitmap(file);dimensions.push({width:im.width,height:im.height});im.close();}const layout=collageLayout(dimensions,mode,Number(size),Number(gap),Number(columns));const canvas=document.createElement('canvas');canvas.width=layout.width;canvas.height=layout.height;const ctx=canvas.getContext('2d');if(!ctx)throw new Error('图片导出失败，请减小尺寸后重试。');if(!transparent||format==='image/jpeg'){ctx.fillStyle=background;ctx.fillRect(0,0,canvas.width,canvas.height);}for(let i=0;i<files.length;i++){const im=await readBitmap(files[i]);try{const p=layout.items[i];ctx.drawImage(im,p.x,p.y,p.width,p.height);}finally{im.close();}}const blob=await canvasBlob(canvas,format);setResult({url:URL.createObjectURL(blob),blob,width:canvas.width,height:canvas.height});canvas.width=0;canvas.height=0;}catch(e){setError((e as Error).message);}finally{setBusy(false);}}
- return <div className="space-y-4"><fieldset disabled={busy} className="min-w-0 space-y-4"><LocalFileQueue files={files} onChange={change} accept="image/png,image/jpeg,image/webp" onAdd={added=>{if(!added.length)return;try{const next=[...files,...added];validateImageFiles(next);change(next);}catch(e){setError((e as Error).message);}}}/>
- <div className="grid gap-4 sm:grid-cols-3"><label>{t('拼接布局')}<select className="block" value={mode} onChange={e=>{setMode(e.target.value);reset();}}><option value="horizontal">{t('横向')}</option><option value="vertical">{t('纵向')}</option><option value="grid">{t('网格')}</option></select></label><label>{t('单元尺寸（像素）')}<Input type="number" min={32} max={4096} value={size} onChange={e=>{setSize(e.target.value);reset();}}/></label><label>{t('间距（像素）')}<Input type="number" min={0} max={200} value={gap} onChange={e=>{setGap(e.target.value);reset();}}/></label>{mode==='grid'&&<label>{t('列数')}<Input type="number" min={1} max={10} value={columns} onChange={e=>{setColumns(e.target.value);reset();}}/></label>}<label>{t('背景颜色')}<Input type="color" value={background} onChange={e=>{setBackground(e.target.value);reset();}}/></label><label>{t('输出格式')}<select className="block" value={format} onChange={e=>{setFormat(e.target.value);reset();}}><option value="image/png">PNG</option><option value="image/jpeg">JPEG</option></select></label>{format==='image/png'&&<label><input type="checkbox" checked={transparent} onChange={e=>{setTransparent(e.target.checked);reset();}}/> {t('透明背景')}</label>}</div>
- <p className="text-sm text-gray-500">{t('横排统一高度，竖排统一宽度，网格完整容纳图片。最多 20 张、总大小 30 MB；输出最长边 8192 像素，总像素不超过 2400 万。全部本地处理。')}</p><Button onClick={generate}>{t(busy?'处理中…':'生成拼接图片')}</Button></fieldset>{error&&<p role="alert">{t(error)}</p>}{result&&<section className="space-y-3"><p>{result.width} × {result.height}px</p>
-{/* Local blob preview; next/image optimization is unnecessary. */}
-{/* eslint-disable-next-line @next/next/no-img-element */}
-<img src={result.url} alt={t('拼接预览')} className="max-h-[600px] max-w-full object-contain"/><Button onClick={()=>downloadBlob(result.blob,`collage.${format==='image/png'?'png':'jpg'}`)}>{t('下载结果')}</Button></section>}</div>;
+import {
+  ToolPanel,
+  ToolHint,
+  ToolFeedback,
+  BusyIcon,
+} from "@/components/ToolWorkspace";
+import { Download, Sparkles } from "lucide-react";
+
+import { useEffect, useState } from "react";
+import { useI18n } from "@/components/LanguageProvider";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { LocalFileQueue } from "@/components/LocalFileQueue";
+import { collageLayout } from "@/lib/image-layout";
+import {
+  validateImageFiles,
+  readBitmap,
+  canvasBlob,
+  downloadBlob,
+} from "@/lib/local-images";
+export function ImageCollage() {
+  const { t } = useI18n();
+  const [files, setFiles] = useState<File[]>([]);
+  const [mode, setMode] = useState("horizontal");
+  const [size, setSize] = useState("400");
+  const [gap, setGap] = useState("10");
+  const [columns, setColumns] = useState("3");
+  const [background, setBackground] = useState("#ffffff");
+  const [format, setFormat] = useState("image/png");
+  const [transparent, setTransparent] = useState(false);
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState("");
+  const [result, setResult] = useState<{
+    url: string;
+    blob: Blob;
+    width: number;
+    height: number;
+  } | null>(null);
+  useEffect(
+    () => () => {
+      if (result) URL.revokeObjectURL(result.url);
+    },
+    [result],
+  );
+  function reset() {
+    setResult(null);
+    setError("");
+  }
+  function change(next: File[]) {
+    setFiles(next);
+    reset();
+  }
+  async function generate() {
+    reset();
+    setBusy(true);
+    try {
+      validateImageFiles(files);
+      const dimensions = [];
+      for (const file of files) {
+        const im = await readBitmap(file);
+        dimensions.push({ width: im.width, height: im.height });
+        im.close();
+      }
+      const layout = collageLayout(
+        dimensions,
+        mode,
+        Number(size),
+        Number(gap),
+        Number(columns),
+      );
+      const canvas = document.createElement("canvas");
+      canvas.width = layout.width;
+      canvas.height = layout.height;
+      const ctx = canvas.getContext("2d");
+      if (!ctx) throw new Error("图片导出失败，请减小尺寸后重试。");
+      if (!transparent || format === "image/jpeg") {
+        ctx.fillStyle = background;
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+      }
+      for (let i = 0; i < files.length; i++) {
+        const im = await readBitmap(files[i]);
+        try {
+          const p = layout.items[i];
+          ctx.drawImage(im, p.x, p.y, p.width, p.height);
+        } finally {
+          im.close();
+        }
+      }
+      const blob = await canvasBlob(canvas, format);
+      setResult({
+        url: URL.createObjectURL(blob),
+        blob,
+        width: canvas.width,
+        height: canvas.height,
+      });
+      canvas.width = 0;
+      canvas.height = 0;
+    } catch (e) {
+      setError((e as Error).message);
+    } finally {
+      setBusy(false);
+    }
+  }
+  return (
+    <div className="tool-workspace">
+      <fieldset disabled={busy}>
+        <ToolPanel
+          title={t("文件与顺序")}
+          detail={t("添加文件后，按需要调整排列顺序")}
+        >
+          <LocalFileQueue
+            files={files}
+            onChange={change}
+            accept="image/png,image/jpeg,image/webp"
+            onAdd={(added) => {
+              if (!added.length) return;
+              try {
+                const next = [...files, ...added];
+                validateImageFiles(next);
+                change(next);
+              } catch (e) {
+                setError((e as Error).message);
+              }
+            }}
+          />
+        </ToolPanel>
+        <ToolPanel title={t("排版设置")}>
+          <div className="workspace-fields">
+            <label>
+              {t("拼接布局")}
+              <select
+                className="block"
+                value={mode}
+                onChange={(e) => {
+                  setMode(e.target.value);
+                  reset();
+                }}
+              >
+                <option value="horizontal">{t("横向")}</option>
+                <option value="vertical">{t("纵向")}</option>
+                <option value="grid">{t("网格")}</option>
+              </select>
+            </label>
+            <label>
+              {t("单元尺寸（像素）")}
+              <Input
+                type="number"
+                min={32}
+                max={4096}
+                value={size}
+                onChange={(e) => {
+                  setSize(e.target.value);
+                  reset();
+                }}
+              />
+            </label>
+            <label>
+              {t("间距（像素）")}
+              <Input
+                type="number"
+                min={0}
+                max={200}
+                value={gap}
+                onChange={(e) => {
+                  setGap(e.target.value);
+                  reset();
+                }}
+              />
+            </label>
+            {mode === "grid" && (
+              <label>
+                {t("列数")}
+                <Input
+                  type="number"
+                  min={1}
+                  max={10}
+                  value={columns}
+                  onChange={(e) => {
+                    setColumns(e.target.value);
+                    reset();
+                  }}
+                />
+              </label>
+            )}
+            <label>
+              {t("背景颜色")}
+              <span className="workspace-color">
+                <Input
+                  type="color"
+                  value={background}
+                  onChange={(e) => {
+                    setBackground(e.target.value);
+                    reset();
+                  }}
+                />
+                <code>{background.toUpperCase()}</code>
+              </span>
+            </label>
+            <label>
+              {t("输出格式")}
+              <select
+                className="block"
+                value={format}
+                onChange={(e) => {
+                  setFormat(e.target.value);
+                  reset();
+                }}
+              >
+                <option value="image/png">PNG</option>
+                <option value="image/jpeg">JPEG</option>
+              </select>
+            </label>
+            {format === "image/png" && (
+              <label className="workspace-toggle">
+                {t("透明背景")}
+                <input
+                  type="checkbox"
+                  checked={transparent}
+                  onChange={(e) => {
+                    setTransparent(e.target.checked);
+                    reset();
+                  }}
+                />
+              </label>
+            )}
+          </div>
+          <ToolHint>
+            {t(
+              "横排统一高度，竖排统一宽度，网格完整容纳图片。最多 20 张、总大小 30 MB；输出最长边 8192 像素，总像素不超过 2400 万。全部本地处理。",
+            )}
+          </ToolHint>
+          <div className="workspace-actionbar">
+            <Button
+              variant="gradient"
+              disabled={!files.length}
+              onClick={generate}
+            >
+              <BusyIcon busy={busy} />
+              {!busy && <Sparkles size={16} />}
+              {t(busy ? "处理中…" : "生成拼接图片")}
+            </Button>
+          </div>
+        </ToolPanel>
+      </fieldset>
+      <ToolFeedback error>{t(error)}</ToolFeedback>
+      {result && (
+        <ToolPanel
+          title={t("拼接预览")}
+          detail={`${result.width} × ${result.height}px`}
+          actions={
+            <Button
+              variant="gradient"
+              onClick={() =>
+                downloadBlob(
+                  result.blob,
+                  `collage.${format === "image/png" ? "png" : "jpg"}`,
+                )
+              }
+            >
+              <Download size={16} />
+              {t("下载结果")}
+            </Button>
+          }
+        >
+          <div className="workspace-preview">
+            {/* Local blob preview; next/image optimization is unnecessary. */}
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={result.url}
+              alt={t("拼接预览")}
+              className="max-h-[600px] max-w-full object-contain"
+            />
+          </div>
+        </ToolPanel>
+      )}
+    </div>
+  );
 }
