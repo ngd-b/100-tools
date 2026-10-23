@@ -9,7 +9,7 @@ import {
 } from "lucide-react";
 
 const categoryIcons: Record<string, LucideIcon> = {
-  color: Palette, image: Image, audio: AudioLines, text: Type, dev: Code2, daily: Calculator,
+  document: FileText, color: Palette, image: Image, audio: AudioLines, text: Type, dev: Code2, daily: Calculator,
 };
 
 const toolIcons: Record<string, LucideIcon> = {

@@ -85,7 +85,7 @@ export function createCollectionSchema(page: PageDetails, items: Tool[], site: S
 
 export function createToolSchema(tool: Tool, category: Category, description: string, site: SiteConfig, locale: Locale = "zh") {
   if (!site.url) return null;
-  const applicationCategories: Record<string, string> = { color: "DesignApplication", image: "MultimediaApplication", audio: "MultimediaApplication", text: "UtilitiesApplication", dev: "DeveloperApplication", daily: "ProductivityApplication" };
+  const applicationCategories: Record<string, string> = { document: "ProductivityApplication", color: "DesignApplication", image: "MultimediaApplication", audio: "MultimediaApplication", text: "UtilitiesApplication", dev: "DeveloperApplication", daily: "ProductivityApplication" };
   return {
     "@context": "https://schema.org",
     "@graph": [

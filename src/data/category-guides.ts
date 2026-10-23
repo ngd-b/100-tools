@@ -1,4 +1,5 @@
 export const categoryGuides: Record<string, { title: string; description: string; intro: string }> = {
+  document: { title: "在线文档工具：图片转 PDF 与 PDF 合并", description: "在浏览器本地生成和整理 PDF 文档，按顺序将图片转为页面或合并多个 PDF 文件。", intro: "准备打印或分享材料时，可以先将图片按顺序转成 PDF，也可以将已有 PDF 合并为一个文件。所有文件在浏览器中处理，页面尺寸、顺序和支持范围见各工具说明。" },
   image: {
     title: "免费在线图片工具：压缩、裁剪、格式转换与二维码",
     description: "在线压缩图片、裁剪尺寸、添加水印、转换 PNG/JPEG/WebP、制作 GIF 和生成二维码。按图片处理任务选择工具，在浏览器中预览和下载结果。",

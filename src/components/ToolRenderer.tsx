@@ -8,6 +8,7 @@ import { ToolLoading } from "@/components/ToolLoading";
 
 // Keep imports explicit so Next.js can create a separate chunk for each tool.
 export const toolComponents: Record<string, ComponentType> = {
+  "image-to-pdf": dynamic(() => import("@/tools/image-to-pdf").then((mod) => mod.ImageToPdf), { loading: ToolLoading, ssr: false }),
   "image-collage": dynamic(() => import("@/tools/image-collage").then((mod) => mod.ImageCollage), { loading: ToolLoading, ssr: false }),
   "random-picker": dynamic(() => import("@/tools/random-picker").then((mod) => mod.RandomPicker), { loading: ToolLoading, ssr: false }),
   "json-csv": dynamic(() => import("@/tools/json-csv").then((mod) => mod.JsonCsv), { loading: ToolLoading, ssr: false }),

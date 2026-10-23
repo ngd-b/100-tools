@@ -1,6 +1,7 @@
 import type { Tool } from "@/types/tools";
 
 export const tools: Tool[] = [
+  {"id": "image-to-pdf", "name": "图片转 PDF", "nameEn": "Images to PDF", "category": "document", "icon": "🧰", "description": "将 PNG、JPEG 或 WebP 图片按顺序生成 PDF，设置 A4 或自适应页面、方向和页边距，本地下载。", "path": "/document/image-to-pdf", "tags": ["图片转 PDF", "Images to PDF", "image", "to", "pdf"]},
   {"id": "image-collage", "name": "图片拼接", "nameEn": "Image Collage", "category": "image", "icon": "🧰", "description": "将多张图片按横向、纵向或网格排列，调整顺序、尺寸、间距和背景，预览并下载拼图。", "path": "/image/collage", "tags": ["图片拼接", "Image Collage", "image", "collage"]},
   {"id": "random-picker", "name": "随机抽取", "nameEn": "Random Picker", "category": "daily", "icon": "🧰", "description": "在浏览器本地从名单或整数范围随机抽取，设置是否重复，复制或下载抽取结果。", "path": "/daily/random", "tags": ["随机抽取", "Random Picker", "random", "picker"]},
   {"id": "json-csv", "name": "JSON ↔ CSV", "nameEn": "JSON ↔ CSV", "category": "dev", "icon": "🧰", "description": "JSON 对象数组与 CSV 表格互转，预览并下载结果", "path": "/dev/json-csv", "tags": ["JSON ↔ CSV", "JSON ↔ CSV", "json", "csv"]},
@@ -547,6 +548,7 @@ export const tools: Tool[] = [
 ];
 
 export const categories = [
+  { id: "document", name: "文档工具", icon: "📄" },
   { id: "color", name: "颜色与样式", icon: "🎨" },
   { id: "image", name: "图片工具", icon: "🖼️" },
   { id: "audio", name: "音频工具", icon: "🔊" },
