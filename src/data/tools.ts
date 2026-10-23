@@ -1,6 +1,7 @@
 import type { Tool } from "@/types/tools";
 
 export const tools: Tool[] = [
+  {"id": "random-picker", "name": "随机抽取", "nameEn": "Random Picker", "category": "daily", "icon": "🧰", "description": "在浏览器本地从名单或整数范围随机抽取，设置是否重复，复制或下载抽取结果。", "path": "/daily/random", "tags": ["随机抽取", "Random Picker", "random", "picker"]},
   {"id": "json-csv", "name": "JSON ↔ CSV", "nameEn": "JSON ↔ CSV", "category": "dev", "icon": "🧰", "description": "JSON 对象数组与 CSV 表格互转，预览并下载结果", "path": "/dev/json-csv", "tags": ["JSON ↔ CSV", "JSON ↔ CSV", "json", "csv"]},
   {
     id: "color-tools",

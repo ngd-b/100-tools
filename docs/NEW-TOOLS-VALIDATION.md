@@ -8,3 +8,10 @@
 - `npx tsc --noEmit`、新增文件定向 ESLint：通过。
 - `npm run build -- --webpack`：通过。默认 Turbopack 在当前执行环境绑定端口失败，使用 Webpack 验证生产构建。
 - Chrome：示例转换、Tab 分隔、嵌套结构错误、CSV 下载、中英文页面、两种宽度无横向溢出、无运行时异常。
+
+## 随机抽取
+
+- `npm test`：44/44 通过，新增名单归一化、无放回抽样、整数端点、超大稀疏范围、非法数量测试。
+- `npx tsc --noEmit`、新增文件定向 ESLint：通过。
+- `npm run build -- --webpack`：通过。
+- Chrome：名单去重、不重复抽取、数量超限、允许重复、结果下载、中英文页面、桌面及手机宽度布局，无运行时异常。

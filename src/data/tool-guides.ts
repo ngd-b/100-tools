@@ -6,6 +6,7 @@ export type ToolGuide = {
 };
 
 export const toolGuides: Record<string, ToolGuide> = {
+  "random-picker": {"title": "随机抽取", "description": "在浏览器本地从名单或整数范围随机抽取，设置是否重复，复制或下载抽取结果。", "steps": ["选择名单抽签或整数范围。", "填写候选内容、抽取数量和重复规则。", "点击开始抽取，复制或下载结果。"], "note": "名单去除空行、首尾空格和重复项。每轮独立抽取，使用浏览器安全随机数。"},
   "json-csv": {"title": "JSON ↔ CSV", "description": "在浏览器中将 JSON 对象数组与 CSV 表格互相转换，选择分隔符、检查表格预览并复制或下载结果。", "steps": ["粘贴 JSON 对象数组或 CSV 表格。", "选择转换方向和分隔符后转换。", "检查表格预览，复制或下载结果。"], "note": "CSV 转 JSON 保留字符串，空值不区分 null 和缺失字段，不支持嵌套结构。"},
   "color-tools": {
     title: "颜色工具箱：在线 HEX、RGB、HSL 颜色转换与配色",
