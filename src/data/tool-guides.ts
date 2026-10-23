@@ -6,6 +6,7 @@ export type ToolGuide = {
 };
 
 export const toolGuides: Record<string, ToolGuide> = {
+  "image-collage": {"title": "图片拼接", "description": "将多张图片按横向、纵向或网格排列，调整顺序、尺寸、间距和背景，预览并下载拼图。", "steps": ["添加 PNG、JPEG 或 WebP 图片并调整顺序。", "选择布局，设置单元尺寸、间距和背景。", "生成并检查拼图，下载 PNG 或 JPEG。"], "note": "图片保持比例，JPEG 使用背景色填充，PNG 可选择透明背景。所有内容在本地处理。"},
   "random-picker": {"title": "随机抽取", "description": "在浏览器本地从名单或整数范围随机抽取，设置是否重复，复制或下载抽取结果。", "steps": ["选择名单抽签或整数范围。", "填写候选内容、抽取数量和重复规则。", "点击开始抽取，复制或下载结果。"], "note": "名单去除空行、首尾空格和重复项。每轮独立抽取，使用浏览器安全随机数。"},
   "json-csv": {"title": "JSON ↔ CSV", "description": "在浏览器中将 JSON 对象数组与 CSV 表格互相转换，选择分隔符、检查表格预览并复制或下载结果。", "steps": ["粘贴 JSON 对象数组或 CSV 表格。", "选择转换方向和分隔符后转换。", "检查表格预览，复制或下载结果。"], "note": "CSV 转 JSON 保留字符串，空值不区分 null 和缺失字段，不支持嵌套结构。"},
   "color-tools": {
