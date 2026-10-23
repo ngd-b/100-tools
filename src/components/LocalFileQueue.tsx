@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import {
   ArrowDown,
   ArrowUp,
@@ -10,6 +10,7 @@ import {
   X,
 } from "lucide-react";
 import { useI18n } from "@/components/LanguageProvider";
+import { ImageUploadZone } from "@/components/ImageUploadZone";
 import { Button } from "@/components/ui/button";
 
 function FilePreview({ file }: { file: File }) {
@@ -45,7 +46,6 @@ export function LocalFileQueue({
   getDetail?: (file: File) => string;
 }) {
   const { t } = useI18n();
-  const [dragging, setDragging] = useState(false);
   const images = accept.includes("image/");
   function move(index: number, delta: number) {
     const next = [...files];
@@ -54,45 +54,25 @@ export function LocalFileQueue({
   }
   return (
     <div className="space-y-4">
-      <label
-        className={`workspace-upload ${dragging ? "is-dragging" : ""}`}
-        onDragOver={(event) => {
-          event.preventDefault();
-          setDragging(true);
-        }}
-        onDragLeave={() => setDragging(false)}
-        onDrop={(event) => {
-          event.preventDefault();
-          setDragging(false);
-          if (!event.currentTarget.closest("fieldset:disabled"))
-            onAdd(Array.from(event.dataTransfer.files));
-        }}
-      >
-        <span className="workspace-upload-icon">
-          {images ? <ImagePlus size={24} /> : <UploadCloud size={24} />}
-        </span>
-        <strong>
-          {t(images ? "点击添加图片，或拖到这里" : "点击添加 PDF，或拖到这里")}
-        </strong>
-        <span>
-          {t(
-            images
-              ? "PNG、JPEG、WebP · 最多 20 张 · 共 30 MB"
-              : "PDF · 最多 20 个 · 共 50 MB",
-          )}
-        </span>
-        <input
-          className="sr-only"
-          aria-label={t("添加本地文件")}
-          type="file"
-          accept={accept}
-          multiple
-          onChange={(event) => {
-            onAdd(Array.from(event.target.files ?? []));
-            event.target.value = "";
-          }}
-        />
-      </label>
+      <ImageUploadZone
+        accept={accept}
+        multiple
+        onFiles={(selected) => onAdd(Array.from(selected))}
+        className="workspace-upload"
+        inputLabel="添加本地文件"
+        buttonLabel={null}
+        title={images ? "点击添加图片，或拖到这里" : "点击添加 PDF，或拖到这里"}
+        description={
+          images
+            ? "PNG、JPEG、WebP · 最多 20 张 · 共 30 MB"
+            : "PDF · 最多 20 个 · 共 50 MB"
+        }
+        icon={
+          <span className="workspace-upload-icon">
+            {images ? <ImagePlus size={24} /> : <UploadCloud size={24} />}
+          </span>
+        }
+      />
       {files.length > 0 && (
         <>
           <div className="workspace-toolbar text-xs text-muted-foreground">

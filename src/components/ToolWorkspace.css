@@ -282,7 +282,7 @@ fieldset:disabled .workspace-upload {
   color: var(--accent);
   margin-bottom: 3px;
 }
-.workspace-upload strong {
+.workspace-upload .upload-zone-title {
   font-size: 14px;
   font-weight: 550;
   color: var(--accent);

@@ -229,7 +229,7 @@ textarea.input { resize: vertical; line-height: 1.7; }
 .filter-pill { display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--card-border); background: #fff; color: var(--text-secondary); font-size: 12px; padding: 8px 12px; border-radius: 6px; transition: color 160ms, background 160ms, border-color 160ms; }
 .filter-pill:hover, .filter-pill.active, .filter-pill[aria-pressed="true"] { background: var(--accent-soft); color: var(--accent); border-color: #bbcdbb; }
 .upload-zone { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 280px; border: 1px dashed #becdb5; background: #f5f8f1; border-radius: 10px; transition: border-color 160ms, background 160ms; cursor: pointer; }
-.upload-zone:hover { border-color: var(--accent); background: #edf3e8; }
+.upload-zone:hover, .upload-zone:focus-within, .upload-zone.is-dragging { border-color: var(--accent); background: #edf3e8; }
 .upload-zone input[type="file"] { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
 input[type="range"] { accent-color: var(--accent); }
 .wave-bars { display: inline-flex; align-items: center; gap: 2px; }
