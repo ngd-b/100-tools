@@ -150,8 +150,8 @@ docker-compose up -d
 推送 `v*` tag 自动触发构建部署：
 
 ```bash
-git tag -a v1.9.0 -m "Release v1.9.0"
-git push origin v1.9.0
+git tag -a v1.9.1 -m "Release v1.9.1"
+git push origin v1.9.1
 ```
 
 ## License
