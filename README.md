@@ -1,6 +1,7 @@
 # 100-tools — 免费在线工具合集
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![XERJ Corpus Hub contributor](https://hub.xerj.org/contributors/ngd-b/badge.svg)](https://hub.xerj.org/contributors/ngd-b)
 
 无需注册，打开即用。提供颜色、图片、音频、文本、开发等各类实用在线工具。
 
