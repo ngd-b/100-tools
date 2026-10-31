@@ -137,7 +137,13 @@ export function PasswordGenerator() {
             value={[format === "chars" ? length : byteLength]}
             onValueChange={(v) => {
               const val = (Array.isArray(v) ? v[0] : v) as number;
-              if (format === "chars") { setLength(val); return; }
+              if (format === "chars") {
+                if (val === length) return;
+                setLength(val);
+                // Length is part of every generated value, so stale results would mislead.
+                resetResults();
+                return;
+              }
               if (val === byteLength) return;
               setByteLength(val);
               // The displayed command and result lengths depend on the byte count.
