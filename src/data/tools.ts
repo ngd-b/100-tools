@@ -172,7 +172,7 @@ export const tools: Tool[] = [
     nameEn: "Password Generator",
     category: "dev",
     icon: "🔐",
-    description: "安全随机密码生成，可调长度、字符集、强度指示",
+    description: "安全随机密码生成，可调长度、字符集、强度指示，支持 Hex/Base64 密钥格式",
     path: "/dev/password",
     tags: ["密码", "随机", "password", "generator", "安全"],
   },
