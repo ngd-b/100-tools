@@ -3,6 +3,7 @@ import type { Tool } from "@/types/tools";
 import { ArrowLeft, ChevronRight } from "lucide-react";
 import { ToolIcon } from "@/components/ToolIcon";
 import { ToolActions } from "@/components/ToolActions";
+import { ToolUsage } from "@/components/ToolUsage";
 import { ToolRenderer } from "@/components/ToolRenderer";
 import { getToolGuide, localizedCategories, localizedTools } from "@/lib/i18n/content";
 import { getTranslator } from "@/lib/i18n/translate";
@@ -30,7 +31,10 @@ export function ToolPage({ tool, locale }: { tool: Tool; locale: Locale }) {
           <header className="workspace-header">
             <div className="workspace-title"><span className="tool-icon" data-category={tool.category}><ToolIcon id={tool.id} category={tool.category} className="size-6" /></span><div><h1>{tool.name}</h1><p>{locale === "zh" ? tool.nameEn : "100-tools / " + tool.category}</p></div></div>
             <p className="workspace-description">{guide.description}</p>
-            <ToolActions key={tool.id} id={tool.id} path={tool.path} />
+            <div className="flex flex-wrap items-center gap-2">
+              <ToolActions key={tool.id} id={tool.id} path={tool.path} />
+              <ToolUsage id={tool.id} />
+            </div>
           </header>
           <ToolRenderer id={tool.id} />
           <section className="tool-instructions" aria-labelledby="tool-instructions">

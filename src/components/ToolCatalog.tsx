@@ -8,6 +8,7 @@ import { NavigationLink as Link } from "@/components/NavigationLink";
 import { categories, getToolById, quickToolIds, tools } from "@/data/tools";
 import { localePath } from "@/lib/i18n/locale";
 import { useFavorites } from "@/hooks/use-favorites";
+import { useUsageCounts } from "@/hooks/use-usage";
 import { ToolCard } from "@/components/ToolCard";
 import { ToolIcon } from "@/components/ToolIcon";
 import { ArrowDown, ArrowUpRight, Check, Command, Grid2X2, Search, ShieldCheck, Star, X } from "lucide-react";
@@ -17,6 +18,7 @@ export function ToolCatalog() {
   const [search, setSearch] = useState("");
   const [activeCategory, setActiveCategory] = useState("all");
   const { favorites, toggle } = useFavorites();
+  const usage = useUsageCounts();
   const router = useRouter();
   const searchRef = useRef<HTMLInputElement>(null);
 
@@ -120,7 +122,7 @@ export function ToolCatalog() {
           <section aria-labelledby="catalog-title">
             <div className="section-heading"><div><p className="eyebrow">THE COLLECTION</p><h2 id="catalog-title">{t(heading)}<span className="heading-count">{filtered.length}</span></h2></div><span className="collection-hint">{t("小而实用，打开即用")}</span><span className="sr-only" role="status">{filtered.length} {t(" 个工具")}</span></div>
             {filtered.length ? (
-              <div className="tools-grid">{filtered.map((tool) => <ToolCard key={tool.id} tool={tool} isFavorite={favorites.has(tool.id)} onToggleFavorite={() => toggle(tool.id)} />)}</div>
+              <div className="tools-grid">{filtered.map((tool) => <ToolCard key={tool.id} tool={tool} isFavorite={favorites.has(tool.id)} onToggleFavorite={() => toggle(tool.id)} usage={usage[tool.id]} />)}</div>
             ) : (
               <div className="empty-state"><Search className="size-7" aria-hidden="true" /><h3>{activeCategory === "favorites" ? t("把常用工具放在这里") : t("暂时没有找到相关工具")}</h3><p>{activeCategory === "favorites" ? t("点击工具卡片右上角的星标，下次就能更快找到。") : t("换个关键词试试，或者浏览全部工具。")}</p><button className="btn btn-secondary" onClick={() => { setSearch(""); setActiveCategory("all"); }}>{t("查看全部工具")}</button></div>
             )}
