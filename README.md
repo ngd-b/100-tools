@@ -146,7 +146,7 @@ docker-compose up -d
 
 工具使用次数保存在 `DATA_DIR/usage.sqlite`，默认是项目下的 `data/` 目录（已加入 `.gitignore`）。`docker-compose.yml` 已把 `usage-data` 卷挂载到 `/app/data`；自行部署时请为 `/app/data` 挂载持久卷，否则重建容器会丢失统计。统计只记录工具 ID 和累计次数，不记录访问者信息。
 
-计数接口做了同源校验、请求体大小限制和按 IP 的令牌桶限流（默认突发 20 次、每 2 秒恢复 1 次；内存级，重启重置，单实例有效）。IP 优先取 `X-Real-IP`，其次取 `X-Forwarded-For` 的最后一个值（代理追加的地址），避免客户端伪造首个值；应保持 `127.0.0.1` 绑定并通过代理访问，并让代理覆盖而不是透传这两个请求头。匿名接口无法完全防刷，次数仅作大致热度参考。
+计数接口做了同源校验、请求体大小限制和按 IP 的令牌桶限流（默认突发 20 次、每 2 秒恢复 1 次；内存级，重启重置，单实例有效）。IP 优先取 `X-Real-IP`，其次取 `X-Forwarded-For` 的最后一个值（代理追加的地址），避免客户端伪造首个值；应保持 `127.0.0.1` 绑定并通过代理访问，并让代理覆盖而不是透传这两个请求头。同源校验按 Host + 端口比对，也接受 `X-Forwarded-Host` 和 `SITE_URL`；如果代理会重写 Host（如 nginx 默认的 `proxy_set_header Host $proxy_host`），请设置 `X-Forwarded-Host` 或配置 `SITE_URL`，否则旧版浏览器等不带 `Sec-Fetch-Site` 的请求会被拒绝。匿名接口无法完全防刷，次数仅作大致热度参考。
 
 安全升级与开发工具剩余告警见 [安全升级记录](docs/SECURITY.md)。
 

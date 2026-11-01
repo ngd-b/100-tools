@@ -44,6 +44,13 @@ export function PasswordGenerator() {
   const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
   const [copiedCommand, setCopiedCommand] = useState(false);
 
+  const resetResults = useCallback(() => {
+    setResults([]);
+    setMeta(null);
+    setCopiedIndex(null);
+    setCopiedCommand(false);
+  }, []);
+
   const toggleSymbol = (s: string) => {
     setSelectedSymbols((prev) => {
       const next = new Set(prev);
@@ -59,6 +66,7 @@ export function PasswordGenerator() {
       }
       return next;
     });
+    resetResults();
   };
 
   const activeSymbols = useMemo(() => [...selectedSymbols].join(""), [selectedSymbols]);
@@ -71,13 +79,6 @@ export function PasswordGenerator() {
     if (activeSymbols) c += activeSymbols;
     return c;
   }, [uppercase, lowercase, numbers, activeSymbols]);
-
-  const resetResults = useCallback(() => {
-    setResults([]);
-    setMeta(null);
-    setCopiedIndex(null);
-    setCopiedCommand(false);
-  }, []);
 
   const changeFormat = useCallback((next: SecretFormat) => {
     if (next === format) return;
@@ -168,7 +169,7 @@ export function PasswordGenerator() {
               { label: t("数字 (0-9)"), checked: numbers, setter: setNumbers },
             ].map(({ label, checked, setter }) => (
               <label key={label} className="flex items-center gap-3 cursor-pointer">
-                <Checkbox checked={checked} onCheckedChange={(v) => setter(v as boolean)} />
+                <Checkbox checked={checked} onCheckedChange={(v) => { setter(v as boolean); resetResults(); }} />
                 <span className="text-sm">{t(label)}</span>
               </label>
             ))}
@@ -178,10 +179,11 @@ export function PasswordGenerator() {
                   onCheckedChange={(v) => {
                     if (v) setSelectedSymbols(new Set(ALL_SYMBOLS));
                     else setSelectedSymbols(new Set());
+                    resetResults();
                   }} />
                 <span className="text-sm">{t("特殊符号")}</span>
                 <button className="text-xs text-blue-500 hover:text-blue-600 ml-auto"
-                  onClick={() => setSelectedSymbols(new Set(ALL_SYMBOLS))}>{t("全选")}</button>
+                  onClick={() => { setSelectedSymbols(new Set(ALL_SYMBOLS)); resetResults(); }}>{t("全选")}</button>
               </div>
               <div className="flex flex-wrap gap-2 pl-8">
                 {(() => {
@@ -227,10 +229,14 @@ export function PasswordGenerator() {
               <span className="text-gray-500">{t("等价命令：")}</span>
               <code className="font-mono text-blue-700 break-all">{meta.command}</code>
               <button className="copy-btn ml-auto text-xs text-blue-500 hover:text-blue-600"
-                onClick={() => {
-                  navigator.clipboard.writeText(meta.command);
-                  setCopiedCommand(true);
-                  setTimeout(() => setCopiedCommand(false), 1500);
+                onClick={async () => {
+                  try {
+                    await navigator.clipboard.writeText(meta.command);
+                    setCopiedCommand(true);
+                    setTimeout(() => setCopiedCommand(false), 1500);
+                  } catch {
+                    setCopiedCommand(false);
+                  }
                 }}>
                 {copiedCommand ? "✓" : t("复制命令")}
               </button>
@@ -246,7 +252,15 @@ export function PasswordGenerator() {
                   <div className="flex items-center justify-between mb-2">
                     <code className="font-mono text-sm break-all flex-1 mr-3">{result.value}</code>
                     <button className="copy-btn text-xs text-blue-500 hover:text-blue-600"
-                      onClick={() => { navigator.clipboard.writeText(result.value); setCopiedIndex(i); setTimeout(() => setCopiedIndex(null), 1500); }}>
+                      onClick={async () => {
+                        try {
+                          await navigator.clipboard.writeText(result.value);
+                          setCopiedIndex(i);
+                          setTimeout(() => setCopiedIndex(null), 1500);
+                        } catch {
+                          setCopiedIndex(null);
+                        }
+                      }}>
                       {copiedIndex === i ? "✓" : t("复制")}
                     </button>
                   </div>

@@ -18,7 +18,7 @@ export function createUsageLimiter({ capacity = 20, refillMs = 2000 } = {}) {
       if (bucket.updatedAt <= staleBefore) buckets.delete(key);
     }
     if (buckets.size <= MAX_BUCKETS) return;
-    // Map iteration follows insertion order, so the oldest keys go first.
+    // consume() re-inserts used keys, so iteration order is least-recently-used.
     let excess = buckets.size - MAX_BUCKETS;
     for (const key of buckets.keys()) {
       if (excess <= 0) break;
@@ -34,6 +34,7 @@ export function createUsageLimiter({ capacity = 20, refillMs = 2000 } = {}) {
     bucket.updatedAt = now;
 
     if (bucket.tokens < 1) {
+      buckets.delete(key);
       buckets.set(key, bucket);
       return {
         allowed: false,
@@ -42,6 +43,8 @@ export function createUsageLimiter({ capacity = 20, refillMs = 2000 } = {}) {
     }
 
     bucket.tokens -= 1;
+    // Re-inserting moves the key to the end, keeping Map order LRU.
+    buckets.delete(key);
     buckets.set(key, bucket);
 
     operations += 1;
@@ -67,7 +70,9 @@ export function usageClientKey(request: Request): string {
 }
 
 // Browsers send Origin/Sec-Fetch-Site; non-browser clients may send neither.
-// Accept the proxy's X-Forwarded-Host because a reverse proxy may rewrite Host.
+// A reverse proxy may rewrite Host, so also accept X-Forwarded-Host and the
+// configured SITE_URL. Compare host and port: a page on another port of the
+// same hostname is cross-origin.
 export function isSameOriginRequest(request: Request): boolean {
   const fetchSite = request.headers.get("sec-fetch-site");
   if (fetchSite === "same-origin") return true;
@@ -76,17 +81,44 @@ export function isSameOriginRequest(request: Request): boolean {
   const origin = request.headers.get("origin");
   if (!origin) return true;
 
-  let originHost: string;
+  let originUrl: URL;
   try {
-    originHost = new URL(origin).hostname;
+    originUrl = new URL(origin);
   } catch {
     return false;
   }
 
-  const hosts = [request.headers.get("host"), request.headers.get("x-forwarded-host")]
+  const hosts = [request.headers.get("host"), request.headers.get("x-forwarded-host"), configuredSiteHost()]
     .flatMap((value) => value?.split(",") ?? [])
-    .map((value) => value.trim().split(":")[0])
+    .map((value) => value.trim())
     .filter(Boolean);
 
-  return hosts.length === 0 || hosts.includes(originHost);
+  return hosts.length === 0 || hosts.some((host) => matchesHost(host, originUrl));
+}
+
+function configuredSiteHost(): string | null {
+  const value = process.env.SITE_URL?.trim();
+  if (!value) return null;
+  try {
+    return new URL(value).host;
+  } catch {
+    return null;
+  }
+}
+
+// Host headers carry no scheme; parse them with the Origin's protocol so the
+// default port is resolved the same way on both sides.
+function matchesHost(hostHeader: string, originUrl: URL): boolean {
+  let hostUrl: URL;
+  try {
+    hostUrl = new URL(`${originUrl.protocol}//${hostHeader}`);
+  } catch {
+    return false;
+  }
+  return hostUrl.hostname === originUrl.hostname
+    && effectivePort(hostUrl) === effectivePort(originUrl);
+}
+
+function effectivePort(url: URL): string {
+  return url.port || (url.protocol === "https:" ? "443" : "80");
 }

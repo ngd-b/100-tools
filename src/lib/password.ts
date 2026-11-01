@@ -1,17 +1,13 @@
+import { secureIndex } from "./random-picker.ts";
+
 export type SecretFormat = "chars" | "hex" | "base64";
 
 export function generateSecurePassword(length: number, charset: string): string {
   const chars = [...charset];
-  const size = chars.length;
-  if (size === 0) return "";
-  // Rejection sampling avoids the modulo bias of `random % size`.
-  const limit = Math.floor(4294967296 / size) * size;
-  const buffer = new Uint32Array(1);
+  if (chars.length === 0) return "";
+  // secureIndex uses rejection sampling, avoiding the modulo bias of `random % size`.
   const password: string[] = [];
-  while (password.length < length) {
-    crypto.getRandomValues(buffer);
-    if (buffer[0] < limit) password.push(chars[buffer[0] % size]);
-  }
+  while (password.length < length) password.push(chars[secureIndex(chars.length)]);
   return password.join("");
 }
 

@@ -50,3 +50,37 @@ test("same-origin requests survive proxy Host rewriting", () => {
     headers: { origin: "https://evil.example", host: "127.0.0.1:3000", "x-forwarded-host": "tools.example.com" },
   })), false);
 });
+
+test("origin comparison covers port, IPv6 and SITE_URL fallback", () => {
+  // Another port on the same hostname is cross-origin.
+  assert.equal(isSameOriginRequest(new Request("http://example.com", {
+    headers: { origin: "http://example.com:9999", host: "example.com", "sec-fetch-site": "same-site" },
+  })), false);
+  // Host and Origin default to port 443 for https.
+  assert.equal(isSameOriginRequest(new Request("https://example.com", {
+    headers: { origin: "https://example.com", host: "example.com:443" },
+  })), true);
+  // Bracketed IPv6 hosts must not be split at the colon.
+  assert.equal(isSameOriginRequest(new Request("http://[::1]:3000", {
+    headers: { origin: "http://[::1]:3000", host: "[::1]:3000" },
+  })), true);
+  // A proxy that rewrites Host can still be validated against SITE_URL.
+  process.env.SITE_URL = "https://tools.example.com";
+  try {
+    assert.equal(isSameOriginRequest(new Request("http://127.0.0.1:3000", {
+      headers: { origin: "https://tools.example.com", host: "127.0.0.1:3000" },
+    })), true);
+  } finally {
+    delete process.env.SITE_URL;
+  }
+});
+
+test("bucket eviction drops least recently used clients", () => {
+  const consume = createUsageLimiter({ capacity: 1, refillMs: 1_000_000 });
+  for (let i = 0; i < 10_000; i += 1) consume(`idle-${i}`, 0);
+  // Touching a key moves it to the end, so it must survive the next eviction.
+  consume("idle-0", 0);
+  consume("newcomer", 0);
+  assert.equal(consume("idle-1", 0).allowed, true); // evicted, recreated fresh
+  assert.equal(consume("idle-0", 0).allowed, false); // kept, still exhausted
+});

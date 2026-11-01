@@ -68,7 +68,8 @@ export async function recordUsage(toolId: string): Promise<void> {
     if (!response.ok) return;
     const data = (await response.json()) as { count?: unknown };
     if (typeof data.count !== "number") return;
-    counts = { ...(counts ?? {}), [toolId]: data.count };
+    // Concurrent visits can return out of order; keep the highest count seen.
+    counts = { ...(counts ?? {}), [toolId]: Math.max(counts?.[toolId] ?? 0, data.count) };
     emit();
   } catch {
     // Counting is best-effort and must never break a tool.

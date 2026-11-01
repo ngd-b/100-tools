@@ -28,9 +28,11 @@ function tooManyRequests(retryAfterSeconds: number) {
   });
 }
 
+type BodyResult = { text: string } | { error: "too-large" | "aborted" };
+
 // Stream the body so a chunked request cannot force an unbounded buffer.
-async function readBody(request: Request, maxBytes: number): Promise<string | null> {
-  if (!request.body) return "";
+async function readBody(request: Request, maxBytes: number): Promise<BodyResult> {
+  if (!request.body) return { text: "" };
   const reader = request.body.getReader();
   const chunks: Uint8Array[] = [];
   let size = 0;
@@ -41,12 +43,12 @@ async function readBody(request: Request, maxBytes: number): Promise<string | nu
       size += value.byteLength;
       if (size > maxBytes) {
         await reader.cancel();
-        return null;
+        return { error: "too-large" };
       }
       chunks.push(value);
     }
   } catch {
-    return null;
+    return { error: "aborted" };
   }
   const bytes = new Uint8Array(size);
   let offset = 0;
@@ -54,7 +56,7 @@ async function readBody(request: Request, maxBytes: number): Promise<string | nu
     bytes.set(chunk, offset);
     offset += chunk.byteLength;
   }
-  return new TextDecoder().decode(bytes);
+  return { text: new TextDecoder().decode(bytes) };
 }
 
 export function GET(request: Request) {
@@ -84,14 +86,16 @@ export async function POST(request: Request) {
     return json({ error: "payload too large" }, { status: 413 });
   }
 
-  const text = await readBody(request, MAX_BODY_BYTES);
-  if (text === null) {
-    return json({ error: "payload too large" }, { status: 413 });
+  const body = await readBody(request, MAX_BODY_BYTES);
+  if ("error" in body) {
+    return body.error === "too-large"
+      ? json({ error: "payload too large" }, { status: 413 })
+      : json({ error: "invalid body" }, { status: 400 });
   }
 
   let payload: unknown;
   try {
-    payload = JSON.parse(text);
+    payload = JSON.parse(body.text);
   } catch {
     return json({ error: "invalid json" }, { status: 400 });
   }
